@@ -22,5 +22,8 @@ class Post extends Model
     //Timestamps
     public $timestamps= true;
 
-    //more about this in the documentation
+    //that means that each single post has a relationship with a user and belongs to a user
+    public function user(){
+        return $this-> belongsTo('App\User');
+    }
 }

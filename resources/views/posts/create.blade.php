@@ -5,7 +5,7 @@
     <h1> Create Post </h1>
     <!-- this is here to determine the action this form will be calling
         and in this case will be calling the store function with POST method-->
-    {!! Form::open(['action' => 'PostsController@store', 'method' =>'POST']) !!}
+    {!! Form::open(['action' => 'PostsController@store', 'method' =>'POST', 'enctype' =>'multipart/form-data']) !!}
         <div class= "form-group">
             <!-- define label for title=  Title-->
             {{Form::label('title', 'Title')}}
@@ -22,6 +22,10 @@
                 id here so the text area can include the ck editor-->
             {{Form::textArea('body','',['id'=>'article-ckeditor', 'class' =>'form-control','placeholder' => 'Body Text'])}}
         </div> 
+
+        <div class="form-group">
+            {{Form::file('cover_image')}}
+        </div>
         <!-- when we submit , it is going to make a post request to store function in PostsController.php-->
         {{Form::submit('Submit', ['class'=> 'btn btn-primary'])}}
     {!! Form::close() !!}
