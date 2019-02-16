@@ -20,22 +20,17 @@
                   <li class="nav-item">
                     <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
                   </li>
+                  
                   <li class="nav-item">
-                    <a class="nav-link" href="/about">About</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="/services">Services</a>
-                  </li>
-                  <li class="nav-item">
-                        <a class="nav-link" href="/posts">Blog</a>
+                        <a class="nav-link" href="/posts">Courses List</a>
                     </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dashboard">Dashboard</a>
+                     </li>
                 </ul>
 
-                <ul class="nav navbar-nav navbar-right">
-                <li class="nav-item">
-                        <a class="nav-link" href="/posts/create">Create Post</a>
-                    </li>
-                </ul>
+                
                 <!-- Right Side Of Navbar -->
                 <ul class="navbar-nav ml-auto">
                     <!-- Authentication Links -->
@@ -55,7 +50,7 @@
                             </a>
                            
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="/dashboard">Dashboard</a>
+                                
                                 <a class="dropdown-item" href="{{ route('logout') }}"
                                    onclick="event.preventDefault();
                                                  document.getElementById('logout-form').submit();">

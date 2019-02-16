@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 class PagesController extends Controller
 {
     public function index(){
-        $title = 'Welcome To Laravel!';
+        $title = 'Welcome To SWIFT!';
         //these are the two ways to pass a variable, either by calling compact, or just using with
         //return view('pages.index', compact('title'));
         

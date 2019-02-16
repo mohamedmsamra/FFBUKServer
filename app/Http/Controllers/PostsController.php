@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 //return the Post Model so we can use it here
+use Illuminate\Support\Facades\Storage;
 use App\Post;
 //if we want to use normal SQL we need to call DB
 use DB;
+
 
 class PostsController extends Controller
 {
@@ -219,6 +221,12 @@ class PostsController extends Controller
             //if the post owner is not the same, we direct the user to /posts with an error message of Unathourised Page
             return redirect('/posts')->with('error','Unauthorised Page');
         }
+
+        if($post -> cover_image != 'noimage.jpg'){
+            //Delete Image
+            Storage::delete('public/cover_images/'.$post->cover_image);
+        }
+
         $post -> delete();
         return redirect('/posts')-> with('success', 'Post Removed!');
     }
