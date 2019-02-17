@@ -19,6 +19,10 @@ class PagesController extends Controller
         $title = 'About';
         return view('pages.about')-> with('title', $title);
     }
+    public function courses(){
+        $title = 'Courses';
+        return view('pages.courses')-> with('title', $title);
+    }
 
     public function services(){
         //this is how we can pass multiple variables through an array 

@@ -47,6 +47,7 @@ Route::get('/about', function () {
 //This method should load the specific view
 Route::get('/', 'PagesController@index');
 Route::get('/about', 'PagesController@about');
+Route::get('/courses', 'PagesController@courses');
 Route::get('/services', 'PagesController@services');
 
 // will create all the routes associated with the post editing deleteing and so on

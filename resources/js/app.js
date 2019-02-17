@@ -19,8 +19,16 @@ window.Vue = require('vue');
 
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
+import Vue from 'vue'
+import VueSidebarMenu from 'vue-sidebar-menu'
+import 'vue-sidebar-menu/dist/vue-sidebar-menu.css'
+Vue.use(VueSidebarMenu)
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+Vue.component('div-comp', require('./components/DivComp.vue').default);
+Vue.component('tip-tap', require('./components/TipTap.vue').default);
+//imported a vue library for the sidebar
+Vue.component('vue-sidebar',require('./components/SideBar.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
