@@ -53,6 +53,10 @@ Route::get('/services', 'PagesController@services');
 // will create all the routes associated with the post editing deleteing and so on
 Route:: resource ('posts','PostsController');
 
+// will create all the routes associated with the assignment editing deleteing and so on
+Route:: resource ('assignments','AssignmentsController');
+
+
 Auth::routes();
 
 Route::get('/dashboard', 'DashboardController@index');
