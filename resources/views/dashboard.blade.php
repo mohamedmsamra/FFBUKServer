@@ -2,6 +2,7 @@
 
 @section('content')
 <div class="container">
+    
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
@@ -14,22 +15,22 @@
                         </div>
                     @endif
 
-                    <a href="/posts/create" class="btn btn-primary"> Add New Course </a>
+                    <a href="/courses/create" class="btn btn-primary"> Add New Course </a>
                     <br> <br>
                     <h3>Your Current Courses</h3>
-                    @if(count($posts)>0)
+                    @if(count($courses)>0)
                         <table class="table table-striped">
                             <tr>
                                 <th> Title </th>
                                 <th></th>
                                 <th></th>
                             </tr>   
-                            @foreach ($posts as $post)
+                            @foreach ($courses as $course)
                             <tr>
-                                <td> {{$post->title}} </td>
-                                <td><a href="/posts/{{$post->id}}/edit" class="btn btn-primary">Edit</a></td>
+                                <td> {{$course->title}} </td>
+                                <td><a href="/courses/{{$course->id}}/edit" class="btn btn-primary">Edit</a></td>
                                 <td>
-                                    {!!Form::open(['action' => ['PostsController@destroy', $post->id], 'method' => 'POST','class' => 'float-right'])!!}
+                                    {!!Form::open(['action' => ['CoursesController@destroy', $course->id], 'method' => 'POST','class' => 'float-right'])!!}
                                         {{Form::hidden('_method','DELETE')}}
                                         {{Form::submit('Delete',['class' => 'btn btn-danger'])}}
                                     {!!Form::close()!!}

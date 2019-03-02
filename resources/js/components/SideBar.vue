@@ -17,7 +17,7 @@
                         icon: 'fa fa-user',
                     },
                     {
-                        href: '/addCourse/',
+                        href: '/courses/create',
                         title: 'Add Course',
                         icon: 'fa fa-book',
                     }

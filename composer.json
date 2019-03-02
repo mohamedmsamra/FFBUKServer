@@ -14,7 +14,8 @@
         "laravel/tinker": "^1.0",
         "laravelcollective/html": "^5.4.0",
         "unisharp/laravel-ckeditor": "^4.7",
-        "unisharp/laravel-filemanager": "dev-master"
+        "unisharp/laravel-filemanager": "dev-master",
+        "doctrine/dbal": "v2.4.2"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",

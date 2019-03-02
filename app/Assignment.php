@@ -19,8 +19,8 @@ class Assignment extends Model
     public $timestamps= true;
 
 
-    public function post(){
-        return $this-> belongsTo('App\Post');
+    public function course(){
+        return $this-> belongsTo('App\Course');
     }
 }
 

@@ -2,13 +2,13 @@
 
 
 @section('content')
-    <a href="/posts" class="btn btn-link"> Go Back </a>
-    <h1> {{$post->title}}</h1>
-    <img style= "width:30%, height:30%" src="/storage/cover_images/{{$post->cover_image}}">
+    <a href="/courses" class="btn btn-link"> Go Back </a>
+    <h1> {{$course->title}}</h1>
+    <img style= "width:30%, height:30%" src="/storage/cover_images/{{$course->cover_image}}">
     <div>
-        {!! $post->body!!}
+        {!! $course->body!!}
     </div>
-    <small> Added on {{$post->created_at}} by {{$post->user->name}}</small>
+    <small> Added on {{$course->created_at}} by {{$course->user->name}}</small>
     <hr>
     {{--
     @auth
@@ -30,7 +30,8 @@
         {!!$assignment->desc!!}
     </div>
     @endforeach
-   
+    <vue-sidebar></vue-sidebar>
+    <class-component class="alert-flash" message ="Working"></class-component>
    
     
 @endsection

@@ -3,15 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-//return the Post Model so we can use it here
+//return the course Model so we can use it here
 use Illuminate\Support\Facades\Storage;
-use App\Post;
+use App\Course;
 use App\Assignment;
 //if we want to use normal SQL we need to call DB
 use DB;
 
 
-class PostsController extends Controller
+class CoursesController extends Controller
 {
 
       /**
@@ -58,8 +58,8 @@ class PostsController extends Controller
         //$posts = DB::select('SELECT * FROM posts');
 
         //put the posts into pages, each page takes 10 items for now per page
-        $posts = Post::orderBy('created_at','desc')->paginate(10);
-        return view('posts.index') -> with('posts', $posts);
+        $courses = Course::orderBy('created_at','desc')->paginate(10);
+        return view('courses.index') -> with('courses', $courses);
 
     }
 
@@ -71,7 +71,7 @@ class PostsController extends Controller
     public function create()
     {
         //return a view within the post folder
-        return view('posts.create');
+        return view('courses.create');
     }
 
     /**
@@ -113,17 +113,17 @@ class PostsController extends Controller
             $fileNameToStore= 'noImage.jpg';
         }
         //Create Post
-        $post = new Post;
-        $post ->title = $request->input('title');   
-        $post ->body = $request->input('body'); 
+        $course = new Course;
+        $course ->title = $request->input('title');   
+        $course ->body = $request->input('body'); 
         //the user_id is not coming from the form, we read it from auth(), which will read the id of current signed_in user
-        $post ->user_id = auth()->user()->id;
-        $post ->cover_image = $fileNameToStore;
-        $post ->save();
+        $course ->user_id = auth()->user()->id;
+        $course ->cover_image = $fileNameToStore;
+        $course ->save();
 
         //direct the page back to the index
         //set the success message to Post Created
-        return redirect('/posts')-> with('success', 'Your Course has been added successfully!');
+        return redirect('/courses')-> with('success', 'Your Course has been added successfully!');
     }
 
     /**
@@ -137,9 +137,9 @@ class PostsController extends Controller
         //it gets the id from the URL
         //http://ffbuk.test/posts/1
        //return this specific post which its id is in the link
-        $post=  Post::find($id);
-        $assignment = Assignment::where('post_id',$post->id)->get();
-        return view('posts.show') -> with('post', $post)
+        $course=  Course::find($id);
+        $assignment = Assignment::where('course_id',$course->id)->get();
+        return view('courses.show') -> with('course', $course)
                                   -> with( 'assignment',$assignment);
 
     }
@@ -153,14 +153,14 @@ class PostsController extends Controller
     public function edit($id)
     {
         
-        $post=  Post::find($id);
+        $course=  Course::find($id);
         //check if the correct user wants to edit his/her own post
-        if(auth()->user()->id !==$post->user_id){
+        if(auth()->user()->id !==$course->user_id){
             //if the post owner is not the same, we direct the user to /posts with an error message of Unathourised Page
-            return redirect('/posts')->with('error','Unauthorised Page');
+            return redirect('/courses')->with('error','Unauthorised Page');
         }
 
-        return view('posts.edit') -> with('post', $post);
+        return view('courses.edit') -> with('course', $course);
 
     }
 
@@ -196,17 +196,17 @@ class PostsController extends Controller
 
         } 
          //update this Post, find it by id
-         $post = Post::find($id);
-         $post -> title = $request->input('title');   
-         $post -> body = $request->input('body'); 
+         $course = Course::find($id);
+         $course -> title = $request->input('title');   
+         $course -> body = $request->input('body'); 
          if($request->hasFile('cover_image')){
-             $post->cover_image = $fileNameToStore;
+             $course->cover_image = $fileNameToStore;
          }
-         $post -> save();
+         $course -> save();
  
          //direct the page back to the index
          //set the success message to Post Created
-         return redirect('/posts')-> with('success', 'Post Updated!');
+         return redirect('/courses')-> with('success', 'Course Updated!');
         
     }
 
@@ -219,18 +219,18 @@ class PostsController extends Controller
     public function destroy($id)
     {
         //needed to delete the post
-        $post = Post::find($id);
-        if(auth()->user()->id !==$post->user_id){
+        $course = Course::find($id);
+        if(auth()->user()->id !==$course->user_id){
             //if the post owner is not the same, we direct the user to /posts with an error message of Unathourised Page
-            return redirect('/posts')->with('error','Unauthorised Page');
+            return redirect('/courses')->with('error','Unauthorised Page');
         }
 
-        if($post -> cover_image != 'noimage.jpg'){
+        if($course -> cover_image != 'noimage.jpg'){
             //Delete Image
-            Storage::delete('public/cover_images/'.$post->cover_image);
+            Storage::delete('public/cover_images/'.$course->cover_image);
         }
 
-        $post -> delete();
-        return redirect('/posts')-> with('success', 'Post Removed!');
+        $course -> delete();
+        return redirect('/courses')-> with('success', 'Course Removed!');
     }
 }

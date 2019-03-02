@@ -18,8 +18,10 @@
 </head>
 <body>
     <div id="app">
+       
         @include('inc.navbar')
         <div class="container">
+            <vue-sidebar></vue-sidebar>
             <main class="py-4">
                 @include('inc.messages')
                 @yield('content')

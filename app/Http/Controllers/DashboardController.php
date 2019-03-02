@@ -29,6 +29,6 @@ class DashboardController extends Controller
         $user= User::find($user_id);
         //here we return the view with the posts of this specific user
         //we can do that simply because we add the relationshop between user and posts in User.php and Post.Php
-        return view('dashboard')->with('posts', $user->posts);
+        return view('dashboard')->with('courses', $user->courses);
     }
 }
