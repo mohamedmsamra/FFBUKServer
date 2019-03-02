@@ -25,8 +25,8 @@ import 'vue-sidebar-menu/dist/vue-sidebar-menu.css'
 Vue.use(VueSidebarMenu)
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
-Vue.component('div-comp', require('./components/DivComp.vue').default);
-Vue.component('tip-tap', require('./components/TipTap.vue').default);
+//Vue.component('div-comp', require('./components/DivComp.vue').default);
+//Vue.component('tip-tap', require('./components/TipTap.vue').default);
 //imported a vue library for the sidebar
 Vue.component('vue-sidebar',require('./components/SideBar.vue').default);
 
