@@ -4,7 +4,7 @@
       <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
         <div class="container">
             <a class="navbar-brand" href="{{ url('/') }}">
-                {{ config('app.name', 'Laravel') }}
+                {{ config('app.name', 'SWiFT') }}
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                 <span class="navbar-toggler-icon"></span>
@@ -22,7 +22,7 @@
                   </li>
                   
                   <li class="nav-item">
-                        <a class="nav-link" href="/posts">Courses List</a>
+                        <a class="nav-link" href="/posts">Start Marking</a>
                     </li>
 
                     <li class="nav-item">

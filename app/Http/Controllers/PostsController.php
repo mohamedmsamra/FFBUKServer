@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 //return the Post Model so we can use it here
 use Illuminate\Support\Facades\Storage;
 use App\Post;
+use App\Assignment;
 //if we want to use normal SQL we need to call DB
 use DB;
 
@@ -122,7 +123,7 @@ class PostsController extends Controller
 
         //direct the page back to the index
         //set the success message to Post Created
-        return redirect('/posts')-> with('success', 'Post Created!');
+        return redirect('/posts')-> with('success', 'Your Course has been added successfully!');
     }
 
     /**
@@ -137,7 +138,9 @@ class PostsController extends Controller
         //http://ffbuk.test/posts/1
        //return this specific post which its id is in the link
         $post=  Post::find($id);
-        return view('posts.show') -> with('post', $post);
+        $assignment = Assignment::where('post_id',$post->id)->get();
+        return view('posts.show') -> with('post', $post)
+                                  -> with( 'assignment',$assignment);
 
     }
 
