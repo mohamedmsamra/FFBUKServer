@@ -1,7 +1,4 @@
-
-      <br><br><br>
-
-      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+      <nav class="navbar navbar-expand-md navbar-dark static-top bg-dark">
         <div class="container">
             <a class="navbar-brand" href="{{ url('/') }}">
                 {{ config('app.name', 'Laravel') }}
@@ -22,7 +19,7 @@
                   </li>
                   
                   <li class="nav-item">
-                        <a class="nav-link" href="/posts">Courses List</a>
+                        <a class="nav-link" href="/courses">Courses</a>
                     </li>
 
                     <li class="nav-item">

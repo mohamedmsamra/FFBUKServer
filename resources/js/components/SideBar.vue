@@ -9,24 +9,17 @@
                 menu: [
                     {
                         header: true,
-                        title: 'Main Navigation',
+                        title: 'Courses List',
                     },
                     {
-                        href: '/',
-                        title: 'Dashboard',
+                        href: '/courses/',
+                        title: 'Courses',
                         icon: 'fa fa-user',
                     },
                     {
-                        title: 'Courses',
+                        href: '/addCourse/',
+                        title: 'Add Course',
                         icon: 'fa fa-book',
-                    },
-                    {
-                        title: 'Assignments',
-                        icon: 'fa fa-edit',
-                    },
-                    {
-                        title: 'Feedback Best Practices',
-                        icon: 'fa fa-comments',
                     }
                 ]
             }

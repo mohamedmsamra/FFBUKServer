@@ -29,7 +29,7 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 //Vue.component('tip-tap', require('./components/TipTap.vue').default);
 //imported a vue library for the sidebar
 Vue.component('vue-sidebar',require('./components/SideBar.vue').default);
-
+Vue.component('class-component',require('./components/ClassComponent.vue').default);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
