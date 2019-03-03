@@ -29,9 +29,5 @@
     <div>
         {!!$assignment->desc!!}
     </div>
-    @endforeach
-    <vue-sidebar></vue-sidebar>
-    <class-component class="alert-flash" message ="Working"></class-component>
-   
-    
+    @endforeach  
 @endsection
