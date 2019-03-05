@@ -21,7 +21,11 @@
        
         @include('inc.navbar')
         <div class="container">
+            @if(!isset($courses)) 
             <vue-sidebar></vue-sidebar>
+            @else
+            <vue-sidebar :coursename="{{ $courses }}"></vue-sidebar>
+            @endif 
             <main class="py-4">
                 @include('inc.messages')
                 @yield('content')
