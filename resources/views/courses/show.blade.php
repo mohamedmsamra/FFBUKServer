@@ -23,15 +23,23 @@
     --}}
 
     <h1> List of Assignments</h1>
-
-    @foreach ($assignment as $assignment)
-    <h3> {{$assignment->name}}</h3>
-    <div>
-        {!!$assignment->desc!!}
-    </div>
-    @endforeach
-    <vue-sidebar></vue-sidebar>
-    <class-component class="alert-flash" message ="Working"></class-component>
+    @if(count($assignment)>0)  
+        @foreach ($assignment as $assignment)
+        <h3> {{$assignment->name}}</h3>
+        <div>
+            {!!$assignment->desc!!}
+        </div>
+        <a href="/assignments/{{$assignment->id}}/edit" class="btn btn-primary">Edit</a>
+        {!!Form::open(['action' => ['AssignmentsController@destroy', $assignment->id], 'method' => 'POST','class' => 'float-right'])!!}
+            {{Form::hidden('_method','DELETE')}}
+            {{Form::submit('Delete',['class' => 'btn btn-danger'])}}
+        {!!Form::close()!!}
+        <br><br><br>
+        @endforeach
+    @else 
+        <p> No Assignments Found </p>    
+    @endif   
+    <a href='/courses/{{$course->id}}/assignments/create' class="btn btn-primary"> Add New Assignment </a>
    
     
 @endsection

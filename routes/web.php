@@ -55,7 +55,7 @@ Route:: resource ('courses','CoursesController');
 
 // will create all the routes associated with the assignment editing deleteing and so on
 Route:: resource ('assignments','AssignmentsController');
-
+Route::get('/courses/{course_id}/assignments/create', ['uses' => 'AssignmentsController@create']);
 
 Auth::routes();
 
