@@ -206,7 +206,7 @@ class CoursesController extends Controller
  
          //direct the page back to the index
          //set the success message to Post Created
-         return redirect('/courses')-> with('success', 'Course Updated!');
+         return redirect('/dashboard')-> with('success', 'Course Updated!');
         
     }
 
