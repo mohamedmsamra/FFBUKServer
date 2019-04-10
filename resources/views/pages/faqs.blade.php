@@ -16,8 +16,8 @@
 	<body>
 		<header>
 			<div>
-			<a href="../index.html">
-				<p style="float: left;"><img src="../img/Logo1.jpg" height="150px" width="150px"></p>
+			<a href="../dashboard">
+				<p style="float: left;"><img src="{{ asset('stuff/icons8-exam-50.png') }}" height="150px" width="150px"></p>
 				<br><br><br>
 				<b><p style="font-size:150%;">Fast FeedBack UK (fFBUK)</p></b>
 				<br>
@@ -51,3 +51,208 @@
 		<br><br>
 	</body>
 </html>
+<style>
+* {
+	font-family: Calibri, Arial, sans-serif;
+}
+
+html {
+	font-size: 18px;
+}
+
+header a, header a:visited, header a:hover {
+	text-decoration: none;
+	color: black;
+}
+
+section {
+	padding: 20px;
+	border: 3px solid gray;
+	border-radius: 15px;
+	margin: 20px 0px;
+	position: relative;
+}
+
+select {
+	font-size: 1rem;
+}
+
+textarea {
+	width: 90%;
+	font-size: 1rem;
+}
+
+a:visited {
+	text-decoration: none;
+}
+
+a {
+	text-decoration: none;
+}
+
+.pdfEmbed, .pdfUpload {
+	box-sizing: border-box;
+	width: 50%;
+	float: left;
+	padding-right: 10px;
+}
+
+.markingWrapper, .tempUpload {
+	box-sizing: border-box;
+	width: 50%;
+	float: right;
+	padding-left: 10px;
+}
+
+.clear {
+	clear: both;
+}
+
+footer {
+	height: 50px;
+}
+
+section h2 {
+	float: left;
+	display: inline;
+	margin: 0;
+}
+
+.markShow {
+	display: inline;
+	font-size: 80%;
+	float: right;
+}
+
+.markShow a:visited {
+	color: blue;
+}
+
+.markScheme {
+	display: none;
+}
+
+.markScheme.active {
+	display: block;
+	position: absolute;
+	right: 5px;
+	z-index: 1;
+}
+
+ol li {
+	cursor: pointer;
+}
+
+
+/* pos/neg tab formatting */
+
+.tabs {
+	width: 100%;
+	display: inline-block;
+}
+
+.tab-links ul {
+	margin: 0;
+}
+
+.tab-links li {
+	margin: 0px 5px;
+	float: left;
+	list-style: none;
+	width: 40%;
+	text-align: center;
+	font-weight: bold;
+	font-size: 1.1rem;
+	height: 2.25rem;
+}
+
+.tab-links a {
+	color: black;
+	display: inline-block;
+	border-radius: 15px;
+	text-decoration: none;
+	width: 100%;
+	height: 2.25rem;
+	line-height: 2.25rem;
+}
+
+.tab-links a:visited {
+	color: black;
+	text-decoration: none;
+}
+
+.tab {
+	display: none;
+}
+
+.tab.active {
+	display: block;
+}
+
+.negative {
+	/*background-color: #D61D00;*/
+	border: 2px solid #D61D00;
+	border-radius: 15px;
+}
+
+.positive {
+	/*background-color: #009E30;*/
+	border: 2px solid #009E30;
+	border-radius: 15px;
+}
+
+/* markscheme tab formatting*/
+.markScheme.tab-links li {
+	font-size: 80%;
+	width: 100%;
+	list-style: none;
+	margin: 0px;
+	font-weight: normal;
+	height: 1rem;
+	display: inline-block;
+	float: none;
+}
+
+.markScheme.tabs {
+	width: 45%;
+	display: none;
+}
+
+.markScheme.tabs.active{
+	display: inline-block;
+}
+
+.markScheme.tab-links a {
+	color: blue;
+	border-radius: 0px;
+	height: 1rem;
+	line-height: 1rem;
+	display: inline-block;
+	width: 100%;
+}
+
+.markScheme.tab-links a:visited {
+	color: blue;
+}
+
+img {
+	max-width: 50vw;
+	max-height: 75vh;
+}
+
+.markScheme img {
+	max-width: 22.5vw;
+	min-width: 200px;
+	max-height: none;
+}
+
+.clearSec {
+	float: right;
+	margin-top: 5px;
+}
+
+#tempChoose {
+	color: transparent;
+	width: 90px;
+}
+	</style>
