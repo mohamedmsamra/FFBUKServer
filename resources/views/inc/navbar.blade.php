@@ -24,7 +24,10 @@
 
                     <li class="nav-item">
                         <a class="nav-link" href="/dashboard">Dashboard</a>
-                     </li>
+                    </li>
+                    <li class="nav-item">
+                            <a class="nav-link" href="/faqs">F.A.Q.</a>
+                    </li>
                 </ul>
 
                 
