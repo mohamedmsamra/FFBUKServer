@@ -13,7 +13,7 @@ class CreateTemplateTable extends Migration
      */
     public function up()
     {
-        Schema::create('template', function (Blueprint $table) {
+        Schema::create('templates', function (Blueprint $table) {
             $table->increments('id');
             $table->string('heading');
             $table->string('category');
