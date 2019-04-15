@@ -59,6 +59,9 @@ Route:: resource ('courses','CoursesController');
 Route:: resource ('assignments','AssignmentsController');
 Route::get('/courses/{course_id}/assignments/create', ['uses' => 'AssignmentsController@create']);
 
+// Create all routes associated with the template editing deleting and so on
+Route:: resource ('templates','TemplatesController');
+
 Auth::routes();
 
 Route::get('/dashboard', 'DashboardController@index');
