@@ -22,5 +22,9 @@ class Assignment extends Model
     public function course(){
         return $this-> belongsTo('App\Course');
     }
+
+    public function templates(){
+        return $this->hasMany('App\Template');
+    }
 }
 

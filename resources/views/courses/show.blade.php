@@ -41,6 +41,7 @@
         <p> No Assignments Found </p>    
     @endif   
     <a href='/courses/{{$course->id}}/assignments/create' class="btn btn-primary"> Add New Assignment </a>
-   
-    
+    <br><br>
+    <h1> Templates</h1>
+    <a href="/templates/create" class="btn btn-primary">Create Template</a>
 @endsection
