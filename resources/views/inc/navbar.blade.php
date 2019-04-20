@@ -28,6 +28,14 @@
                     <li class="nav-item">
                             <a class="nav-link" href="/faqs">F.A.Q.</a>
                     </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/survey1">Survey 1</a>
+                    </li>
+
+                    <li class="nav-item">
+                    <a class="nav-link" href="/survey2">Survey 2</a>
+                    </li>
                 </ul>
 
                 

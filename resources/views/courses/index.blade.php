@@ -1,14 +1,11 @@
 @extends('layouts.app')
 
-
 @section('content')
-    <h1> Courses </h1>
-
+    <h1>Courses</h1>
    
-      @if(count($courses)>0)
+    @if(count($courses) > 0)
         @foreach ($courses as $course)
             <div class="card" style="padding:7px">
-
                 <div class="row">
                     <div class="col-md-4 col-sm-4">
                     <img style= "width:50%" src="/storage/cover_images/{{$course->cover_image}}">
@@ -20,13 +17,12 @@
                         <small> Written On {{$course->created_at}} by {{$course->user->name}}</small>
                     </div>
                 </div>
- 
             </div>   
             <br>
         @endforeach
         <!-- add the links of pages into the end of the page-->
         {{$courses->links()}}
-  @else 
-      <p> No Courses Found </p>
-  @endif
+    @else 
+        <p> No Courses Found </p>
+    @endif
 @endsection

@@ -11,6 +11,10 @@
 |
 */
 
+Route::prefix('api')->group(function () {
+    Route::resource('sidebar', 'SidebarController');
+});
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -33,7 +37,7 @@ Route::get('/users/{name}/{id}', function ($name,$id) {
 });
 
 
-//when the user ask for about page by calling it. return this view 
+//when the user ask for about page by calling it. return this view
 //from resources/views/pages/about
 Route::get('/about', function () {
     return view('pages.about');
@@ -49,6 +53,8 @@ Route::get('/', 'PagesController@index');
 Route::get('/about', 'PagesController@about');
 Route::get('/marking', 'PagesController@marking');
 Route::get('/faqs', 'PagesController@faqs');
+Route::get('/survey1', 'PagesController@survey1');
+Route::get('/survey2', 'PagesController@survey2');
 //Route::get('/courses', 'PagesController@courses');
 Route::get('/services', 'PagesController@services');
 

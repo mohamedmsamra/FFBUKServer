@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Course;
 use App\Assignment;
+use App\User;
 //if we want to use normal SQL we need to call DB
 use DB;
 
@@ -14,7 +15,7 @@ use DB;
 class CoursesController extends Controller
 {
 
-      /**
+    /**
      * Create a new controller instance.
      *
      * @return void
@@ -24,7 +25,7 @@ class CoursesController extends Controller
         //so doing this, we are prevening the guest to the website from seeing to anything
         //related to posts except index and show, so guests now can not create post
         //so creating a post became available only if you are a signed-in/authenicated user
-        $this->middleware('auth',['except' => ['index','show']]);
+        $this->middleware('auth', ['except' => ['index', 'show']]);
     }
 
     /**
@@ -34,16 +35,16 @@ class CoursesController extends Controller
      */
     public function index()
     {
-        //this is the page that index retrieve 
+        //this is the page that index retrieve
         //http://ffbuk.test/posts
         //return a view named index from posts folder
 
         // a model function that retrieve all the data from post table without using SQL queries
         // and that actual use Eloquent (object relational mapper) without any sql queries
         //$posts= Post::all();
-        
 
-        //we can control how we can return posts so ordered asc or desc by title 
+
+        //we can control how we can return posts so ordered asc or desc by title
         //$posts = Post::orderBy('title','desc')->get();
 
         //we can also how many items we can return
@@ -58,9 +59,11 @@ class CoursesController extends Controller
         //$posts = DB::select('SELECT * FROM posts');
 
         //put the posts into pages, each page takes 10 items for now per page
-        $courses = Course::orderBy('created_at','desc')->paginate(10);
-        return view('courses.index') -> with('courses', $courses);
+        $user_id = auth()->user()->id;
+        $user = User::find($user_id);
+        $courses = $user->courses()->orderBy('created_at', 'desc')->paginate(10);
 
+        return view('courses.index')->with('courses', $courses);
     }
 
     /**
@@ -83,8 +86,8 @@ class CoursesController extends Controller
     public function store(Request $request)
     {
         //here we do our form validation first before returnging that the storage was successful
-        // so the form does not submit until the title and the body are there 
-       
+        // so the form does not submit until the title and the body are there
+
         $this -> validate($request,[
             'title' => 'required',
             'body' => 'required',
@@ -92,7 +95,7 @@ class CoursesController extends Controller
             //and finally has a max size of 1999mb
             'cover_image' => 'image| nullable | max:1999'
         ]);
-        
+
 
         //Handle File upload
         //make sure an actual file was chosen
@@ -114,8 +117,8 @@ class CoursesController extends Controller
         }
         //Create Post
         $course = new Course;
-        $course ->title = $request->input('title');   
-        $course ->body = $request->input('body'); 
+        $course ->title = $request->input('title');
+        $course ->body = $request->input('body');
         //the user_id is not coming from the form, we read it from auth(), which will read the id of current signed_in user
         $course ->user_id = auth()->user()->id;
         $course ->cover_image = $fileNameToStore;
@@ -152,7 +155,7 @@ class CoursesController extends Controller
      */
     public function edit($id)
     {
-        
+
         $course=  Course::find($id);
         //check if the correct user wants to edit his/her own post
         if(auth()->user()->id !==$course->user_id){
@@ -194,20 +197,20 @@ class CoursesController extends Controller
             //Upload Image
             $path = $request -> file('cover_image') -> storeAs('public/cover_images',$fileNameToStore);
 
-        } 
+        }
          //update this Post, find it by id
          $course = Course::find($id);
-         $course -> title = $request->input('title');   
-         $course -> body = $request->input('body'); 
+         $course -> title = $request->input('title');
+         $course -> body = $request->input('body');
          if($request->hasFile('cover_image')){
              $course->cover_image = $fileNameToStore;
          }
          $course -> save();
- 
+
          //direct the page back to the index
          //set the success message to Post Created
          return redirect('/dashboard')-> with('success', 'Course Updated!');
-        
+
     }
 
     /**

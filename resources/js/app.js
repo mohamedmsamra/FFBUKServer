@@ -22,6 +22,7 @@ window.Vue = require('vue');
 import Vue from 'vue'
 import VueSidebarMenu from 'vue-sidebar-menu'
 import 'vue-sidebar-menu/dist/vue-sidebar-menu.css'
+import axios from 'axios'
 Vue.use(VueSidebarMenu)
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);

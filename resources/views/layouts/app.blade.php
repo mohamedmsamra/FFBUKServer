@@ -18,27 +18,21 @@
 </head>
 <body>
     <div id="app">
-       
         @include('inc.navbar')
         <div class="container">
-            @if(!isset($courses)) 
             <vue-sidebar></vue-sidebar>
-            @else
-            <vue-sidebar :coursename="{{ $courses }}"></vue-sidebar>
-            @endif 
             <main class="py-4">
                 @include('inc.messages')
                 @yield('content')
             </main>
          </div>
     </div>
-    
+
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
     <script src="/vendor/unisharp/laravel-ckeditor/ckeditor.js"></script>
     <script>
       CKEDITOR.replace( 'article-ckeditor' );
     </script>
-   
 </body>
 </html>

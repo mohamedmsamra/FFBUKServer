@@ -40,5 +40,15 @@ class PagesController extends Controller
         );
         return view('pages.services')-> with($data);
     }
+
+    public function survey1(){
+        $title = 'Survey 1';
+        return view('pages.survey1')-> with('title', $title);
+    }
+
+    public function survey2(){
+        $title = 'Survey 2';
+        return view('pages.survey2')-> with('title', $title);
+    }
 }
 
