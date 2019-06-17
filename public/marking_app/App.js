@@ -1,7 +1,12 @@
 class App extends React.Component {
     render() {
         return (
-            <Section />
+            <div>
+                <Section />
+                <Section />
+                <Section />
+                <Section />
+            </div>
         );
     }
 }
