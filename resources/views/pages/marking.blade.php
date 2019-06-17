@@ -4,6 +4,7 @@
 		<title>SWiFT</title>
 		<link rel="shortcut icon" type="image/x-icon" href="../img/Tab_Icons/favicon.ico" />
 		<link rel="stylesheet" type="text/css" href="../css/generalstyle.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/marking.css"/>
 		<script src="{{ asset('../js_ffbuk/jquery-3.2.1.min.js') }}"></script>
 		<script src="{{ asset('../js_ffbuk/jspdf.min.js') }}"></script>
 		<script src="{{ asset('../js_ffbuk/jspdf.plugin.autotable.js')}}"></script>
@@ -15,6 +16,9 @@
 		<script src="{{ asset('../js_ffbuk/jszip.js')}}"></script>
 		<script src="{{ asset('../js_ffbuk/fileSaver.js')}}"></script>
 		<script mimeType=text/plain; charset=x-user-defined src="{{ asset('../js_ffbuk/jszip-utils.js')}}"></script>
+		<script crossorigin src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
+		<script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
+		<script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script> {{-- TODO: Only temporary --}}
 	</head>
 	
 	<body>
@@ -42,7 +46,7 @@
 		<div class="clear" style="height: 10px"></div>
 		
 		<div class="pdfEmbed"></div> <!--Filled by tabtoggle.js on upload to PDFChoose-->
-		
+		<div id="react-root"></div>
 		<div class="markingWrapper"> <!--Hidden until a template is chosen, including save buttons-->
 		<div class="sectionContainer"> <!--Filled by fillform.js on upload to tempChoose-->
 		</div>
@@ -58,7 +62,9 @@
 		</div>
 		<div class="clear"></div>
 		<footer></footer>
-		
+		<script type="text/jsx" src="/marking_app/Section.js"></script>
+		<script type="text/jsx" src="/marking_app/App.js"></script>
+		<script type="text/jsx" src="/marking_app/index.js"></script>
 	</body>
 </html>
 <style>
