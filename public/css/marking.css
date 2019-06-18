@@ -206,9 +206,12 @@ img {
 /* New Code */
 
 .section {
-    background: #e9ecef;
+	background: #f0f0f0;
+	border: 1px solid #ddd;
     padding: 20px;
-    border-radius: 10px;
+	border-radius: 10px;
+	margin-right: 20px;
+	/* margin-left:20px; */
     margin-bottom: 30px;
 }
 
@@ -236,3 +239,10 @@ img {
 /* .comments ul {
     margin-top
 } */
+
+
+/** New New Code **/
+.markingSide {
+	float: right;
+	width: 50%;
+}

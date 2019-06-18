@@ -32,7 +32,7 @@ class TemplatesController extends Controller
         
         //direct the page back to the index
         //set the success message to Template Created
-        return redirect('/template/')-> with('success', 'Your Template has been added successfully!');
+        return redirect('/')-> with('success', 'Your Template has been added successfully!');
     }
     public function index()
     {

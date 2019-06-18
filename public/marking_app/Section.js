@@ -36,7 +36,10 @@ class Section extends React.Component {
         }
         return (
             <div className="section">
-                <h3>Template name</h3>
+                <button type="button" class="close" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h3>{this.props.title}</h3>
                 <textarea></textarea>
                 <div className="comments">
                     <div className="buttons">
@@ -48,4 +51,8 @@ class Section extends React.Component {
             </div>
         );
     }
+}
+
+Section.defaultProps = {
+    title: 'Section Title'
 }
