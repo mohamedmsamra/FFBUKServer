@@ -36,10 +36,21 @@
             });
         });
 
-        function get(loc) {
-            fetch(loc)
-                .then(data => data.json())
-                .then(data => console.log(data));
+        function get(loc, data) {
+            fetch(loc, {
+                method: 'get',
+                body: JSON.stringify(data),
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json, text-plain, */*",
+                    "X-Requested-With": "XMLHttpRequest",
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content')
+                }
+            }).then(function(response) {
+                return response.json();
+            }).then(function(data) {
+                console.log(data);
+            });
         }
 
         function post(loc, data) {

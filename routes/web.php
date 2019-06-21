@@ -71,11 +71,13 @@ Route:: resource ('templates','TemplatesController');
 // Resources for the API
 Route:: resource ('/api/templates','Api\TemplatesController');
 Route:: resource ('/api/sections','Api\SectionsController');
+Route:: resource ('/api/comments','Api\CommentsController');
 
 Auth::routes();
 
 Route::get('/dashboard', 'DashboardController@index');
 
+// TODO: Remove
 Route::get('/apitest', function () {
     return view('apitest');
 });

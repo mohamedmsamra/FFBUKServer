@@ -25,11 +25,11 @@ class SectionsController extends Controller
 
     public function show($id) {
         $section =  Section::find($id);
-        // Add comments
-        foreach ($templates as $template) {
-            $sections = Section::where('template_id', "=", $template['id'])->get();
-            $template['sections'] = $sections;
-        }
+        // // Add comments
+        // foreach ($templates as $template) {
+        //     $sections = Section::where('template_id', "=", $template['id'])->get();
+        //     $template['sections'] = $sections;
+        // }
         return $section;
     }
 }
