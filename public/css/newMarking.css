@@ -1,0 +1,56 @@
+.section {
+	background: #f0f0f0;
+	border: 1px solid #ddd;
+    padding: 20px;
+	border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.section textarea {
+    width: 100%;
+    height: 100px;
+    resize: none;
+    margin-bottom: 10px;
+}
+
+.comments .buttons {
+    width: 100%;
+    display: flex;
+    /* margin-bottom: 10px; */
+}
+
+.comments .buttons button {
+    flex: 1 0;
+}
+
+.comments .buttons button:not(:first-child) {
+    margin-left: 20px;
+}
+
+.leftSide {
+    float: left;
+    width: 53%;
+}
+
+.rightSide {
+    float: right;
+    width: 43%;
+}
+
+.leftSide, .rightSide {
+    margin: 1%;
+}
+
+
+.clear {
+    clear: both;
+}
+
+.custom-file-label::after {
+    /* content: "Browse"!important; */
+    background-color: transparent!important;
+}
+
+.commentsList {
+    cursor: pointer;
+}

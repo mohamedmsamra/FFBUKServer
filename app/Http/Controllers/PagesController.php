@@ -25,7 +25,7 @@ class PagesController extends Controller
     }
     public function marking(){
         $title = 'Marking';
-        return view('pages.marking')-> with('title', $title);
+        return view('pages.newMarking')-> with('title', $title);
     }
     public function faqs(){
         $title = 'Frequently Asked Questions';

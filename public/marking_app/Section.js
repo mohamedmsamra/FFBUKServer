@@ -1,12 +1,20 @@
 class Section extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
+        console.log(this.props);
         this.state = {
-            openComments: ""
+            openComments: "",
+            posComments: this.props.posComments,
+            negComments: this.props.negComments,
+            text: ''
         }
         this.openComments = this.openComments.bind(this);
+        this.handleCommentClick = this.handleCommentClick.bind(this);
+        this.handleEditTitle = this.handleEditTitle.bind(this);
+
     }
 
+    // Display list of comments 
     openComments(type) {
         if (type == this.state.openComments) {
             this.setState({openComments: ""});
@@ -15,44 +23,77 @@ class Section extends React.Component {
         }
     }
 
+    // On click, add comment to the text box if it wasn't added already
+    handleCommentClick(comment) {
+        if(!comment.added) {
+            // Add text to text box
+            this.setState({text: this.state.text + comment.text + '\n'});
+            // Remember that the comment was added (i.e. find the comment and set added = true)
+            this.setState({posComments: this.state.posComments.map(x => x === comment ? {text : x.text, added : true} : x)});
+            this.setState({negComments: this.state.negComments.map(x => x === comment ? {text : x.text, added : true} : x)});
+
+        }
+    }
+
+    handleEditTitle() {
+        
+    }
+
     render() {
         let openComments;
+        const posCommentsToRender = this.state.posComments.map(comment => <li onClick={() => this.handleCommentClick(comment)} className="list-group-item  list-group-item-action">{comment.text}</li>);
+        const negCommentsToRender = this.state.negComments.map(comment => <li onClick={() => this.handleCommentClick(comment)} className="list-group-item  list-group-item-action">{comment.text}</li>);
+
         if (this.state.openComments == "positive") {
-            openComments =  <ul className="list-group">
-                                <li className="list-group-item">Positive</li>
-                                <li className="list-group-item">Dapibus ac facilisis in</li>
-                                <li className="list-group-item">Morbi leo risus</li>
-                                <li className="list-group-item">Porta ac consectetur ac</li>
-                                <li className="list-group-item">Vestibulum at eros</li>
+            openComments =  <ul className="list-group commentsList">
+                                {posCommentsToRender}
                             </ul>
         } else if (this.state.openComments == "negative") {
-            openComments =  <ul className="list-group">
-                                <li className="list-group-item">Negative</li>
-                                <li className="list-group-item">Dapibus ac facilisis in</li>
-                                <li className="list-group-item">Morbi leo risus</li>
-                                <li className="list-group-item">Porta ac consectetur ac</li>
-                                <li className="list-group-item">Vestibulum at eros</li>
+            openComments =  <ul className="list-group commentsList">
+                                {negCommentsToRender}
                             </ul>
         }
+
+        // The comments part of the section
+        let commentsDiv = (
+            <div className="comments">
+                <div className="buttons">
+                    <button type="button" className="btn btn-success" onClick={() => this.openComments("positive")}> Positive</button>
+                    <button type="button" className="btn btn-danger" onClick={() => this.openComments("negative")} >Negative</button>
+                </div>
+                {openComments}
+            </div>
+        );
+
+        // The button to delete a section
+        let removeBtn = (
+            <button onClick={() => this.props.handleDeleteClick(this.props.id)} type="button" class="close" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        );
         return (
             <div className="section">
-                <button type="button" class="close" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <h3>{this.props.title}</h3>
-                <textarea></textarea>
-                <div className="comments">
-                    <div className="buttons">
-                        <button type="button" className="btn btn-success" onClick={() => this.openComments("positive")}> Positive</button>
-                        <button type="button" className="btn btn-danger" onClick={() => this.openComments("negative")} >Negative</button>
-                    </div>
-                   {openComments}
+                {/* Delete section button */}
+                {this.props.removeable ? removeBtn : ''}
+
+                <h3 onClick={this.handleEditTitle}>{this.props.title}</h3>
+
+                <div class="form-group">
+                    <textarea class="form-control" id="exampleFormControlTextarea1" value={this.state.text} rows="3">{this.state.text}</textarea>
                 </div>
+
+                {/* If this section should have comments, display them */}
+                {this.props.hasComments ? commentsDiv : ''}
+                
             </div>
         );
     }
 }
 
 Section.defaultProps = {
-    title: 'Section Title'
+    title: 'Section Title',
+    posComments: [],
+    negComments: [],
+    hasComments: true,
+    removeable: true
 }
