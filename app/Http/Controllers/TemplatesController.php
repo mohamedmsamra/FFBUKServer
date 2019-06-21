@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Template;
+use App\Models\Template;
 
 class TemplatesController extends Controller
 {

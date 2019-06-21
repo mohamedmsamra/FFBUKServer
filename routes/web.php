@@ -68,6 +68,14 @@ Route::get('/courses/{course_id}/assignments/create', ['uses' => 'AssignmentsCon
 // Create all routes associated with the template editing deleting and so on
 Route:: resource ('templates','TemplatesController');
 
+// Resources for the API
+Route:: resource ('/api/templates','Api\TemplatesController');
+Route:: resource ('/api/sections','Api\SectionsController');
+
 Auth::routes();
 
 Route::get('/dashboard', 'DashboardController@index');
+
+Route::get('/apitest', function () {
+    return view('apitest');
+});
