@@ -6,12 +6,12 @@ class Section extends React.Component {
             openComments: "",
             posComments: this.props.posComments,
             negComments: this.props.negComments,
-            text: ''
+            value: ''
         }
         this.openComments = this.openComments.bind(this);
         this.handleCommentClick = this.handleCommentClick.bind(this);
         this.handleEditTitle = this.handleEditTitle.bind(this);
-
+        this.handleTextareaChange = this.handleTextareaChange.bind(this);
     }
 
     // Display list of comments 
@@ -23,20 +23,27 @@ class Section extends React.Component {
         }
     }
 
+    setCommentAdded(comment,value) {
+        this.setState({posComments: this.state.posComments.map(x => x === comment ? {text : x.text, added : value} : x)});
+        this.setState({negComments: this.state.negComments.map(x => x === comment ? {text : x.text, added : value} : x)});
+    }
+
     // On click, add comment to the text box if it wasn't added already
     handleCommentClick(comment) {
         if(!comment.added) {
             // Add text to text box
-            this.setState({text: this.state.text + comment.text + '\n'});
+            this.setState({value: this.state.value + comment.text + '\n'});
             // Remember that the comment was added (i.e. find the comment and set added = true)
-            this.setState({posComments: this.state.posComments.map(x => x === comment ? {text : x.text, added : true} : x)});
-            this.setState({negComments: this.state.negComments.map(x => x === comment ? {text : x.text, added : true} : x)});
-
+            this.setCommentAdded(comment,true);
         }
     }
 
     handleEditTitle() {
-        
+
+    }
+
+    handleTextareaChange() {
+        this.setState({value: event.target.value});
     }
 
     render() {
@@ -79,7 +86,7 @@ class Section extends React.Component {
                 <h3 onClick={this.handleEditTitle}>{this.props.title}</h3>
 
                 <div class="form-group">
-                    <textarea class="form-control" id="exampleFormControlTextarea1" value={this.state.text} rows="3">{this.state.text}</textarea>
+                    <textarea class="form-control" value={this.state.value} onChange={this.handleTextareaChange}></textarea>
                 </div>
 
                 {/* If this section should have comments, display them */}

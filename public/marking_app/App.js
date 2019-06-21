@@ -64,6 +64,8 @@ class App extends React.Component {
                     <Section title="3 Points Done Well" hasComments={false} removeable={false}/>
                     <Section title="3 Points To Impove" hasComments={false} removeable={false}/>
                 </div>
+
+                
             
             </div>
         );
