@@ -16,7 +16,6 @@
 .comments .buttons {
     width: 100%;
     display: flex;
-    /* margin-bottom: 10px; */
 }
 
 .comments .buttons button {
@@ -53,4 +52,5 @@
 
 .commentsList {
     cursor: pointer;
+    margin-top: 20px;
 }
