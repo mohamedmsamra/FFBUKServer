@@ -44,6 +44,9 @@ class App extends React.Component {
         return (
             <div>
 
+                <div className="markingSide">
+
+                </div>
                 <div className={this.state.loadButtons ? 'loadCreateBtns' : 'loadCreateBtns d-none'}>
                     <button type="button" className="btn btn-outline-primary btn-lg">Load Template</button>
                     <button onClick={this.handleCreateClick} type="button" className="btn btn-outline-success btn-lg">Create Template</button>
