@@ -49,8 +49,8 @@ class TemplatesController extends Controller
         foreach ($sections as $section) {
             $pos_comments = Comment::where('section_id', '=', $section['id'])->where('type', '=', 'positive')->get();
             $neg_comments = Comment::where('section_id', '=', $section['id'])->where('type', '=', 'negative')->get();
-            $section['pos_comments'] = $pos_comments;
-            $section['neg_comments'] = $neg_comments;
+            $section['positiveComments'] = $pos_comments;
+            $section['negativeComments'] = $neg_comments;
         }
         
         $template['sections'] = $sections;
