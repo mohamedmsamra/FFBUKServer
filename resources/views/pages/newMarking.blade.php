@@ -17,10 +17,14 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     {{-- <link rel="stylesheet" type="text/css" href="../css/generalstyle.css"/> --}}
     <link rel="stylesheet" type="text/css" href="../css/newMarking.css"/>
+
+    {{-- Bootstrap --}}
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     
     {{-- Scripts --}}
-    <script src="{{ asset('../js_ffbuk/jquery-3.2.1.min.js') }}"></script>
     <script src="{{ asset('../js_ffbuk/jspdf.min.js') }}"></script>
     <script src="{{ asset('../js_ffbuk/jspdf.plugin.autotable.js')}}"></script>
     
@@ -34,7 +38,7 @@
     <script crossorigin src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script> {{-- TODO: Only temporary --}}
-	
+	<meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 <body>
     <div id="app">
@@ -90,9 +94,12 @@
     <script>
       CKEDITOR.replace( 'article-ckeditor' );
     </script>
-    <script type="text/jsx" src="/marking_app/Section.js"></script>
+    <script>
+        const assignment_id = 1;
+    </script>
+    <script type="text/jsx" src="/marking_app/components/modals/NewSectionModal.js"></script>
+    <script type="text/jsx" src="/marking_app/components/Section.js"></script>
     <script type="text/jsx" src="/marking_app/App.js"></script>
     <script type="text/jsx" src="/marking_app/index.js"></script>
-
 </body>
 </html>
