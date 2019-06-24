@@ -33,14 +33,14 @@ class App extends React.Component {
         this.setState({sections: items});
     }
 
-    handleCreateClick() {
+    handleCreateClick(templateName) {
         // post()
         this.setState({loadButtons: false, action: 'create'}, function () {
             console.log(this.state.action)});
 
         fetch('/api/templates', {
             method: 'post',
-            body: JSON.stringify({assignment_id: assignment_id, name: "default name" + Date.now()}),
+            body: JSON.stringify({assignment_id: assignment_id, name: templateName}),
             headers: {
                 "Content-Type": "application/json",
                 "Accept": "application/json, text-plain, */*",
@@ -52,6 +52,9 @@ class App extends React.Component {
         }).then((data) => {
             console.log(data);
             this.setTemplate(data.id);
+            $("#createTemplateModal").removeClass("fade");
+            $("#createTemplateModal").modal('hide');
+            $("#createTemplateModal").addClass("fade");
         });
         
     }
@@ -94,9 +97,9 @@ class App extends React.Component {
                 </div> */}
                 <div className="loadCreateBtns">
                     <button type="button" className="btn btn-outline-primary btn-lg" onClick={() => $("#loadTemplateModal").modal('show')}>Load Template</button>
-                    <button onClick={this.handleCreateClick} type="button" className="btn btn-outline-success btn-lg">Create Template</button>
+                    <button onClick={() => $("#createTemplateModal").modal('show')} type="button" className="btn btn-outline-success btn-lg">Create Template</button>
                 </div>
-                    
+                {/* // onClick={this.handleCreateClick} */}
                 
                 <div>
                     {this.state.loading
@@ -120,6 +123,7 @@ class App extends React.Component {
 
                 <NewSectionModal data={this.state} />
                 <LoadTemplateModal templates={this.state.templates} handleSelectTemplate={this.setTemplate}/>
+                <CreateTemplateModal handleSubmit={this.handleCreateClick}/>
             </div>
         );
     }

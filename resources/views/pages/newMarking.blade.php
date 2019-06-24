@@ -100,6 +100,7 @@
     <script>
         const assignment_id = 1;
     </script>
+    <script type="text/jsx" src="/marking_app/components/modals/CreateTemplateModal.js"></script>
     <script type="text/jsx" src="/marking_app/components/modals/LoadTemplateModal.js"></script>
     <script type="text/jsx" src="/marking_app/components/Loading.js"></script>
     <script type="text/jsx" src="/marking_app/components/modals/NewSectionModal.js"></script>

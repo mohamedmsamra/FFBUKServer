@@ -11,6 +11,10 @@ class LoadTemplateModal extends React.Component {
         this.setState({template: temp});
     }
 
+    // as_json(){
+    // super.merge(('created_at') => self.created_at.strftime("%d %b %Y"));
+    // }
+  
 
     render() {
         // const templates = [{name:'template 1', id: 1}, {name: 'template 2', id: 2}, {name:'template 3', id: 3}, {name: 'template 4', id: 4}];
@@ -19,6 +23,7 @@ class LoadTemplateModal extends React.Component {
             return (
                 <a onClick={() => this.handleClick(template)} class="list-group-item list-group-item-action" href={'#' + template.id} data-toggle="list" role="tab">
                     {template.name}
+                    <span className="float-right">{template.created_at}</span>
                 </a>
             )});
         return (
