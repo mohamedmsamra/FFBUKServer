@@ -75,7 +75,7 @@ class App extends React.Component {
                         </div>
                     :
                         <div>
-                            <button type="button" class="mb-3 btn btn-lg btn-block btn-light" data-toggle="modal" data-target="#newSectionModal">
+                            <button type="button" class="mb-3 btn btn-lg btn-block btn-light" onClick={() => $("#newSectionModal").modal('show')}>
                             + Add new section
                             </button>
                             <div class="sections">

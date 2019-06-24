@@ -59,19 +59,20 @@ Route::get('/survey2', 'PagesController@survey2');
 Route::get('/services', 'PagesController@services');
 
 // will create all the routes associated with the post editing deleteing and so on
-Route:: resource ('courses','CoursesController');
+Route::resource('courses', 'CoursesController');
 
 // will create all the routes associated with the assignment editing deleteing and so on
-Route:: resource ('assignments','AssignmentsController');
+Route::resource('assignments', 'AssignmentsController');
 Route::get('/courses/{course_id}/assignments/create', ['uses' => 'AssignmentsController@create']);
 
 // Create all routes associated with the template editing deleting and so on
-Route:: resource ('templates','TemplatesController');
+Route::resource('templates', 'TemplatesController');
 
 // Resources for the API
-Route:: resource ('/api/templates','Api\TemplatesController');
-Route:: resource ('/api/sections','Api\SectionsController');
-Route:: resource ('/api/comments','Api\CommentsController');
+Route::resource('/api/templates', 'Api\TemplatesController');
+Route::resource('/api/sections', 'Api\SectionsController');
+Route::post('api/sections/new-section', 'Api\SectionsController@postNewSection');
+Route::resource('/api/comments', 'Api\CommentsController');
 
 Auth::routes();
 
