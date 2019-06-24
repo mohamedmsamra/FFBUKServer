@@ -6,23 +6,33 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Template;
 use App\Models\Section;
+use App\Models\Comment;
 
 class TemplatesController extends Controller
 {
-    public function index() {
-        $templates = Template::get();
+    public function index(Request $request) {
+        $templates;
+
+        // If assignment id is provided
+        if ($request->input('assignment_id')) {
+            $templates = Template::where('assignment_id', "=", $request->input('assignment_id'))->get();
+        } else {
+            $templates = Template::get();
+        }
 
         return json_encode($templates);
     }
 
     public function store(Request $request) {
         $this -> validate($request,[
-            'name' => 'required'
+            'name' => 'required',
+            'assignment_id' => 'required'
         ]);
         
         //Create Template
         $template = new Template;
         $template->name = $request->input('name');
+        $template->assignment_id = $request->input('assignment_id');
         $template->save();
         
         // //direct the page back to the index
@@ -35,11 +45,16 @@ class TemplatesController extends Controller
         $template = Template::find($id);
 
         // Add sections
-        foreach ($templates as $template) {
-            $sections = Section::where('template_id', "=", $template['id'])->get();
-            $template['sections'] = $sections;
+        $sections = Section::where('template_id', "=", $template['id'])->get();
+        foreach ($sections as $section) {
+            $pos_comments = Comment::where('section_id', '=', $section['id'])->where('type', '=', 'positive')->get();
+            $neg_comments = Comment::where('section_id', '=', $section['id'])->where('type', '=', 'negative')->get();
+            $section['pos_comments'] = $pos_comments;
+            $section['neg_comments'] = $neg_comments;
         }
         
+        $template['sections'] = $sections;
+
         return $template ? json_encode($template) : "{error: 'Template not found'}";
     }
 }
