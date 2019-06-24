@@ -27,7 +27,7 @@ class NewSectionModal extends React.Component {
 
                                 {/* Positive/Negative Buttons */}
                                 <div class="commentsToggle container">
-                                    <div class="btn-group btn-group-toggle row justify-content-center" data-toggle="buttons">
+                                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
                                         <label class="btn btn-light active">
                                             <input type="radio" name="comment_type" id="addPostive" autocomplete="off" checked /> Positive
                                         </label>
@@ -46,12 +46,6 @@ class NewSectionModal extends React.Component {
 
                                 {/* Added Comments */}
                                 <ul class="list-group">
-                                    <li class="list-group-item">
-                                        <span class="name">Lalalalaiaia</span>
-                                        <button class="float-right">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </button>
-                                    </li>
                                     <li class="list-group-item">Dapibus ac facilisis in</li>
                                     <li class="list-group-item">Morbi leo risus</li>
                                     <li class="list-group-item">Porta ac consectetur ac</li>

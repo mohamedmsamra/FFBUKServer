@@ -1,41 +1,14 @@
 
-// Placeholder Sections
-let section1 = {
-    'id' : '1',
-    'title' : 'section title',
-    positiveComments : [
-        'comment 1',
-        'comment 2'
-    ],
-    negativeComments : [
-        'neg comment 1',
-        'neg comment 2'
-    ]
-};
-
-let section2 = {
-    'id' : '2',
-    'title' : 'section title 2',
-    positiveComments : [
-        {text: 'comment 11', added: false},
-        'comment 21'
-    ],
-    negativeComments : [
-        'neg comment 11',
-        'neg comment 21'
-    ]
-};
-
-let sections = [];
-
 class App extends React.Component {
     constructor(props) {
         super(props);
         // this.handleClick = this.handleClick.bind(this);
         this.deleteSection = this.deleteSection.bind(this);
+        this.handleCreateClick = this.handleCreateClick.bind(this);
         this.state = {
             loading: true,
-            sections: sections
+            sections: [],
+            loadButtons: true 
         };
     }
 
@@ -62,11 +35,21 @@ class App extends React.Component {
     //     }));
     // }
 
+    handleCreateClick() {
+        this.setState({loadButtons: false});
+    }
+
     render() {
         const sectionsToRender = this.state.sections.map(section => <Section handleDeleteClick={this.deleteSection} id={section.id} title={section.title} posComments={section.positiveComments} negComments={section.negativeComments}/>)
         return (
             <div>
-                <div class="markingSide">
+
+                <div className={this.state.loadButtons ? 'loadCreateBtns' : 'loadCreateBtns d-none'}>
+                    <button type="button" className="btn btn-outline-primary btn-lg">Load Template</button>
+                    <button onClick={this.handleCreateClick} type="button" className="btn btn-outline-success btn-lg">Create Template</button>
+                </div>
+
+                <div class={this.state.loadButtons ? 'markingSide d-none' : 'markingSide'}>
                     {this.state.loading
                     ?
                         <div className="loading">

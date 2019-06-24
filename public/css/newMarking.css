@@ -73,3 +73,9 @@
 .commentsToggle {
     margin-bottom: 20px;
 }
+
+.loadCreateBtns .btn {
+    margin-right: 1%;
+    width:49%;
+
+}
