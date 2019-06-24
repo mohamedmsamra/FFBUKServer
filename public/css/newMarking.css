@@ -64,3 +64,8 @@
 .loading img {
     margin-bottom: 10px;
 }
+
+.commentsToggle {
+    margin-bottom: 20px;
+    width: 100%;
+}
