@@ -73,13 +73,13 @@
                     <div class="rightSide">
                         <div id="react-root"></div>
                         
-                        <div class="save">
+                        {{-- <div class="save">
                             <button type="button" class='btn btn-danger' onclick="if(confirm('All entered text will be deleted. Are you sure?')) setup()" id="clearButton">Clear All</button>
                             <button type="button" class='btn btn-success' onclick="Save(event); getPDF()" id="nextButton">Save and Load Next Document</button>
                             Save as:
                             <input type="radio" name="txtorpdf" value="pdf" checked="checked">PDF</input>
                             <input type="radio" name="txtorpdf" value="txt">Text</input>
-                        </div>
+                        </div> --}}
                         
                         </div>
                         
@@ -100,6 +100,7 @@
     <script>
         const assignment_id = 1;
     </script>
+    <script type="text/jsx" src="/marking_app/components/modals/LoadTemplateModal.js"></script>
     <script type="text/jsx" src="/marking_app/components/modals/NewSectionModal.js"></script>
     <script type="text/jsx" src="/marking_app/components/Section.js"></script>
     <script type="text/jsx" src="/marking_app/App.js"></script>

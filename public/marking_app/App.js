@@ -5,17 +5,34 @@ class App extends React.Component {
         // this.handleClick = this.handleClick.bind(this);
         this.deleteSection = this.deleteSection.bind(this);
         this.handleCreateClick = this.handleCreateClick.bind(this);
+        this.setTemplate = this.setTemplate.bind(this);
         this.state = {
             loading: true,
+            templates: [],
             sections: [],
-            loadButtons: true 
+            loadButtons: true,
+            action: '',
+            template_id: 1
         };
     }
 
     componentDidMount() {
-        fetch('/api/templates/1')
+        fetch('/api/templates')
+            .then(data => data.json())   
+            .then(data => this.setState({templates: data}));
+
+        fetch('/api/templates/' + this.state.template_id)
             .then(data => data.json())
-            .then(data => this.setState({sections: data.sections, loading: false}));
+            .then(data => this.setState({sections: data.sections, loading: false}));           
+    }
+
+
+
+    setTemplate(id) {
+        this.setState({template_id: id, action: 'load'}, function() {
+            console.log('Template selected in app has id: ' + this.state.template_id);
+        });
+        this.loadTemplate();
     }
 
     deleteSection(id){
@@ -23,34 +40,40 @@ class App extends React.Component {
         this.setState({sections: items});
     }
 
-    // handleClick() {
-    //     const newItem = {
-    //         'id': Date.now(),
-    //         'title': 'Section Title',
-    //         positiveComments: [{text: 'placeholder positive comment', added: false}, {text: 'placeholder positive comment 2', added: false}],
-    //         negativeComments: [{text: 'placeholder negative comment', added: false}, {text: 'placeholder negative comment 2', added: false}]
-    //     };
-    //     this.setState(state => ({
-    //         sections: state.sections.concat(newItem)
-    //     }));
-    // }
-
     handleCreateClick() {
-        this.setState({loadButtons: false});
+        post()
+        // this.setState({loadButtons: false, action: 'create'}, function () {
+        //     console.log(this.state.action)});
     }
+
+    loadTemplate(templateId) {
+        console.log(templateId);
+        console.log(this.state.templates)
+        let template = this.state.templates.find(temp => temp.id === templateId);
+        let content = (
+            <h1>{template.name}</h1>
+        );
+    }
+
 
     render() {
         const sectionsToRender = this.state.sections.map(section => <Section handleDeleteClick={this.deleteSection} id={section.id} title={section.title} posComments={section.positiveComments} negComments={section.negativeComments}/>)
+        const templatesTitles = this.state.templates.map(template => <p>{template.name}</p>);
         return (
             <div>
 
                 <div className="markingSide">
-
+                
                 </div>
                 <div className={this.state.loadButtons ? 'loadCreateBtns' : 'loadCreateBtns d-none'}>
-                    <button type="button" className="btn btn-outline-primary btn-lg">Load Template</button>
+                    <button type="button" className="btn btn-outline-primary btn-lg" data-toggle="modal" data-target="#loadTemplateModal">Load Template</button>
                     <button onClick={this.handleCreateClick} type="button" className="btn btn-outline-success btn-lg">Create Template</button>
                 </div>
+
+                <div>
+                    {templatesTitles}
+                </div>
+                
 
                 <div class={this.state.loadButtons ? 'markingSide d-none' : 'markingSide'}>
                     {this.state.loading
@@ -73,6 +96,7 @@ class App extends React.Component {
                     }
                 </div>
                 <NewSectionModal data={this.state} />
+                <LoadTemplateModal templates={this.state.templates} handleSelectTemplate={this.setTemplate}/>
             </div>
         );
     }

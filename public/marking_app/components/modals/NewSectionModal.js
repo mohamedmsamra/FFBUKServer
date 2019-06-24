@@ -1,6 +1,6 @@
 class NewSectionModal extends React.Component {
-    constructor(props) {
-        super(props);
+    constructor() {
+        super();
         this.state = {
             newSectionTitle: "",
             selectedCategory: "positive",
