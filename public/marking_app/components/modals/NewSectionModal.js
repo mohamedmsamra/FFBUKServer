@@ -66,7 +66,7 @@ class NewSectionModal extends React.Component {
             method: 'post',
             body: JSON.stringify({
                 title: this.state.newSectionTitle,
-                template_id: 1,
+                template_id: this.props.data.template.id,
                 positiveComments: this.state.posComments.map(c => c.text),
                 negativeComments: this.state.negComments.map(c => c.text)
             }),
@@ -78,13 +78,13 @@ class NewSectionModal extends React.Component {
             }
         })
             .then(data => data.json())
-            .then(data => console.log(data))
-            .then(() => {
-                this.setState(initialState);
+            .then(data => {
+                this.props.addSection(data);
                 $("#newSectionModal").removeClass("fade");
                 $("#newSectionModal").modal('hide');
                 $("#newSectionModal").addClass("fade");
-            })
+                this.setState(initialState);
+            });
     }
 
     render() {

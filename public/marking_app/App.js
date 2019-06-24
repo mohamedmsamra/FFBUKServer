@@ -7,6 +7,7 @@ class App extends React.Component {
         this.handleCreateClick = this.handleCreateClick.bind(this);
         this.setTemplate = this.setTemplate.bind(this);
         this.loadTemplate = this.loadTemplate.bind(this);
+        this.addSection = this.addSection.bind(this);
         this.state = {
             loading: false,
             templates: [],
@@ -65,6 +66,10 @@ class App extends React.Component {
         });
     }
 
+    addSection(section) {
+        this.setState(prevState => prevState.sections.push(section));
+    }
+
     loadTemplate() {
         // console.log(templateId);
         // console.log(this.state.templates)
@@ -91,7 +96,6 @@ class App extends React.Component {
 
         return (
             <div>
-
                 {/* <div className="markingSide">
                 
                 </div> */}
@@ -121,7 +125,7 @@ class App extends React.Component {
                     }
                 </div>
 
-                <NewSectionModal data={this.state} />
+                <NewSectionModal addSection={this.addSection} data={this.state} />
                 <LoadTemplateModal templates={this.state.templates} handleSelectTemplate={this.setTemplate}/>
                 <CreateTemplateModal handleSubmit={this.handleCreateClick}/>
             </div>
