@@ -72,7 +72,7 @@ class App extends React.Component {
                         </div>
                     }
                 </div>
-                <NewSectionModal />
+                <NewSectionModal data={this.state} />
             </div>
         );
     }
