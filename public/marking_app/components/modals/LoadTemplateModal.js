@@ -2,14 +2,13 @@ class LoadTemplateModal extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            template_id: 1
+            template: {}
         };
         this.handleClick = this.handleClick.bind(this);
     }
 
-    handleClick(id) {
-        this.setState({template_id: id}, function() {
-        console.log(this.state.template_id)});
+    handleClick(temp) {
+        this.setState({template: temp});
     }
 
 
@@ -18,7 +17,7 @@ class LoadTemplateModal extends React.Component {
         
         const displayTemplates = this.props.templates.map(template => {
             return (
-                <a onClick={() => this.handleClick(template.id)} class="list-group-item list-group-item-action" href={'#' + template.id} data-toggle="list" role="tab">
+                <a onClick={() => this.handleClick(template)} class="list-group-item list-group-item-action" href={'#' + template.id} data-toggle="list" role="tab">
                     {template.name}
                 </a>
             )});
@@ -47,7 +46,7 @@ class LoadTemplateModal extends React.Component {
                         {/* Modal Footer */}
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                            <button onClick={() => this.props.handleSelectTemplate(this.state.template_id)} type="button" class="btn btn-primary">Load Template</button>
+                            <button onClick={() => this.props.handleSelectTemplate(this.state.template)} type="button" class="btn btn-primary">Load Template</button>
                         </div>
                     </div>
                 </div>

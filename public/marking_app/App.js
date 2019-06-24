@@ -6,13 +6,15 @@ class App extends React.Component {
         this.deleteSection = this.deleteSection.bind(this);
         this.handleCreateClick = this.handleCreateClick.bind(this);
         this.setTemplate = this.setTemplate.bind(this);
+        this.loadTemplate = this.loadTemplate.bind(this);
         this.state = {
-            loading: true,
+            loading: false,
             templates: [],
             sections: [],
-            loadButtons: true,
+            templateLoaded: false,
             action: '',
-            template_id: 1
+            template: {},
+            content: (<h1>Nothing</h1>)
         };
     }
 
@@ -21,18 +23,9 @@ class App extends React.Component {
             .then(data => data.json())   
             .then(data => this.setState({templates: data}));
 
-        fetch('/api/templates/' + this.state.template_id)
+        fetch('/api/templates/' + this.state.template.id)
             .then(data => data.json())
             .then(data => this.setState({sections: data.sections, loading: false}));           
-    }
-
-
-
-    setTemplate(id) {
-        this.setState({template_id: id, action: 'load'}, function() {
-            console.log('Template selected in app has id: ' + this.state.template_id);
-        });
-        this.loadTemplate();
     }
 
     deleteSection(id){
@@ -41,60 +34,90 @@ class App extends React.Component {
     }
 
     handleCreateClick() {
-        post()
-        // this.setState({loadButtons: false, action: 'create'}, function () {
-        //     console.log(this.state.action)});
+        // post()
+        this.setState({loadButtons: false, action: 'create'}, function () {
+            console.log(this.state.action)});
+
+        fetch('/api/templates', {
+            method: 'post',
+            body: JSON.stringify({assignment_id: assignment_id, name: "default name" + Date.now()}),
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json, text-plain, */*",
+                "X-Requested-With": "XMLHttpRequest",
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content')
+            }
+        }).then(function(response) {
+            return response.json();
+        }).then((data) => {
+            console.log(data);
+            this.setTemplate(data.id);
+        });
+        
     }
 
-    loadTemplate(templateId) {
-        console.log(templateId);
-        console.log(this.state.templates)
-        let template = this.state.templates.find(temp => temp.id === templateId);
-        let content = (
-            <h1>{template.name}</h1>
-        );
+    setTemplate(temp) {
+        this.setState({template: temp, action: 'load'}, function() {
+            this.loadTemplate();
+        });
+    }
+
+    loadTemplate() {
+        // console.log(templateId);
+        // console.log(this.state.templates)
+        console.log('Template selected in app has id: ' + this.state.template.id);
+        fetch('/api/templates/' + this.state.template.id)
+            .then(data => data.json())
+            .then(data => this.setState({sections: data.sections, loading: false}))  
+            .then()
+            .then(() => {
+                $("#loadTemplateModal").removeClass("fade");
+                $("#loadTemplateModal").modal('hide');
+                $("#loadTemplateModal").addClass("fade");
+                this.setState({loading: false, templateLoaded: true});
+            });
+
+        // const sectionsToRender = this.state.sections.map(section => <Section handleDeleteClick={this.deleteSection} id={section.id} title={section.title} posComments={section.positiveComments} negComments={section.negativeComments}/>)
+        this.setState({loading: true});
+        
     }
 
 
     render() {
         const sectionsToRender = this.state.sections.map(section => <Section handleDeleteClick={this.deleteSection} id={section.id} title={section.title} posComments={section.positiveComments} negComments={section.negativeComments}/>)
-        const templatesTitles = this.state.templates.map(template => <p>{template.name}</p>);
+
         return (
             <div>
 
-                <div className="markingSide">
+                {/* <div className="markingSide">
                 
-                </div>
-                <div className={this.state.loadButtons ? 'loadCreateBtns' : 'loadCreateBtns d-none'}>
-                    <button type="button" className="btn btn-outline-primary btn-lg" data-toggle="modal" data-target="#loadTemplateModal">Load Template</button>
+                </div> */}
+                <div className="loadCreateBtns">
+                    <button type="button" className="btn btn-outline-primary btn-lg" onClick={() => $("#loadTemplateModal").modal('show')}>Load Template</button>
                     <button onClick={this.handleCreateClick} type="button" className="btn btn-outline-success btn-lg">Create Template</button>
                 </div>
-
-                <div>
-                    {templatesTitles}
-                </div>
+                    
                 
-
-                <div class={this.state.loadButtons ? 'markingSide d-none' : 'markingSide'}>
+                <div>
                     {this.state.loading
                     ?
-                        <div className="loading">
-                            <img src="/svg/loading.svg"></img>
-                            <p>Loading...</p>
-                        </div>
+                        <Loading text="Loading..." />
                     :
-                        <div>
-                            <button type="button" class="mb-3 btn btn-lg btn-block btn-light" data-toggle="modal" data-target="#newSectionModal">
-                            + Add new section
-                            </button>
-                            <div class="sections">
-                                {sectionsToRender}
-                                <Section title="3 Points Done Well" hasComments={false} removeable={false}/>
-                                <Section title="3 Points To Impove" hasComments={false} removeable={false}/>
-                            </div>
-                        </div>
+                        this.state.templateLoaded &&
+                            (<div>
+                                <h2>{this.state.template.name}</h2>
+                                <button type="button" class="mb-3 btn btn-lg btn-block btn-light" onClick={() => $("#newSectionModal").modal('show')}>
+                                + Add new section
+                                </button>
+                                <div class="sections">
+                                    {sectionsToRender}
+                                    <Section title="3 Points Done Well" hasComments={false} removeable={false}/>
+                                    <Section title="3 Points To Impove" hasComments={false} removeable={false}/>
+                                </div>
+                            </div>)
                     }
                 </div>
+
                 <NewSectionModal data={this.state} />
                 <LoadTemplateModal templates={this.state.templates} handleSelectTemplate={this.setTemplate}/>
             </div>

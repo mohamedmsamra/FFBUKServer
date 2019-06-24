@@ -38,7 +38,7 @@ class TemplatesController extends Controller
         // //direct the page back to the index
         // //set the success message to Template Created
         // return redirect('/')-> with('success', 'Your Template has been added successfully!');
-        return json_encode("done");
+        return json_encode($template);
     }
 
     public function show($id) {
