@@ -75,3 +75,20 @@
     width:49%;
 
 }
+
+#loadTemplateModal .date {
+    color: grey;
+    font-style: italic;
+    margin-bottom: 0;
+}
+
+#loadTemplateModal .list-group-item.active .date {
+    color: white;
+}
+
+#loadTemplateModal .date span {
+    font-size: 0.7rem;
+    display: inline-block;
+    vertical-align: middle;
+    line-height: normal;
+}

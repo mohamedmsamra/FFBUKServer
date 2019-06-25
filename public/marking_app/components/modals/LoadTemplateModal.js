@@ -23,7 +23,7 @@ class LoadTemplateModal extends React.Component {
             return (
                 <a onClick={() => this.handleClick(template)} class="list-group-item list-group-item-action" href={'#' + template.id} data-toggle="list" role="tab">
                     {template.name}
-                    <span className="float-right">{template.created_at}</span>
+                    <p className="float-right date"><span>{template.created_at}</span></p>
                 </a>
             )});
         return (
