@@ -49,7 +49,7 @@
         <div>
             {{-- <main class="py-4"> --}}
                 @include('inc.messages')
-                <h2>Marking</h2>
+                <h2>{{ $assignment['name'] }}</h2>
                 <div>
                     {{-- PDF display side --}}
                     <div class="leftSide">
@@ -98,7 +98,7 @@
       CKEDITOR.replace( 'article-ckeditor' );
     </script>
     <script>
-        const assignment_id = 1;
+        const assignment_id = {{ $assignment['id'] }};
     </script>
     <script type="text/jsx" src="/marking_app/components/modals/CreateTemplateModal.js"></script>
     <script type="text/jsx" src="/marking_app/components/modals/LoadTemplateModal.js"></script>

@@ -26,7 +26,7 @@
     <h1> List of Assignments</h1>
     @if(count($assignment)>0)  
         @foreach ($assignment as $assignment)
-        <a href="/marking" class="btn btn-mark" style="font-size:1.35rem;padding-bottom:0px">{{$assignment->name}}<a>
+        <a href="/marking/{{ $assignment->id }}" class="btn btn-mark" style="font-size:1.35rem;padding-bottom:0px">{{$assignment->name}}<a>
         <div>
             {!!$assignment->desc!!}
         </div>

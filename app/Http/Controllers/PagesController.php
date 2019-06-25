@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Assignment;
 
 class PagesController extends Controller
 {
@@ -23,9 +24,15 @@ class PagesController extends Controller
         $title = 'Courses';
         return view('pages.courses')-> with('title', $title);
     }
-    public function marking(){
+    public function marking($assignment_id){
         $title = 'Marking';
-        return view('pages.newMarking')-> with('title', $title);
+        // Find assignment
+        $assignment = Assignment::where('id', '=', $assignment_id)->first();
+        if ($assignment === null) {
+            abort(404);
+        } else {
+            return view('pages.newMarking', ['title' => $title, 'assignment' => $assignment]);
+        }
     }
     public function faqs(){
         $title = 'Frequently Asked Questions';
