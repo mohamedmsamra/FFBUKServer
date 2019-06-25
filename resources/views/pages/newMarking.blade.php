@@ -66,6 +66,8 @@
                             
                             <div class="clear" style="height: 10px"></div>
                             
+                            <embed src= "/Report 1.pdf" width= "500" height= "375">
+
                             <div class="pdfEmbed"></div> <!--Filled by tabtoggle.js on upload to PDFChoose-->
                     </div>
 
@@ -73,13 +75,13 @@
                     <div class="rightSide">
                         <div id="react-root"></div>
                         
-                        {{-- <div class="save">
+                        <div class="save">
                             <button type="button" class='btn btn-danger' onclick="if(confirm('All entered text will be deleted. Are you sure?')) setup()" id="clearButton">Clear All</button>
                             <button type="button" class='btn btn-success' onclick="Save(event); getPDF()" id="nextButton">Save and Load Next Document</button>
                             Save as:
                             <input type="radio" name="txtorpdf" value="pdf" checked="checked">PDF</input>
                             <input type="radio" name="txtorpdf" value="txt">Text</input>
-                        </div> --}}
+                        </div>
                         
                         </div>
                         

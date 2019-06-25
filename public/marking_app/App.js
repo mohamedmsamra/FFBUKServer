@@ -121,6 +121,19 @@ class App extends React.Component {
                                     <Section title="3 Points Done Well" hasComments={false} removeable={false}/>
                                     <Section title="3 Points To Impove" hasComments={false} removeable={false}/>
                                 </div>
+                                {/* <div class="save">
+                                    <button type="button" class='btn btn-danger' onClick={} id="clearButton">Clear All</button>
+                                    <button type="button" class='btn btn-success' onClick={} id="nextButton">Save and Load Next Document</button>
+                                    Save as:
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio" id="customRadio1" name="customRadio" class="custom-control-input" />
+                                        <label class="custom-control-label" for="customRadio1">Pdf</label>
+                                    </div>
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio" id="customRadio2" name="customRadio" class="custom-control-input" />
+                                        <label class="custom-control-label" for="customRadio2">Text</label>
+                                    </div>
+                                </div> */}
                             </div>)
                     }
                 </div>
