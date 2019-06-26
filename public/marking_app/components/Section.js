@@ -111,10 +111,14 @@ class Section extends React.Component {
         return <div className="input-group">
                     <input type="text" className="form-control" defaultValue={this.state.title}/>
                     <div className="input-group-append" id="button-addon4">
-                        <button onClick={this.handleEditTitle} className="btn btn-outline-secondary" type="button"><i className="fas fa-times"></i></button>
-                        <button className="btn btn-outline-secondary" type="button"><i className="fas fa-check"></i></button>
+                        <button onClick={this.handleEditTitle} className="btn btn-outline-danger" type="button"><i className="fas fa-times"></i></button>
+                        <button onClick={this.updateTitle} className="btn btn-outline-success" type="button"><i className="fas fa-check"></i></button>
                     </div>
                 </div>
+    }
+
+    updateTitle() {
+        this.setState({editTitle: false, title: edited});
     }
 
     renderAddCommentInput() {
