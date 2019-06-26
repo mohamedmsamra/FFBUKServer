@@ -1,3 +1,5 @@
+import React from 'react';
+
 class CreateTemplateModal extends React.Component {
     constructor(props) {
         super(props);
@@ -40,3 +42,5 @@ class CreateTemplateModal extends React.Component {
         )
     }
 }
+
+export default CreateTemplateModal;

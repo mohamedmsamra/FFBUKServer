@@ -38,9 +38,10 @@
     <script src="{{ asset('../js_ffbuk/jszip.js')}}"></script>
     <script src="{{ asset('../js_ffbuk/fileSaver.js')}}"></script>
     <script mimeType=text/plain; charset=x-user-defined src="{{ asset('../js_ffbuk/jszip-utils.js')}}"></script>
-    <script crossorigin src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
+
+    {{-- <script crossorigin src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script> {{-- TODO: Only temporary --}}
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script> --}} {{-- TODO: Only temporary --}}
 	<meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 <body>
@@ -100,12 +101,12 @@
     <script>
         const assignment_id = {{ $assignment['id'] }};
     </script>
-    <script type="text/jsx" src="/marking_app/components/modals/CreateTemplateModal.js"></script>
+    {{-- <script type="text/jsx" src="/marking_app/components/modals/CreateTemplateModal.js"></script>
     <script type="text/jsx" src="/marking_app/components/modals/LoadTemplateModal.js"></script>
     <script type="text/jsx" src="/marking_app/components/Loading.js"></script>
     <script type="text/jsx" src="/marking_app/components/modals/NewSectionModal.js"></script>
     <script type="text/jsx" src="/marking_app/components/Section.js"></script>
-    <script type="text/jsx" src="/marking_app/App.js"></script>
-    <script type="text/jsx" src="/marking_app/index.js"></script>
+    <script type="text/jsx" src="/marking_app/App.js"></script> --}}
+    <script src="/build/js/marking_app/index.bundle.js"></script>
 </body>
 </html>

@@ -1,3 +1,5 @@
+import React from 'react';
+
 class Section extends React.Component {
     constructor(props) {
         super(props);
@@ -104,3 +106,5 @@ Section.defaultProps = {
     hasComments: true,
     removeable: true
 }
+
+export default Section;

@@ -1,3 +1,8 @@
+import React from 'react';
+import Section from './components/Section';
+import NewSectionModal from './components/modals/NewSectionModal';
+import LoadTemplateModal from './components/modals/LoadTemplateModal';
+import CreateTemplateModal from './components/modals/CreateTemplateModal';
 
 class App extends React.Component {
     constructor(props) {
@@ -132,3 +137,5 @@ class App extends React.Component {
         );
     }
 }
+
+export default App;

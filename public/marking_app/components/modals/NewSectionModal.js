@@ -1,3 +1,6 @@
+import React from 'react';
+import Loading from '../Loading';
+
 const initialState = {
     submitting: false,
     newSectionTitle: "",
@@ -201,3 +204,5 @@ class NewSectionModal extends React.Component {
         );
     }
 }
+
+export default NewSectionModal;

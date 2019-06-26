@@ -1,3 +1,5 @@
+import React from 'react';
+
 class LoadTemplateModal extends React.Component {
     constructor(props) {
         super(props);
@@ -59,3 +61,5 @@ class LoadTemplateModal extends React.Component {
         )
     }
 }
+
+export default LoadTemplateModal;
