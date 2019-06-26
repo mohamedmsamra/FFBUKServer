@@ -3,6 +3,7 @@ import Section from './components/Section';
 import NewSectionModal from './components/modals/NewSectionModal';
 import LoadTemplateModal from './components/modals/LoadTemplateModal';
 import CreateTemplateModal from './components/modals/CreateTemplateModal';
+import Loading from './components/Loading';
 
 class App extends React.Component {
     constructor(props) {
@@ -25,6 +26,7 @@ class App extends React.Component {
     }
 
     componentDidMount() {
+        console.log('test')
         fetch('/api/templates')
             .then(data => data.json())   
             .then(data => this.setState({templates: data}));
