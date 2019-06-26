@@ -12,5 +12,5 @@ const mix = require('laravel-mix');
  */
 
 // mix.react('resources/js/app.js', 'public/js')
-mix.react('./public/marking_app/index.js', './public/build/js/marking_app/')
+mix.react('./resources/js/marking_app/index.js', './public/builds/js/marking_app/')
    .sass('resources/sass/app.scss', 'public/css');

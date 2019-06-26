@@ -105,6 +105,6 @@
     <script type="text/jsx" src="/marking_app/components/modals/NewSectionModal.js"></script>
     <script type="text/jsx" src="/marking_app/components/Section.js"></script>
     <script type="text/jsx" src="/marking_app/App.js"></script> --}}
-    <script src="/build/js/marking_app/index.js"></script>
+    <script src="/builds/js/marking_app/index.js"></script>
 </body>
 </html>

@@ -26,7 +26,6 @@ class App extends React.Component {
     }
 
     componentDidMount() {
-        console.log('test')
         fetch('/api/templates')
             .then(data => data.json())   
             .then(data => this.setState({templates: data}));
