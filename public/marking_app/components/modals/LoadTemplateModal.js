@@ -23,7 +23,7 @@ class LoadTemplateModal extends React.Component {
         
         const displayTemplates = this.props.templates.map(template => {
             return (
-                <a onClick={() => this.handleClick(template)} class="list-group-item list-group-item-action" href={'#' + template.id} data-toggle="list" role="tab">
+                <a onClick={() => this.handleClick(template)}  onDoubleClick={() => {this.handleClick(template); this.props.handleSelectTemplate(this.state.template)}} class="list-group-item list-group-item-action" href={'#' + template.id} data-toggle="list" role="tab">
                     {template.name}
                     <p className="float-right date"><span>{template.created_at}</span></p>
                 </a>

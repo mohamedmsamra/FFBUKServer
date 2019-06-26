@@ -502,6 +502,7 @@ function getPDF() {
 	var name=$('.pdfEmbed').attr("id"); //name of current embedded PDF (if one exists)
 	var file;
 	var index=-1;
+	console.log(name);
 	if (name) { //if a file is already present, find which point in the file list that file is at
 		var fileList=$('#pdfChoose')[0].files;
 		for (var i=0; i<fileList.length; i++) {

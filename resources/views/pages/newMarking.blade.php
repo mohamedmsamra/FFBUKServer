@@ -67,6 +67,8 @@
                             
                             <div class="clear" style="height: 10px"></div>
                             
+                            {{-- <embed id="myEmbed" src="/Report 1.pdf" width= "500" height= "375"> --}}
+
                             <div class="pdfEmbed"></div> <!--Filled by tabtoggle.js on upload to PDFChoose-->
                     </div>
 
