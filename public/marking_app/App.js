@@ -157,6 +157,7 @@ class App extends React.Component {
                 <NewSectionModal addSection={this.addSection} data={this.state} />
                 <LoadTemplateModal templates={this.state.templates} handleSelectTemplate={this.setTemplate}/>
                 <CreateTemplateModal handleSubmit={this.handleCreateClick}/>
+                
             </div>
         );
     }

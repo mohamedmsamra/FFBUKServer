@@ -102,6 +102,7 @@
     <script>
         const assignment_id = {{ $assignment['id'] }};
     </script>
+    <script type="text/jsx" src="/marking_app/components/modals/ConfirmationModal.js"></script>
     <script type="text/jsx" src="/marking_app/components/modals/CreateTemplateModal.js"></script>
     <script type="text/jsx" src="/marking_app/components/modals/LoadTemplateModal.js"></script>
     <script type="text/jsx" src="/marking_app/components/Loading.js"></script>
