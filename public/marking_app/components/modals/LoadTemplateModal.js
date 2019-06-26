@@ -23,37 +23,37 @@ class LoadTemplateModal extends React.Component {
         
         const displayTemplates = this.props.templates.map(template => {
             return (
-                <a onClick={() => this.handleClick(template)}  onDoubleClick={() => {this.handleClick(template); this.props.handleSelectTemplate(this.state.template)}} class="list-group-item list-group-item-action" href={'#' + template.id} data-toggle="list" role="tab">
+                <a onClick={() => this.handleClick(template)}  onDoubleClick={() => {this.handleClick(template); this.props.handleSelectTemplate(this.state.template)}} className="list-group-item list-group-item-action" href={'#' + template.id} data-toggle="list" role="tab">
                     {template.name}
                     <p className="float-right date"><span>{template.created_at}</span></p>
                 </a>
             )});
         return (
-            <div class="modal fade" id="loadTemplateModal" tabindex="-1" role="dialog" aria-labelledby="loadTemplateModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content loadTemplate">
+            <div className="modal fade" id="loadTemplateModal" tabindex="-1" role="dialog" aria-labelledby="loadTemplateModalLabel" aria-hidden="true">
+                <div className="modal-dialog" role="document">
+                    <div className="modal-content loadTemplate">
 
                         {/* Modal Header */}
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="loadTemplateModalLabel">Load Template</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <div className="modal-header">
+                            <h5 className="modal-title" id="loadTemplateModalLabel">Load Template</h5>
+                            <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
 
                         {/* Modal Body */}
-                        <div class="modal-body">
+                        <div className="modal-body">
                                 
                             {/* Templates */}
-                            <div class="list-group" role="tablist">
+                            <div className="list-group" role="tablist">
                                 {displayTemplates}
                             </div>
 
                         </div>
                         {/* Modal Footer */}
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                            <button onClick={() => this.props.handleSelectTemplate(this.state.template)} type="button" class="btn btn-primary">Load Template</button>
+                        <div className="modal-footer">
+                            <button type="button" className="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            <button onClick={() => this.props.handleSelectTemplate(this.state.template)} type="button" className="btn btn-primary">Load Template</button>
                         </div>
                     </div>
                 </div>

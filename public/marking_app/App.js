@@ -118,41 +118,41 @@ class App extends React.Component {
                         this.state.templateLoaded &&
                             (<div>
                                 <h2>{this.state.template.name}</h2>
-                                <button type="button" class="mb-3 btn btn-lg btn-block btn-light" onClick={() => $("#newSectionModal").modal('show')}>
+                                <button type="button" className="mb-3 btn btn-lg btn-block btn-light" onClick={() => $("#newSectionModal").modal('show')}>
                                 + Add new section
                                 </button>
-                                <div class="sections">
+                                <div className="sections">
                                     {sectionsToRender}
                                     <Section title="3 Points Done Well" hasComments={false} removeable={false}/>
                                     <Section title="3 Points To Impove" hasComments={false} removeable={false}/>
                                 </div>
 
-                                <div class="save">
-                                    <button type="button" class='btn btn-danger' onClick={() => {if(confirm('All entered text will be deleted. Are you sure?')) setup()}} id="clearButton">Clear All</button>
-                                    <button type="button" class='btn btn-success' id="nextButton">Save and Load Next Document</button>
+                                <div className="save">
+                                    <button type="button" className='btn btn-danger' onClick={() => {if(confirm('All entered text will be deleted. Are you sure?')) setup()}} id="clearButton">Clear All</button>
+                                    <button type="button" className='btn btn-success' id="nextButton">Save and Load Next Document</button>
                                     Save as:
                                     Copy
-                                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                                        <label class="btn btn-secondary active">
+                                    <div className="btn-group btn-group-toggle" data-toggle="buttons">
+                                        <label className="btn btn-secondary active">
                                             <input type="radio" name="options" id="option1" autocomplete="off" checked /> PDF
                                         </label>
-                                        <label class="btn btn-secondary">
+                                        <label className="btn btn-secondary">
                                             <input type="radio" name="options" id="option2" autocomplete="off" /> Text
                                         </label>
                                     </div>
                                 </div>
 
-                                {/* <div class="save">
-                                    <button type="button" class='btn btn-danger' onClick={} id="clearButton">Clear All</button>
-                                    <button type="button" class='btn btn-success' onClick={} id="nextButton">Save and Load Next Document</button>
+                                {/* <div className="save">
+                                    <button type="button" className='btn btn-danger' onClick={} id="clearButton">Clear All</button>
+                                    <button type="button" className='btn btn-success' onClick={} id="nextButton">Save and Load Next Document</button>
                                     Save as:
-                                    <div class="custom-control custom-radio">
-                                        <input type="radio" id="customRadio1" name="customRadio" class="custom-control-input" />
-                                        <label class="custom-control-label" for="customRadio1">Pdf</label>
+                                    <div className="custom-control custom-radio">
+                                        <input type="radio" id="customRadio1" name="customRadio" className="custom-control-input" />
+                                        <label className="custom-control-label" for="customRadio1">Pdf</label>
                                     </div>
-                                    <div class="custom-control custom-radio">
-                                        <input type="radio" id="customRadio2" name="customRadio" class="custom-control-input" />
-                                        <label class="custom-control-label" for="customRadio2">Text</label>
+                                    <div className="custom-control custom-radio">
+                                        <input type="radio" id="customRadio2" name="customRadio" className="custom-control-input" />
+                                        <label className="custom-control-label" for="customRadio2">Text</label>
                                     </div>
                                 </div> */}
                             </div>)

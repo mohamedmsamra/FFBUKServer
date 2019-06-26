@@ -94,9 +94,9 @@ class NewSectionModal extends React.Component {
         const category = this.state.selectedCategory == "positive" ? this.state.posComments : this.state.negComments;
         const displayComments = category.map(comment => {
             return (
-                <li class="list-group-item">
+                <li className="list-group-item">
                     {comment.text}
-                    <button type="button" class="close" aria-label="Close" onClick={() => this.handleRemoveComment(comment.id)}>
+                    <button type="button" className="close" aria-label="Close" onClick={() => this.handleRemoveComment(comment.id)}>
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </li>
@@ -111,20 +111,20 @@ class NewSectionModal extends React.Component {
             return (
                 <div>
                     {/* Section Title input */}
-                    <div class="form-group">
+                    <div className="form-group">
                         <input
                             name="newSectionTitle"
                             value={this.state.newSectionTitle}
                             onChange={this.handleFormChange}
                             type="text"
-                            class="form-control form-control-lg"
+                            className="form-control form-control-lg"
                             id="newSectionTitle"
                             placeholder="Section title"
                         />
                     </div>
                     {/* Positive/Negative Buttons */}
-                    <div class="commentsToggle btn-group btn-group-toggle" data-toggle="buttons">
-                        <label class="btn btn-light active" onClick={() => this.handleChangeCommentType("positive")}>
+                    <div className="commentsToggle btn-group btn-group-toggle" data-toggle="buttons">
+                        <label className="btn btn-light active" onClick={() => this.handleChangeCommentType("positive")}>
                             <input
                                 type="radio"
                                 name="selectedCategory"
@@ -133,7 +133,7 @@ class NewSectionModal extends React.Component {
                                 id="addPostive"
                             /> Positive
                         </label>
-                        <label class="btn btn-light" onClick={() => this.handleChangeCommentType("negative")}>
+                        <label className="btn btn-light" onClick={() => this.handleChangeCommentType("negative")}>
                             <input
                                 type="radio"
                                 name="selectedCategory"
@@ -145,19 +145,19 @@ class NewSectionModal extends React.Component {
                     </div>
                     {/* Add New Comment */}
                     <form onSubmit={this.handleAddComment}>
-                        <div class="input-group mb-3">
+                        <div className="input-group mb-3">
                             <input
                                 value={this.state.newComment}
                                 name="newComment" type="text"
                                 onChange={this.handleFormChange}
-                                class="form-control"
+                                className="form-control"
                                 placeholder="New comment"
                                 aria-label="New comment"
                                 aria-describedby="newCommentText"
                             />
-                            <div class="input-group-append">
+                            <div className="input-group-append">
                                 <button
-                                    class="btn btn-outline-secondary"
+                                    className="btn btn-outline-secondary"
                                     type="button"
                                     id="newCommentText"
                                     type="submit"
@@ -168,7 +168,7 @@ class NewSectionModal extends React.Component {
                         </div>
                     </form>
                     {/* Added Comments */}
-                    <ul class="list-group">
+                    <ul className="list-group">
                         {displayComments}
                     </ul>
                 </div>
@@ -176,26 +176,26 @@ class NewSectionModal extends React.Component {
         }
 
         return (
-            <div class="modal fade" id="newSectionModal" tabindex="-1" role="dialog" aria-labelledby="newSectionModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content newSection">
+            <div className="modal fade" id="newSectionModal" tabindex="-1" role="dialog" aria-labelledby="newSectionModalLabel" aria-hidden="true">
+                <div className="modal-dialog" role="document">
+                    <div className="modal-content newSection">
                         {/* Modal Header */}
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="newSectionModalLabel">Add new section</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <div className="modal-header">
+                            <h5 className="modal-title" id="newSectionModalLabel">Add new section</h5>
+                            <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
 
                         {/* Modal Body */}
-                        <div class="modal-body">
+                        <div className="modal-body">
                             {modalBody()}
                         </div>
                         {/* Modal Footer */}
                         {!this.state.submitting &&
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                <button type="button" class="btn btn-primary" onClick={this.handleSubmitSection}>Add section</button>
+                            <div className="modal-footer">
+                                <button type="button" className="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                <button type="button" className="btn btn-primary" onClick={this.handleSubmitSection}>Add section</button>
                             </div>
                         }
                     </div>

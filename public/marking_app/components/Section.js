@@ -54,11 +54,11 @@ class Section extends React.Component {
         this.setState({editTitle: !this.state.editTitle});
         // const prev = e.target;
         // let editable = (
-        //     <div class="input-group">
-        //         <input type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username with two button addons" aria-describedby="button-addon4" />
-        //         <div class="input-group-append" id="button-addon4">
-        //             <button class="btn btn-outline-secondary" type="button"><i class="fas fa-times"></i></button>
-        //             <button class="btn btn-outline-secondary" type="button"><i class="fas fa-check"></i></button>
+        //     <div className="input-group">
+        //         <input type="text" className="form-control" placeholder="Recipient's username" aria-label="Recipient's username with two button addons" aria-describedby="button-addon4" />
+        //         <div className="input-group-append" id="button-addon4">
+        //             <button className="btn btn-outline-secondary" type="button"><i className="fas fa-times"></i></button>
+        //             <button className="btn btn-outline-secondary" type="button"><i className="fas fa-check"></i></button>
         //         </div>
         //     </div>
         // );
@@ -107,30 +107,30 @@ class Section extends React.Component {
     }
 
     renderTitleEditView() {
-        return <div class="input-group">
-                    <input type="text" class="form-control" defaultValue={this.state.title}/>
-                    <div class="input-group-append" id="button-addon4">
-                        <button onClick={this.handleEditTitle} class="btn btn-outline-secondary" type="button"><i class="fas fa-times"></i></button>
-                        <button class="btn btn-outline-secondary" type="button"><i class="fas fa-check"></i></button>
+        return <div className="input-group">
+                    <input type="text" className="form-control" defaultValue={this.state.title}/>
+                    <div className="input-group-append" id="button-addon4">
+                        <button onClick={this.handleEditTitle} className="btn btn-outline-secondary" type="button"><i className="fas fa-times"></i></button>
+                        <button className="btn btn-outline-secondary" type="button"><i className="fas fa-check"></i></button>
                     </div>
                 </div>
     }
 
     renderAddCommentInput() {
         return <form onSubmit={this.handleAddComment}>
-                    <div class="input-group mb-3">
+                    <div className="input-group mb-3">
                         <input
                             value={this.state.newComment}
                             name="newComment" type="text"
                             onChange={this.handleFormChange}
-                            class="form-control"
+                            className="form-control"
                             placeholder="New comment"
                             aria-label="New comment"
                             aria-describedby="newCommentText"
                         />
-                        <div class="input-group-append">
+                        <div className="input-group-append">
                             <button
-                                class="btn btn-outline-secondary"
+                                className="btn btn-outline-secondary"
                                 type="button"
                                 id="newCommentText"
                                 type="submit"
@@ -156,11 +156,11 @@ class Section extends React.Component {
                         {comment.text}
                     </div>
                     <div className="float-right commentBtns">
-                        <button type="button" class="invisibleBtn"  data-toggle="tooltip" data-placement="top" title="Edit Comment">
-                            <i class="far fa-edit"></i>
+                        <button type="button" className="invisibleBtn"  data-toggle="tooltip" data-placement="top" title="Edit Comment">
+                            <i className="far fa-edit"></i>
                         </button>
-                        <button type="button" class="invisibleBtn" onClick={() => this.handleRemoveComment(comment.id)/*{$("#confirmationModal").modal('show'); this.setCommentId(comment.id)}*/} data-placement="top" title="Edit Comment">
-                            <i class="fas fa-times"></i>
+                        <button type="button" className="invisibleBtn" onClick={() => this.handleRemoveComment(comment.id)/*{$("#confirmationModal").modal('show'); this.setCommentId(comment.id)}*/} data-placement="top" title="Edit Comment">
+                            <i className="fas fa-times"></i>
                         </button>
                     </div>
                 </li>
@@ -197,7 +197,7 @@ class Section extends React.Component {
 
         // The button to delete a section
         let removeBtn = (
-            <button onClick={() => this.props.handleDeleteClick(this.props.id)} type="button" class="close" aria-label="Close">
+            <button onClick={() => this.props.handleDeleteClick(this.props.id)} type="button" className="close" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
         );
@@ -213,8 +213,8 @@ class Section extends React.Component {
                     <h3 onDoubleClick={this.handleEditTitle}>{this.props.title}</h3>
                 }
 
-                <div class="form-group">
-                    <textarea class="form-control" value={this.state.value} onChange={this.handleTextareaChange}></textarea>
+                <div className="form-group">
+                    <textarea className="form-control" value={this.state.value} onChange={this.handleTextareaChange}></textarea>
                 </div>
 
                 {/* If this section should have comments, display them */}
