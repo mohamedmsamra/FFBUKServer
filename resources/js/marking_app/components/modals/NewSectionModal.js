@@ -129,7 +129,7 @@ class NewSectionModal extends React.Component {
                                 type="radio"
                                 name="selectedCategory"
                                 value="positive"
-                                checked={this.state.selectedCategory === "positive"}
+                                defaultChecked={this.state.selectedCategory === "positive"}
                                 id="addPostive"
                             /> Positive
                         </label>
@@ -138,7 +138,7 @@ class NewSectionModal extends React.Component {
                                 type="radio"
                                 name="selectedCategory"
                                 value="negative"
-                                checked={this.state.selectedCategory === "negative"}
+                                defaultChecked={this.state.selectedCategory === "negative"}
                                 id="addNegative"
                             /> Negative
                         </label>
@@ -176,7 +176,7 @@ class NewSectionModal extends React.Component {
         }
 
         return (
-            <div className="modal fade" id="newSectionModal" tabindex="-1" role="dialog" aria-labelledby="newSectionModalLabel" aria-hidden="true">
+            <div className="modal fade" id="newSectionModal" tabIndex="-1" role="dialog" aria-labelledby="newSectionModalLabel" aria-hidden="true">
                 <div className="modal-dialog" role="document">
                     <div className="modal-content newSection">
                         {/* Modal Header */}

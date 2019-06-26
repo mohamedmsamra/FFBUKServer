@@ -98,7 +98,7 @@ class App extends React.Component {
 
 
     render() {
-        const sectionsToRender = this.state.sections.map(section => <Section handleDeleteClick={this.deleteSection} id={section.id} title={section.title} posComments={section.positiveComments} negComments={section.negativeComments}/>)
+        const sectionsToRender = this.state.sections.map(section => <Section handleDeleteClick={this.deleteSection} id={section.id} key={section.id} title={section.title} posComments={section.positiveComments} negComments={section.negativeComments}/>)
 
         return (
             <div>
@@ -132,13 +132,12 @@ class App extends React.Component {
                                     <button type="button" className='btn btn-danger' onClick={() => {if(confirm('All entered text will be deleted. Are you sure?')) setup()}} id="clearButton">Clear All</button>
                                     <button type="button" className='btn btn-success' id="nextButton">Save and Load Next Document</button>
                                     Save as:
-                                    Copy
                                     <div className="btn-group btn-group-toggle" data-toggle="buttons">
                                         <label className="btn btn-secondary active">
-                                            <input type="radio" name="options" id="option1" autocomplete="off" checked /> PDF
+                                            <input type="radio" name="options" id="option1" autoComplete="off" defaultChecked /> PDF
                                         </label>
                                         <label className="btn btn-secondary">
-                                            <input type="radio" name="options" id="option2" autocomplete="off" /> Text
+                                            <input type="radio" name="options" id="option2" autoComplete="off" /> Text
                                         </label>
                                     </div>
                                 </div>

@@ -23,13 +23,13 @@ class LoadTemplateModal extends React.Component {
         
         const displayTemplates = this.props.templates.map(template => {
             return (
-                <a onClick={() => this.handleClick(template)}  onDoubleClick={() => {this.handleClick(template); this.props.handleSelectTemplate(this.state.template)}} className="list-group-item list-group-item-action" href={'#' + template.id} data-toggle="list" role="tab">
+                <a onClick={() => this.handleClick(template)}  onDoubleClick={() => {this.handleClick(template); this.props.handleSelectTemplate(this.state.template)}} className="list-group-item list-group-item-action" href={'#' + template.id} key={template.id} data-toggle="list" role="tab">
                     {template.name}
                     <p className="float-right date"><span>{template.created_at}</span></p>
                 </a>
             )});
         return (
-            <div className="modal fade" id="loadTemplateModal" tabindex="-1" role="dialog" aria-labelledby="loadTemplateModalLabel" aria-hidden="true">
+            <div className="modal fade" id="loadTemplateModal" tabIndex="-1" role="dialog" aria-labelledby="loadTemplateModalLabel" aria-hidden="true">
                 <div className="modal-dialog" role="document">
                     <div className="modal-content loadTemplate">
 

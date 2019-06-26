@@ -10,7 +10,7 @@ class CreateTemplateModal extends React.Component {
  
     render() {
         return (
-            <div className="modal fade" id="createTemplateModal" tabindex="-1" role="dialog" aria-labelledby="createTemplateModalLabel" aria-hidden="true">
+            <div className="modal fade" id="createTemplateModal" tabIndex="-1" role="dialog" aria-labelledby="createTemplateModalLabel" aria-hidden="true">
                 <div className="modal-dialog" role="document">
                     <div className="modal-content createTemplate">
 

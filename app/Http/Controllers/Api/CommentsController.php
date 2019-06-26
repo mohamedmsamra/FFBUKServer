@@ -25,4 +25,10 @@ class CommentsController extends Controller
         
         return json_encode("done");
     }
+
+    public function destroy($id) {
+        $comment = Comment::find($id);
+        $comment -> delete();
+        return json_encode("done");
+    }
 }

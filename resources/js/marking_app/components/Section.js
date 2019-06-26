@@ -75,18 +75,33 @@ class Section extends React.Component {
 
     handleRemoveComment(idToRemove) {
         // let idToRemove = this.state.commentID;
-        this.setState(prevState => {
-            const category = prevState.openComments == "positive" ? "posComments" : "negComments";
-            for (var i = 0; i < prevState[category].length; i++) { 
-                if (prevState[category][i].id == idToRemove) {
-                    prevState[category].splice(i, 1); 
-                }
+        fetch('/api/comments/' + idToRemove, {
+            method: 'delete',
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json, text-plain, */*",
+                "X-Requested-With": "XMLHttpRequest",
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content')
             }
-            return prevState;
+        }).then(function(response) {
+            return response.json();
+        }).then((data) => {
+            console.log(data);
+        }).then( () => {
+            this.setState(prevState => {
+                const category = prevState.openComments == "positive" ? "posComments" : "negComments";
+                for (var i = 0; i < prevState[category].length; i++) { 
+                    if (prevState[category][i].id == idToRemove) {
+                        prevState[category].splice(i, 1); 
+                    }
+                }
+                return prevState;
+            });
+            $("#confirmationModal").removeClass("fade");
+            $("#confirmationModal").modal('hide');
+            $("#confirmationModal").addClass("fade");
         });
-        $("#confirmationModal").removeClass("fade");
-        $("#confirmationModal").modal('hide');
-        $("#confirmationModal").addClass("fade");
+        
     }
 
     handleFormChange(event) {
@@ -151,7 +166,7 @@ class Section extends React.Component {
         const category = this.state.openComments == "positive" ? this.state.posComments : this.state.negComments;
         const displayComments = category.map(comment => {
             return (
-                <li className="list-group-item  list-group-item-action sectionComment">
+                <li key={'comment' + comment.id} className="list-group-item  list-group-item-action sectionComment">
                     <div 
                         className="float-left clickableComment" 
                         onClick={() => this.handleCommentClick(comment)}  
