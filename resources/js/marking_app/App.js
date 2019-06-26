@@ -36,8 +36,26 @@ class App extends React.Component {
     }
 
     deleteSection(id){
+        // let idToRemove = this.state.commentID;
+        fetch('/api/sections/' + id, {
+            method: 'delete',
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json, text-plain, */*",
+                "X-Requested-With": "XMLHttpRequest",
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content')
+            }
+        }).then(function(response) {
+            return response.json();
+        }).then((data) => {
+            console.log(data);
+            $("#confirmationModal").removeClass("fade");
+            $("#confirmationModal").modal('hide');
+            $("#confirmationModal").addClass("fade");
+        });
         let items = this.state.sections.filter(item => item.id !== id);
         this.setState({sections: items});
+
     }
 
     handleCreateClick(templateName) {
@@ -96,9 +114,8 @@ class App extends React.Component {
         
     }
 
-
     render() {
-        const sectionsToRender = this.state.sections.map(section => <Section handleDeleteClick={this.deleteSection} id={section.id} key={section.id} title={section.title} posComments={section.positiveComments} negComments={section.negativeComments}/>)
+        const sectionsToRender = this.state.sections.map(section => <Section handleDeleteClick={this.deleteSection} id={section.id} key={section.id} title={section.title} posComments={section.positiveComments} negComments={section.negativeComments} template_id={this.state.template.id}/>)
 
         return (
             <div>

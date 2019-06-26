@@ -1,9 +1,12 @@
 .section {
-	background: #f0f0f0;
-	border: 1px solid #ddd;
-    padding: 20px;
-	border-radius: 10px;
-    margin-bottom: 20px;
+	/* background: #f0f0f0; */
+	/* border: 1px solid #ddd; */
+    /* padding: 20px; */
+	border-radius: 10px!important;
+    margin-bottom: 30px;
+    -webkit-box-shadow: 0 8px 12px -5px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: 0 8px 12px -5px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 8px 12px -5px rgba(0, 0, 0, 0.3);
 }
 
 .section textarea {
@@ -11,6 +14,10 @@
     height: 100px;
     resize: none;
     margin-bottom: 10px;
+}
+
+.section .titleDiv h4{
+    line-height: 1.25;
 }
 
 .comments .buttons {
@@ -97,6 +104,13 @@
     background-color: transparent;
     border: none;
     padding: 0.5rem;
+    margin: 0;
+}
+
+.titleDiv .invisibleBtn {
+    background-color: transparent;
+    border: none;
+    padding: 4px 10px;
     margin: 0;
 }
 
