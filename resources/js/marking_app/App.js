@@ -4,6 +4,7 @@ import NewSectionModal from './components/modals/NewSectionModal';
 import LoadTemplateModal from './components/modals/LoadTemplateModal';
 import CreateTemplateModal from './components/modals/CreateTemplateModal';
 import Loading from './components/Loading';
+import Comment from './components/Comment.js';
 
 class App extends React.Component {
     constructor(props) {
@@ -119,14 +120,11 @@ class App extends React.Component {
 
         return (
             <div>
-                {/* <div className="markingSide">
                 
-                </div> */}
                 <div className="loadCreateBtns">
                     <button type="button" className="btn btn-outline-primary btn-lg" onClick={() => $("#loadTemplateModal").modal('show')}>Load Template</button>
                     <button onClick={() => $("#createTemplateModal").modal('show')} type="button" className="btn btn-outline-success btn-lg">Create Template</button>
                 </div>
-                {/* // onClick={this.handleCreateClick} */}
                 
                 <div>
                     {this.state.loading

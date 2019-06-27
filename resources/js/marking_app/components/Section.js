@@ -1,5 +1,5 @@
 import React from 'react';
-import ConfirmationModal from './modals/ConfirmationModal'
+import ConfirmationModal from './modals/ConfirmationModal';
 
 class Section extends React.Component {
     constructor(props) {
@@ -14,7 +14,8 @@ class Section extends React.Component {
             newComment: '',
             idCounter: 0, 
             commentID: 0,
-            editTitle: false
+            editTitle: false,
+            editComment: false
         }
         this.openComments = this.openComments.bind(this);
         this.handleCommentClick = this.handleCommentClick.bind(this);
@@ -25,6 +26,12 @@ class Section extends React.Component {
         this.setCommentId = this.setCommentId.bind(this);
         this.handleRemoveComment = this.handleRemoveComment.bind(this);
         this.updateTitle = this.updateTitle.bind(this);
+        this.changeEditComment = this.changeEditComment.bind(this);
+        this.updateComment = this.updateComment.bind(this);
+        this.renderEditCommentView = this.renderEditCommentView.bind(this);
+        this.renderCommentView = this.renderCommentView.bind(this);
+        this.renderAddCommentInput = this.renderAddCommentInput.bind(this);
+        this.renderTitleEditView = this.renderTitleEditView.bind(this);
     }
 
     // Display list of comments 
@@ -139,7 +146,7 @@ class Section extends React.Component {
 
     renderTitleEditView() {
         return <div className="input-group">
-                    <input type="text" className="form-control" defaultValue={this.state.title} ref="sectionTitleInput"/>
+                    <input type="text" className="form-control form-control-lg" defaultValue={this.state.title} ref="sectionTitleInput"/>
                     <div className="input-group-append" id="button-addon4">
                         <button onClick={this.handleEditTitle} className="btn btn-outline-danger" type="button"><i className="fas fa-times"></i></button>
                         <button onClick={this.updateTitle} className="btn btn-outline-success" type="button"><i className="fas fa-check"></i></button>
@@ -169,7 +176,14 @@ class Section extends React.Component {
         });
 
         this.setState({editTitle: false, title: this.refs.sectionTitleInput.value});
+    }
 
+    changeEditComment() {
+        this.setState({editComment: !this.state.editComment})
+    }
+
+    updateComment() {
+        this.setState({editComment: false, title: this.refs.commentInput.value});
     }
 
     renderAddCommentInput() {
@@ -198,27 +212,75 @@ class Section extends React.Component {
                 </form>
     }
 
+    renderEditCommentView(comment) {
+        return (
+            <div className="input-group">
+                <input type="text" 
+                className="form-control form-control-lg" 
+                defaultValue={comment.text} 
+                ref="commentInput"/>
+                <div className="input-group-append" id="button-addon4">
+                    <button 
+                        onClick={this.changeEditComment} 
+                        className="btn btn-outline-danger" 
+                        type="button">
+                        <i className="fas fa-times"></i>
+                    </button>
+                    <button 
+                        onClick={this.updateTitle} 
+                        className="btn btn-outline-success" 
+                        type="button">
+                        <i className="fas fa-check"></i>
+                    </button>
+                </div>
+            </div>
+        );
+    }
+
+    renderCommentView(comment) {
+        return (
+            <div>
+                <div 
+                    className="float-left clickableComment" 
+                    onClick={() => this.handleCommentClick(comment)}  
+                    data-toggle="tooltip" 
+                    data-placement="top" 
+                    title="Click to Add">
+                    {comment.text}
+                </div>
+                <div className="float-right commentBtns">
+                    <button 
+                        type="button" 
+                        className="invisibleBtn"  
+                        data-toggle="tooltip" 
+                        data-placement="top" 
+                        title="Edit Comment">
+                        <i className="far fa-edit"></i>
+                    </button>
+                    <button 
+                        type="button" 
+                        className="invisibleBtn" 
+                        onClick={() => this.handleRemoveComment(comment.id)/*{$("#confirmationModal").modal('show'); this.setCommentId(comment.id)}*/}
+                        data-placement="top" 
+                        title="Edit Comment">
+                        <i className="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+        );
+    }
+
     render() {
         const category = this.state.openComments == "positive" ? this.state.posComments : this.state.negComments;
         const displayComments = category.map(comment => {
             return (
                 <li key={'comment' + comment.id} className="list-group-item  list-group-item-action sectionComment">
-                    <div 
-                        className="float-left clickableComment" 
-                        onClick={() => this.handleCommentClick(comment)}  
-                        data-toggle="tooltip" 
-                        data-placement="top" 
-                        title="Click to Add">
-                        {comment.text}
-                    </div>
-                    <div className="float-right commentBtns">
-                        <button type="button" className="invisibleBtn"  data-toggle="tooltip" data-placement="top" title="Edit Comment">
-                            <i className="far fa-edit"></i>
-                        </button>
-                        <button type="button" className="invisibleBtn" onClick={() => this.handleRemoveComment(comment.id)/*{$("#confirmationModal").modal('show'); this.setCommentId(comment.id)}*/} data-placement="top" title="Edit Comment">
-                            <i className="fas fa-times"></i>
-                        </button>
-                    </div>
+                    {this.state.editComment ? 
+                        this.renderEditCommentView(comment)
+                        :
+                        this.renderCommentView(comment)
+                    }
+                    
                 </li>
                 
             )});
