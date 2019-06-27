@@ -15,6 +15,8 @@ class App extends React.Component {
         this.setTemplate = this.setTemplate.bind(this);
         this.loadTemplate = this.loadTemplate.bind(this);
         this.addSection = this.addSection.bind(this);
+        this.handleSectionTextChange = this.handleSectionTextChange.bind(this);
+        this.handleAppendComment = this.handleAppendComment.bind(this);
         this.state = {
             loading: false,
             templates: [],
@@ -22,7 +24,8 @@ class App extends React.Component {
             templateLoaded: false,
             action: '',
             template: {},
-            content: (<h1>Nothing</h1>)
+            content: (<h1>Nothing</h1>),
+            sectionValues: []
         };
     }
 
@@ -101,7 +104,7 @@ class App extends React.Component {
         console.log('Template selected in app has id: ' + this.state.template.id);
         fetch('/api/templates/' + this.state.template.id)
             .then(data => data.json())
-            .then(data => this.setState({sections: data.sections, loading: false}))  
+            .then(data => this.setState({sections: data.sections.map(s => {s.value = ''; return s;}), loading: false}))  
             .then()
             .then(() => {
                 $("#loadTemplateModal").removeClass("fade");
@@ -115,8 +118,32 @@ class App extends React.Component {
         
     }
 
+    handleSectionTextChange(id, value) {
+        this.setState(prevState => {prevState.sections.find(x => x.id == id).value = value; return prevState;});
+    }
+
+    handleAppendComment(id, comment) {
+        this.setState(prevState => {
+            prevState.sections.find(x => x.id == id).value += "<p>" + comment + "</p>";
+            return prevState;
+        });
+    }
+
     render() {
-        const sectionsToRender = this.state.sections.map(section => <Section handleDeleteClick={this.deleteSection} id={section.id} key={section.id} title={section.title} posComments={section.positiveComments} negComments={section.negativeComments} template_id={this.state.template.id}/>)
+        const sectionsToRender = this.state.sections.map(section => { return (
+            <Section
+                handleDeleteClick={this.deleteSection}
+                handleSectionTextChange={this.handleSectionTextChange}
+                handleAppendComment={this.handleAppendComment}
+                id={section.id}
+                key={section.id}
+                title={section.title}
+                value={section.value}
+                posComments={section.positiveComments}
+                negComments={section.negativeComments}
+                template_id={this.state.template.id}
+            />
+        )});
 
         return (
             <div>

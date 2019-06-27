@@ -1,5 +1,6 @@
 import React from 'react';
 import ConfirmationModal from './modals/ConfirmationModal';
+import TextEditor from './TextEditor';
 
 class Section extends React.Component {
     constructor(props) {
@@ -10,7 +11,6 @@ class Section extends React.Component {
             openComments: "",
             posComments: this.props.posComments,
             negComments: this.props.negComments,
-            value: '',
             newComment: '',
             idCounter: 0, 
             commentID: 0,
@@ -20,7 +20,6 @@ class Section extends React.Component {
         this.openComments = this.openComments.bind(this);
         this.handleCommentClick = this.handleCommentClick.bind(this);
         this.handleEditTitle = this.handleEditTitle.bind(this);
-        this.handleTextareaChange = this.handleTextareaChange.bind(this);
         this.handleAddComment = this.handleAddComment.bind(this);
         this.handleFormChange = this.handleFormChange.bind(this);
         this.setCommentId = this.setCommentId.bind(this);
@@ -32,6 +31,7 @@ class Section extends React.Component {
         this.renderCommentView = this.renderCommentView.bind(this);
         this.renderAddCommentInput = this.renderAddCommentInput.bind(this);
         this.renderTitleEditView = this.renderTitleEditView.bind(this);
+        this.handleEditText = this.handleEditText.bind(this);
     }
 
     // Display list of comments 
@@ -52,7 +52,7 @@ class Section extends React.Component {
     handleCommentClick(comment) {
         if(!comment.added) {
             // Add text to text box
-            this.setState({value: this.state.value + comment.text + '\n'});
+            this.props.handleAppendComment(this.props.id, comment.text);
             // Remember that the comment was added (i.e. find the comment and set added = true)
             this.setCommentAdded(comment,true);
         }
@@ -60,10 +60,6 @@ class Section extends React.Component {
 
     handleEditTitle(e) {
         this.setState({editTitle: !this.state.editTitle});
-    }
-
-    handleTextareaChange() {
-        this.setState({value: event.target.value});
     }
 
     setCommentId(id) {
@@ -269,8 +265,14 @@ class Section extends React.Component {
             </div>
         );
     }
+    
+    handleEditText(value) {
+        this.setState({value: value});
+        // this.props.handleSectionTextChange(this.props.id, value);
+    }
 
     render() {
+        console.log('Rendering ' + this.props.id + '...');
         const category = this.state.openComments == "positive" ? this.state.posComments : this.state.negComments;
         const displayComments = category.map(comment => {
             return (
@@ -319,8 +321,7 @@ class Section extends React.Component {
                 <span aria-hidden="true">&times;</span>
             </button>
         );
-
-
+       
         return (
             <div className="card section">
                 <div className="card-header">
@@ -343,7 +344,7 @@ class Section extends React.Component {
                 </div>
                 <div className="card-body">
                     <div className="form-group">
-                        <textarea className="form-control" value={this.state.value} onChange={this.handleTextareaChange}></textarea>
+                        <TextEditor id={this.props.id} value={this.props.value} handleSectionTextChange={(val) => this.props.handleSectionTextChange(this.props.id, val)}/>
                     </div>
 
                     {/* If this section should have comments, display them */}

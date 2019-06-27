@@ -9,10 +9,8 @@
     box-shadow: 0 8px 12px -5px rgba(0, 0, 0, 0.3);
 }
 
-.section textarea {
+.section .sectionText {
     width: 100%;
-    height: 100px;
-    resize: none;
     margin-bottom: 10px;
 }
 
