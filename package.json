@@ -23,8 +23,6 @@
         "laravel-mix": "^4.0.16",
         "lodash": "^4.17.5",
         "popper.js": "^1.15.0",
-        "react": "^16.8.6",
-        "react-dom": "^16.2.0",
         "resolve-url-loader": "^2.3.1",
         "sass": "^1.15.2",
         "sass-loader": "^7.1.0",
@@ -32,6 +30,10 @@
     },
     "dependencies": {
         "font-awesome": "^4.7.0",
+        "react": "^16.8.6",
+        "react-bootstrap": "^1.0.0-beta.9",
+        "react-dom": "^16.2.0",
+        "react-quill": "^1.3.3",
         "tiptap": "^1.13.0",
         "vue-sidebar-menu": "^3.6.0"
     },

@@ -106,8 +106,8 @@ class App extends React.Component {
                 
                 </div> */}
                 <div className="loadCreateBtns">
-                    <button type="button" className="btn btn-outline-primary btn-lg" onClick={() => $("#loadTemplateModal").modal('show')}>Load Template</button>
-                    <button onClick={() => $("#createTemplateModal").modal('show')} type="button" className="btn btn-outline-success btn-lg">Create Template</button>
+                    <button type="button" className="btn btn-outline-primary" onClick={() => $("#loadTemplateModal").modal('show')}>Load Template</button>
+                    <button onClick={() => $("#createTemplateModal").modal('show')} type="button" className="btn btn-outline-success">Create New Template</button>
                 </div>
                 {/* // onClick={this.handleCreateClick} */}
                 
