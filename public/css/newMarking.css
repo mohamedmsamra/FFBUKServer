@@ -134,3 +134,7 @@
 .sectionComment .editView input[type="text"], .sectionComment .editView .btn{
     border: none!important;
 }
+
+.sectionComment .editView {
+    padding: 0.35rem 0.5rem;
+}
