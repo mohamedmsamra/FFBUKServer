@@ -18,6 +18,7 @@ class App extends React.Component {
         this.addSection = this.addSection.bind(this);
         this.handleSectionTextChange = this.handleSectionTextChange.bind(this);
         this.handleAppendComment = this.handleAppendComment.bind(this);
+        this.generatePDF = this.generatePDF.bind(this);
         this.state = {
             loading: false,
             templates: [],
@@ -28,16 +29,6 @@ class App extends React.Component {
             content: (<h1>Nothing</h1>),
             sectionValues: []
         };
-    }
-
-    componentDidMount() {
-        fetch('/api/templates')
-            .then(data => data.json())   
-            .then(data => this.setState({templates: data}));
-
-        fetch('/api/templates/' + this.state.template.id)
-            .then(data => data.json())
-            .then(data => this.setState({sections: data.sections, loading: false}));           
     }
 
     deleteSection(id){
@@ -90,6 +81,9 @@ class App extends React.Component {
     }
 
     setTemplate(temp) {
+        $("#loadTemplateModal").removeClass("fade");
+        $("#loadTemplateModal").modal('hide');
+        $("#loadTemplateModal").addClass("fade");
         this.setState({template: temp, action: 'load'}, function() {
             this.loadTemplate();
         });
@@ -108,9 +102,6 @@ class App extends React.Component {
             .then(data => this.setState({sections: data.sections.map(s => {s.value = ''; return s;}), loading: false}))  
             .then()
             .then(() => {
-                $("#loadTemplateModal").removeClass("fade");
-                $("#loadTemplateModal").modal('hide');
-                $("#loadTemplateModal").addClass("fade");
                 this.setState({loading: false, templateLoaded: true});
             });
 
@@ -131,8 +122,17 @@ class App extends React.Component {
     }
 
     generatePDF() {
+        let html = "";
+        const sections = this.state.sections;
+        for (let i = 0; i < sections.length; i++) {
+            if (sections[i].value != "") {
+                html += "<h1>" + sections[i].title + "</h1>";
+                html += sections[i].value;
+            }
+        }
+
         var doc = new jsPDF();
-        doc.fromHTML('<h1>Hello world!</h1><p>This is a test!</p>', 15, 15, {
+        doc.fromHTML(html, 15, 15, {
             'width': 170,
         });
         doc.save('sample-file.pdf');
@@ -164,7 +164,7 @@ class App extends React.Component {
                 <div>
                     {this.state.loading
                     ?
-                        <Loading text="Loading..." />
+                        <Loading text="Loading template..." />
                     :
                         this.state.templateLoaded &&
                             (<div>
@@ -197,7 +197,7 @@ class App extends React.Component {
                 </div>
 
                 <NewSectionModal addSection={this.addSection} data={this.state} />
-                <LoadTemplateModal templates={this.state.templates} handleSelectTemplate={this.setTemplate}/>
+                <LoadTemplateModal handleSelectTemplate={this.setTemplate}/>
                 <CreateTemplateModal handleSubmit={this.handleCreateClick}/>
                 
             </div>
