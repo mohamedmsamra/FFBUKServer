@@ -29,7 +29,6 @@ class Section extends React.Component {
         this.updateComment = this.updateComment.bind(this);
         this.renderAddCommentInput = this.renderAddCommentInput.bind(this);
         this.renderTitleEditView = this.renderTitleEditView.bind(this);
-        this.handleEditText = this.handleEditText.bind(this);
         this.addComment = this.addComment.bind(this);
     }
 
@@ -228,7 +227,6 @@ class Section extends React.Component {
     }
 
     render() {
-        console.log('Rendering ' + this.props.id + '...');
         const category = this.state.openComments == "positive" ? this.state.posComments : this.state.negComments;
         // {console.log(category)}
 

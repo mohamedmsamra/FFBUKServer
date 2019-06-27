@@ -22,7 +22,6 @@ class TextEditor extends React.Component {
                 [{ 'color': [] }]
             ]
         };
-        console.log('Rendering text editor...');
         return (
             <ReactQuill
                 className="sectionText"
