@@ -72,4 +72,30 @@ class SectionsController extends Controller
 
         return json_encode($returnSection);
     }
+
+    public function destroy($id) {
+        $section = Section::find($id);
+        $section -> delete();
+        return json_encode("done");
+    }
+
+    public function update(Request $request, $id)
+    {
+        $this -> validate($request,[
+            'title' => 'required',
+            'template_id' => 'required',
+            'positiveComments' => 'present|array',
+            'negativeComments' => 'present|array'
+        ]);
+
+         //update this Post, find it by id
+         $section = Section::find($id);
+         $section -> title = $request->input('title'); 
+
+         $section -> save();
+ 
+         //direct the page back to the index
+         //set the success message to Post Created
+         return json_encode("Section Updated!");
+    }
 }

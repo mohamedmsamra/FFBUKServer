@@ -4,6 +4,7 @@ import NewSectionModal from './components/modals/NewSectionModal';
 import LoadTemplateModal from './components/modals/LoadTemplateModal';
 import CreateTemplateModal from './components/modals/CreateTemplateModal';
 import Loading from './components/Loading';
+import Comment from './components/Comment.js';
 
 class App extends React.Component {
     constructor(props) {
@@ -36,8 +37,26 @@ class App extends React.Component {
     }
 
     deleteSection(id){
+        // let idToRemove = this.state.commentID;
+        fetch('/api/sections/' + id, {
+            method: 'delete',
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json, text-plain, */*",
+                "X-Requested-With": "XMLHttpRequest",
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content')
+            }
+        }).then(function(response) {
+            return response.json();
+        }).then((data) => {
+            console.log(data);
+            $("#confirmationModal").removeClass("fade");
+            $("#confirmationModal").modal('hide');
+            $("#confirmationModal").addClass("fade");
+        });
         let items = this.state.sections.filter(item => item.id !== id);
         this.setState({sections: items});
+
     }
 
     handleCreateClick(templateName) {
@@ -96,20 +115,16 @@ class App extends React.Component {
         
     }
 
-
     render() {
-        const sectionsToRender = this.state.sections.map(section => <Section handleDeleteClick={this.deleteSection} id={section.id} key={section.id} title={section.title} posComments={section.positiveComments} negComments={section.negativeComments}/>)
+        const sectionsToRender = this.state.sections.map(section => <Section handleDeleteClick={this.deleteSection} id={section.id} key={section.id} title={section.title} posComments={section.positiveComments} negComments={section.negativeComments} template_id={this.state.template.id}/>)
 
         return (
             <div>
-                {/* <div className="markingSide">
                 
-                </div> */}
                 <div className="loadCreateBtns">
                     <button type="button" className="btn btn-outline-primary" onClick={() => $("#loadTemplateModal").modal('show')}>Load Template</button>
                     <button onClick={() => $("#createTemplateModal").modal('show')} type="button" className="btn btn-outline-success">Create New Template</button>
                 </div>
-                {/* // onClick={this.handleCreateClick} */}
                 
                 <div>
                     {this.state.loading
