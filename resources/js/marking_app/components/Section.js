@@ -1,4 +1,5 @@
 import React from 'react';
+import Comment from './Comment.js';
 import ConfirmationModal from './modals/ConfirmationModal';
 
 class Section extends React.Component {
@@ -15,7 +16,6 @@ class Section extends React.Component {
             idCounter: 0, 
             commentID: 0,
             editTitle: false,
-            editComment: false
         }
         this.openComments = this.openComments.bind(this);
         this.handleCommentClick = this.handleCommentClick.bind(this);
@@ -28,10 +28,10 @@ class Section extends React.Component {
         this.updateTitle = this.updateTitle.bind(this);
         this.changeEditComment = this.changeEditComment.bind(this);
         this.updateComment = this.updateComment.bind(this);
-        this.renderEditCommentView = this.renderEditCommentView.bind(this);
-        this.renderCommentView = this.renderCommentView.bind(this);
         this.renderAddCommentInput = this.renderAddCommentInput.bind(this);
         this.renderTitleEditView = this.renderTitleEditView.bind(this);
+        this.addComment = this.addComment.bind(this);
+
     }
 
     // Display list of comments 
@@ -72,6 +72,7 @@ class Section extends React.Component {
 
     handleRemoveComment(idToRemove) {
         // let idToRemove = this.state.commentID;
+        console.log('Fetch method delete comment with id = ' + idToRemove);
         fetch('/api/comments/' + idToRemove, {
             method: 'delete',
             headers: {
@@ -106,14 +107,25 @@ class Section extends React.Component {
         type === "checkbox" ? this.setState({ [name]: checked }) : this.setState({ [name]: value });
     }
 
+    addComment(comment) {
+        if (comment.type === 'positive') {
+            console.log('positive: ' + comment); 
+            this.setState(prevState => prevState.posComments.push(comment));
+        } else if (comment.type === 'negative') {
+            console.log('negative: ' + comment); 
+
+            this.setState(prevState => prevState.negComments.push(comment));
+        }
+    }
+
     handleAddComment(event) {
         
         if (this.state.newComment != "") {
             let cat = this.state.openComments;
-            console.log("comment text is " + this.state.newComment);
-            console.log("comment type is " + cat);
-            console.log("comment section id is " + this.props.id);
-
+            // console.log("comment text is " + this.state.newComment);
+            // console.log("comment type is " + cat);
+            // console.log("comment section id is " + this.props.id);
+            console.log('I am here');
             // Submit the section to the server
             fetch("/api/comments", {
                 method: 'post',
@@ -128,17 +140,25 @@ class Section extends React.Component {
                     "X-Requested-With": "XMLHttpRequest",
                     "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content')
                 }
-            }).then(function(data) {
-                console.log(data);
-            });
-
-            this.setState(prevState => {
-                const category = prevState.openComments == "positive" ? "posComments" : "negComments";
-                prevState[category].push({id: prevState.idCounter, text: this.state.newComment});
-                prevState.idCounter++;
-                prevState.newComment = "";
-                return prevState;
             })
+                .then(data => data.json())
+                .then(data => {
+                    console.log('but not here');
+
+                    console.log('what' + data);
+                    this.addComment(data);
+                    this.setState({newComment: ''});
+                });
+
+                console.log('and I am here');
+
+            // this.setState(prevState => {
+            //     const category = prevState.openComments == "positive" ? "posComments" : "negComments";
+            //     prevState[category].push({id: prevState.idCounter, text: this.state.newComment});
+            //     prevState.idCounter++;
+            //     prevState.newComment = "";
+            //     return prevState;
+            // })
         }              
         
         event.preventDefault();
@@ -212,74 +232,21 @@ class Section extends React.Component {
                 </form>
     }
 
-    renderEditCommentView(comment) {
-        return (
-            <div className="input-group">
-                <input type="text" 
-                className="form-control form-control-lg" 
-                defaultValue={comment.text} 
-                ref="commentInput"/>
-                <div className="input-group-append" id="button-addon4">
-                    <button 
-                        onClick={this.changeEditComment} 
-                        className="btn btn-outline-danger" 
-                        type="button">
-                        <i className="fas fa-times"></i>
-                    </button>
-                    <button 
-                        onClick={this.updateTitle} 
-                        className="btn btn-outline-success" 
-                        type="button">
-                        <i className="fas fa-check"></i>
-                    </button>
-                </div>
-            </div>
-        );
-    }
-
-    renderCommentView(comment) {
-        return (
-            <div>
-                <div 
-                    className="float-left clickableComment" 
-                    onClick={() => this.handleCommentClick(comment)}  
-                    data-toggle="tooltip" 
-                    data-placement="top" 
-                    title="Click to Add">
-                    {comment.text}
-                </div>
-                <div className="float-right commentBtns">
-                    <button 
-                        type="button" 
-                        className="invisibleBtn"  
-                        data-toggle="tooltip" 
-                        data-placement="top" 
-                        title="Edit Comment">
-                        <i className="far fa-edit"></i>
-                    </button>
-                    <button 
-                        type="button" 
-                        className="invisibleBtn" 
-                        onClick={() => this.handleRemoveComment(comment.id)/*{$("#confirmationModal").modal('show'); this.setCommentId(comment.id)}*/}
-                        data-placement="top" 
-                        title="Edit Comment">
-                        <i className="fas fa-times"></i>
-                    </button>
-                </div>
-            </div>
-        );
-    }
 
     render() {
         const category = this.state.openComments == "positive" ? this.state.posComments : this.state.negComments;
+        // {console.log(category)}
+
         const displayComments = category.map(comment => {
             return (
                 <li key={'comment' + comment.id} className="list-group-item  list-group-item-action sectionComment">
-                    {this.state.editComment ? 
+                    <Comment id={comment.id} text={comment.text} type={comment.type} section_id={comment.section_id} handleRemove={this.handleRemoveComment} handleClick={this.handleCommentClick}/>
+                    {/* {this.state.editComment ? 
                         this.renderEditCommentView(comment)
                         :
-                        this.renderCommentView(comment)
-                    }
+                        // this.renderCommentView(comment)
+
+                    } */}
                     
                 </li>
                 

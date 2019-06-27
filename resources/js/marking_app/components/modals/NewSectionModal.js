@@ -82,6 +82,7 @@ class NewSectionModal extends React.Component {
         })
             .then(data => data.json())
             .then(data => {
+                console.log(data);
                 this.props.addSection(data);
                 $("#newSectionModal").removeClass("fade");
                 $("#newSectionModal").modal('hide');
