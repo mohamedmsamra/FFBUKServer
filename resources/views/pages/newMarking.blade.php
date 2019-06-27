@@ -26,10 +26,6 @@
     
     {{-- Font Awesome icons --}}
     <script src="https://kit.fontawesome.com/736a6a7946.js"></script>
-
-    {{-- Scripts --}}
-    <script src="{{ asset('../js_ffbuk/jspdf.min.js') }}"></script>
-    <script src="{{ asset('../js_ffbuk/jspdf.plugin.autotable.js')}}"></script>
     
     <script src="{{ asset('../js_ffbuk/pdfobject.js')}}"></script>
     <script src="{{ asset('../js_ffbuk/marking.js')}}"></script>

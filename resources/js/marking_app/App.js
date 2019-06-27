@@ -1,4 +1,5 @@
 import React from 'react';
+import jsPDF from 'jspdf';
 import Section from './components/Section';
 import NewSectionModal from './components/modals/NewSectionModal';
 import LoadTemplateModal from './components/modals/LoadTemplateModal';
@@ -129,6 +130,14 @@ class App extends React.Component {
         });
     }
 
+    generatePDF() {
+        var doc = new jsPDF();
+        doc.fromHTML('<h1>Hello world!</h1><p>This is a test!</p>', 15, 15, {
+            'width': 170,
+        });
+        doc.save('sample-file.pdf');
+    }
+
     render() {
         const sectionsToRender = this.state.sections.map(section => { return (
             <Section
@@ -147,7 +156,6 @@ class App extends React.Component {
 
         return (
             <div>
-                
                 <div className="loadCreateBtns">
                     <button type="button" className="btn btn-outline-primary" onClick={() => $("#loadTemplateModal").modal('show')}>Load Template</button>
                     <button onClick={() => $("#createTemplateModal").modal('show')} type="button" className="btn btn-outline-success">Create New Template</button>
@@ -172,7 +180,7 @@ class App extends React.Component {
 
                                 <div className="save">
                                     <button type="button" className='btn btn-danger' onClick={() => {if(confirm('All entered text will be deleted. Are you sure?')) setup()}} id="clearButton">Clear All</button>
-                                    <button type="button" className='btn btn-success' id="nextButton">Save and Load Next Document</button>
+                                    <button type="button" className='btn btn-success' id="nextButton" onClick={this.generatePDF}>Save and Load Next Document</button>
                                     Save as:
                                     <div className="btn-group btn-group-toggle" data-toggle="buttons">
                                         <label className="btn btn-secondary active">
