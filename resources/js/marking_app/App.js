@@ -183,20 +183,7 @@ class App extends React.Component {
                                         </label>
                                     </div>
                                 </div>
-
-                                {/* <div className="save">
-                                    <button type="button" className='btn btn-danger' onClick={} id="clearButton">Clear All</button>
-                                    <button type="button" className='btn btn-success' onClick={} id="nextButton">Save and Load Next Document</button>
-                                    Save as:
-                                    <div className="custom-control custom-radio">
-                                        <input type="radio" id="customRadio1" name="customRadio" className="custom-control-input" />
-                                        <label className="custom-control-label" for="customRadio1">Pdf</label>
-                                    </div>
-                                    <div className="custom-control custom-radio">
-                                        <input type="radio" id="customRadio2" name="customRadio" className="custom-control-input" />
-                                        <label className="custom-control-label" for="customRadio2">Text</label>
-                                    </div>
-                                </div> */}
+                                
                             </div>)
                     }
                 </div>

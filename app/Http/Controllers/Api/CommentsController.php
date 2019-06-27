@@ -22,13 +22,35 @@ class CommentsController extends Controller
         $comment->type = $request->input('type');
         $comment->section_id = $request->input('section_id');
         $comment->save();
+
+        $returnComment = Comment::find($comment['id']);
         
-        return json_encode("done");
+        return json_encode($returnComment);
     }
 
     public function destroy($id) {
         $comment = Comment::find($id);
         $comment -> delete();
         return json_encode("done");
+    }
+
+    public function update(Request $request, $id)
+    {
+        
+        $this -> validate($request,[
+            'text' => 'required',
+            'type' => 'required',
+            'section_id' => 'required'
+        ]);
+
+        //update this Post, find it by id
+        $comment = Comment::find($id);
+        $comment -> text = $request->input('text');
+
+        $comment -> save();
+
+        //direct the page back to the index
+        //set the success message to Post Created
+        return json_encode("Comment Updated!");
     }
 }
