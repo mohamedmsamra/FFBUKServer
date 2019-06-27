@@ -28,6 +28,11 @@ class CommentsController extends Controller
         return json_encode($returnComment);
     }
 
+    public function show($id) {
+        $comment =  Comment::find($id);
+        return $comment;
+    }
+
     public function destroy($id) {
         $comment = Comment::find($id);
         $comment -> delete();
@@ -36,7 +41,6 @@ class CommentsController extends Controller
 
     public function update(Request $request, $id)
     {
-        
         $this -> validate($request,[
             'text' => 'required',
             'type' => 'required',
