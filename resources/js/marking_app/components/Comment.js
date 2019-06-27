@@ -8,12 +8,14 @@ class Comment extends React.Component {
             text: this.props.text,
             type: this.props.type,
             section_id: this.props.section_id,
-            edit: false
+            edit: false,
+            added: false
         }
         this.handleEditChange = this.handleEditChange.bind(this);
         this.update = this.update.bind(this);
         this.renderCommentView = this.renderCommentView.bind(this);
         this.renderEditCommentView = this.renderEditCommentView.bind(this);
+        this.setCommentAdded = this.setCommentAdded.bind(this);
     }
 
     handleEditChange(e) {
@@ -27,8 +29,7 @@ class Comment extends React.Component {
             method: 'put',
             mode: 'cors',
             body: JSON.stringify({
-                id: this.props.id,
-                text: this.state.text,
+                text: this.refs.commentInput.value,
                 type: this.props.type,
                 section_id: this.props.section_id
             }),
@@ -41,8 +42,11 @@ class Comment extends React.Component {
         }).then(function(data) {
             console.log(data);
         });
+        this.setState({edit: false, text: this.refs.commentInput.value, added: false});
+    }
 
-        this.setState({edit: false, text: this.refs.commentInput.value});
+    setCommentAdded(value) {
+        this.setState({added : value});
     }
 
     renderEditCommentView() {
@@ -71,11 +75,22 @@ class Comment extends React.Component {
     }
 
     renderCommentView() {
-        // {console.log(this);}
+                
         return (<div>
                     <div 
                         className="float-left clickableComment" 
-                        onClick={() => this.props.handleClick(this.props)}
+                        onClick={() => {
+                            let temp = {
+                                id: this.props.id,
+                                text: this.state.text,
+                                type: this.props.type,
+                                section_id: this.props.section_id,
+                                added: this.state.added
+                            };
+                            this.props.handleClick(temp);
+                            this.setCommentAdded(true);
+                        }
+                            }
                         data-toggle="tooltip" 
                         data-placement="top" 
                         title="Click to Add">
