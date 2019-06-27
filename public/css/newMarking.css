@@ -136,3 +136,13 @@
 .sectionComment .editView {
     padding: 0.315rem 0.5rem;
 }
+
+.commentsList .sectionComment.positive {
+    background-color: #f4fff7;
+    border-color: #aac1af;
+}
+
+.commentsList .sectionComment.negative {
+    background-color: #fff8f9;
+    border-color: #dcafb4;
+}

@@ -186,7 +186,7 @@ class Section extends React.Component {
         const category = this.state.openComments == "positive" ? this.state.posComments : this.state.negComments;
         const displayComments = category.map(comment => {
             return (
-                <li key={'comment' + comment.id} className="list-group-item  list-group-item-action sectionComment">
+                <li key={'comment' + comment.id} className={"list-group-item list-group-item-action sectionComment " + this.state.openComments}>
                     <Comment 
                         id={comment.id} 
                         text={comment.text} 
@@ -197,20 +197,6 @@ class Section extends React.Component {
                 </li>
                 
             )});
-            
-        let openComments;
-
-        if (this.state.openComments != "") {
-            openComments =  (
-                <div className="commentsList">
-                    {this.renderAddCommentInput()}
-                    <div className="list-group commentsList">
-                        {displayComments}
-                    </div>
-                </div>
-                
-            );
-        } 
 
         // The comments part of the section
         let commentsDiv = (
@@ -220,7 +206,15 @@ class Section extends React.Component {
                     <button type="button" className="btn btn-danger" onClick={() => this.openComments("negative")} >Negative</button>
                 </div>
                 
-                {openComments}
+                {this.state.openComments &&
+                    <div className="commentsList">
+                        {this.renderAddCommentInput()}
+                        <div className="list-group commentsList ">
+                            {displayComments}
+                        </div>
+                    </div>
+                }
+
             </div>
         );
 
@@ -248,7 +242,7 @@ class Section extends React.Component {
                         }
                     </div>
                     <div>
-                        {this.props.removeable ? removeBtn : ''}
+                        {this.props.removeable && removeBtn}
                     </div>
                 </div>
                 <div className="card-body">
@@ -257,7 +251,7 @@ class Section extends React.Component {
                     </div>
 
                     {/* If this section should have comments, display them */}
-                    {this.props.hasComments ? commentsDiv : ''}
+                    {this.props.hasComments && commentsDiv}
                 </div>
             </div>
         );
