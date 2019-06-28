@@ -1,3 +1,26 @@
+.template {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    margin-top: 20px;
+    padding: 20px;
+}
+
+.template .templateBody {
+    margin-top: 20px;
+}
+
+.markingSwitch {
+    height: 30px;
+}
+
+.markingSwitch p {
+    font-size: 20px;
+}
+
+.markingSwitch .custom-switch .custom-control-label::before {
+    width: 2.5rem;
+}
+
 .section {
 	/* background: #f0f0f0; */
 	/* border: 1px solid #ddd; */

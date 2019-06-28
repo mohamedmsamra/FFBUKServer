@@ -191,13 +191,27 @@ class App extends React.Component {
                         <Loading text="Loading template..." />
                     :
                     (this.state.template &&
-                        <div>
-                            <h2>{this.state.template.name}</h2>
-                            <button type="button" className="mb-3 btn btn-lg btn-block btn-light" onClick={() => $("#newSectionModal").modal('show')}>
-                            + Add new section
-                            </button>
-                            <div className="sections">
-                                {this.renderSections()}
+                        <div className="template">
+                            <h2 className="templateTitle text-center">{this.state.template.name}</h2>
+                            <hr></hr>
+
+                            <div className="templateBody">
+                                <div className="markingSwitch">
+                                    <p className="float-left">Enable Marking</p>
+                                    <div className="custom-control custom-switch float-right">
+                                        <input type="checkbox" className="custom-control-input" id="customSwitch1"/>
+                                        <label className="custom-control-label" htmlFor="customSwitch1"></label>
+                                    </div>
+                                </div>
+                                
+                            
+                            
+                                <button type="button" className="mb-3 btn btn-lg btn-block btn-light" onClick={() => $("#newSectionModal").modal('show')}>
+                                    + Add new section
+                                </button>
+                                <div className="sections">
+                                    {this.renderSections()}
+                                </div>
                             </div>
 
                             <div className="save">
