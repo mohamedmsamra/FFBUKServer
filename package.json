@@ -31,10 +31,14 @@
     "dependencies": {
         "font-awesome": "^4.7.0",
         "jspdf": "^1.5.3",
+        "prop-types": "^15.7.2",
         "react": "^16.8.6",
+        "react-alert": "^5.5.0",
+        "react-alert-template-basic": "^1.0.0",
         "react-bootstrap": "^1.0.0-beta.9",
         "react-dom": "^16.2.0",
         "react-quill": "^1.3.3",
+        "react-transition-group": "^4.1.1",
         "tiptap": "^1.13.0",
         "vue-sidebar-menu": "^3.6.0"
     },

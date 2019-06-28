@@ -1,5 +1,6 @@
 import React from 'react';
 import jsPDF from 'jspdf';
+import { withAlert } from 'react-alert'
 import Section from './components/Section';
 import NewSectionModal from './components/modals/NewSectionModal';
 import LoadTemplateModal from './components/modals/LoadTemplateModal';
@@ -121,7 +122,7 @@ class App extends React.Component {
             section = this.state.template.sections.compulsory[i];
             console.log("value of " + section.title + ' is ' + section.value);
             if(isEmpty(section.value)) {
-                console.log("compulsory");
+                this.props.alert.error("Entering " + section.title + " is compulsory!");
                 return;
             }
         }
@@ -227,4 +228,4 @@ class App extends React.Component {
     }
 }
 
-export default App;
+export default withAlert()(App);
