@@ -2,10 +2,6 @@ import React from 'react';
 import ReactQuill from 'react-quill';
 
 class TextEditor extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
     handleValueChange(val) {
         this.setState({value: val})
     }
@@ -19,7 +15,7 @@ class TextEditor extends React.Component {
             toolbar: [
                 [{ 'header': [2, 3, false] }],
                 ['bold', 'italic', 'underline'],
-                [{ 'color': [] }]
+                [{ 'color': [] }, { 'list': 'bullet' }]
             ]
         };
         return (
