@@ -107,12 +107,20 @@ class App extends React.Component {
         });
     }
 
+
     generatePDF() {
-        let val;
-        for(let i = 0; i < 2; i++) {
-            val = this.state.template.sections.compulsory[i];
-            console.log("value of " + val.title + ' is ' + val.value);
-            if(val.value === '') {
+        const isEmpty = htmlString => {
+            const parser = new DOMParser();
+         
+            const { textContent } = parser.parseFromString(htmlString, "text/html").documentElement;
+         
+            return !textContent.trim();
+        }
+        let section;
+        for(let i = 0; i < this.state.template.sections.compulsory.length; i++) {
+            section = this.state.template.sections.compulsory[i];
+            console.log("value of " + section.title + ' is ' + section.value);
+            if(isEmpty(section.value)) {
                 console.log("compulsory");
                 return;
             }
