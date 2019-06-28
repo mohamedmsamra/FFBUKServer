@@ -12,7 +12,7 @@ class App extends React.Component {
         // this.handleClick = this.handleClick.bind(this);
         this.deleteSection = this.deleteSection.bind(this);
         this.addSection = this.addSection.bind(this);
-        this.handleCreateClick = this.handleCreateClick.bind(this);
+        this.handleCreatedNewTemplate = this.handleCreatedNewTemplate.bind(this);
         this.handleSectionTextChange = this.handleSectionTextChange.bind(this);
         this.handleCompulsoryTextChange = this.handleCompulsoryTextChange.bind(this);
         this.handleAppendComment = this.handleAppendComment.bind(this);
@@ -49,29 +49,6 @@ class App extends React.Component {
 
     }
 
-    handleCreateClick(templateName) {
-        this.setState({loadButtons: false});
-
-        fetch('/api/templates', {
-            method: 'post',
-            body: JSON.stringify({assignment_id: assignment_id, name: templateName}),
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json, text-plain, */*",
-                "X-Requested-With": "XMLHttpRequest",
-                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content')
-            }
-        }).then(function(response) {
-            return response.json();
-        }).then((data) => {
-            this.setState({template: this.templateFromDBFormat(data)});
-            $("#createTemplateModal").removeClass("fade");
-            $("#createTemplateModal").modal('hide');
-            $("#createTemplateModal").addClass("fade");
-        });
-        
-    }
-
     addSection(section) {
         this.setState(prevState => prevState.template.sections.custom.push(section));
     }
@@ -101,7 +78,6 @@ class App extends React.Component {
             .then(data => {
                 this.setState({
                     template: this.templateFromDBFormat(data),
-                    templateLoaded: true,
                     loading: false
                 });
                 $("#loadTemplateModal").removeClass("fade");
@@ -110,6 +86,10 @@ class App extends React.Component {
             });
 
         this.setState({loading: true});
+    }
+
+    handleCreatedNewTemplate(data) {
+        this.setState({template: this.templateFromDBFormat(data)});
     }
 
     handleSectionTextChange(id, value) {
@@ -232,7 +212,7 @@ class App extends React.Component {
             </div>
 
                 <LoadTemplateModal handleSelectTemplate={this.handleSelectTemplate}/>
-                <CreateTemplateModal handleCreate={this.handleCreateClick}/>
+                <CreateTemplateModal handleCreate={this.handleCreatedNewTemplate}/>
 
             </div>
         );
