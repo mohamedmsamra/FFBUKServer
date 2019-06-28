@@ -128,6 +128,15 @@ class App extends React.Component {
     }
 
     generatePDF() {
+        let val;
+        for(let i = 0; i < 2; i++) {
+            val = this.state.template.sections.compulsory[i];
+            console.log("value of " + val.title + ' is ' + val.value);
+            if(val.value === '') {
+                console.log("compulsory");
+                return;
+            }
+        }
         let html = "";
         const stateSections = this.state.template.sections;
         const outSections = stateSections.custom.concat(stateSections.compulsory);
@@ -144,6 +153,7 @@ class App extends React.Component {
             'width': 170,
         });
         doc.save('sample-file.pdf');
+        
     }
 
     renderSections() {
