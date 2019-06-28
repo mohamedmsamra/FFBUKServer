@@ -22,8 +22,7 @@ class App extends React.Component {
         this.generatePDF = this.generatePDF.bind(this);
         this.state = {
             loading: false,
-            templateLoaded: false,
-            template: {},
+            template: null,
             content: (<h1>Nothing</h1>)
         };
     }
@@ -104,7 +103,6 @@ class App extends React.Component {
             .then(data => {
                 this.setState({
                     template: this.templateFromDBFormat(data),
-                    templateLoaded: true,
                     loading: false
                 });
                 $("#loadTemplateModal").removeClass("fade");
@@ -196,8 +194,8 @@ class App extends React.Component {
                     ?
                         <Loading text="Loading template..." />
                     :
-                        this.state.templateLoaded &&
-                            (<div>
+                        (this.state.template &&
+                            <div>
                                 <h2>{this.state.template.name}</h2>
                                 <button type="button" className="mb-3 btn btn-lg btn-block btn-light" onClick={() => $("#newSectionModal").modal('show')}>
                                 + Add new section
@@ -219,12 +217,12 @@ class App extends React.Component {
                                         </label>
                                     </div>
                                 </div>
-                                
-                            </div>)
+                                <NewSectionModal template_id={this.state.template.id} addSection={this.addSection} data={this.state} />
+                            </div>
+                        )
                     }
                 </div>
 
-                <NewSectionModal template_id={this.state.template.id} addSection={this.addSection} data={this.state} />
                 <LoadTemplateModal handleSelectTemplate={this.handleSelectTemplate}/>
                 <CreateTemplateModal handleCreate={this.handleCreateClick}/>
 
