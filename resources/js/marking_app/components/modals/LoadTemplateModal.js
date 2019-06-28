@@ -42,7 +42,7 @@ class LoadTemplateModal extends React.Component {
                     {/* Modal Footer */}
                     <div className="modal-footer">
                         <button type="button" className="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                        <button onClick={() => this.props.handleSelectTemplate(this.state.selectedTemplateID)} type="button" className="btn btn-primary">Load Template</button>
+                        <button disabled={this.state.selectedTemplateID == -1} onClick={() => this.props.handleSelectTemplate(this.state.selectedTemplateID)} type="button" className="btn btn-primary">Load Template</button>
                     </div>
                 </div>
             );
