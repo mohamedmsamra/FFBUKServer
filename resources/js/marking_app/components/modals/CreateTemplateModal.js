@@ -11,7 +11,6 @@ class CreateTemplateModal extends React.Component {
     constructor(props) {
         super(props);
         this.state = initialState;
-        this.submit = this.submit.bind(this);
         this.handleFormChange = this.handleFormChange.bind(this);
         this.handleCancel = this.handleCancel.bind(this);
     }
@@ -21,20 +20,30 @@ class CreateTemplateModal extends React.Component {
         type === "checkbox" ? this.setState({ [name]: checked }) : this.setState({ [name]: value });
     }
 
-    submit() {
-        const title = document.getElementById("titleInput").value;
-        if (title != '') {
-            this.props.handleCreate(title);
-            // this.setState(initialState);
-        }
-    }
-
     handleSubmit(event) {
         event.preventDefault();
         event.stopPropagation();
         const form = event.currentTarget;
-        this.setState({ validated: true });
-        this.submit();
+        if (this.state.titleInput) {
+            this.setState({ validated: true });
+            fetch('/api/templates', {
+                method: 'post',
+                body: JSON.stringify({assignment_id: assignment_id, name: this.state.titleInput}),
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json, text-plain, */*",
+                    "X-Requested-With": "XMLHttpRequest",
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content')
+                }
+            }).then(function(response) {
+                return response.json();
+            }).then((data) => {
+                this.props.handleCreate(data);
+                $("#createTemplateModal").removeClass("fade");
+                $("#createTemplateModal").modal('hide');
+                $("#createTemplateModal").addClass("fade");
+            });
+        }
     } 
 
     handleCancel(e) {
