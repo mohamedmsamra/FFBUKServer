@@ -5,8 +5,6 @@ import NewSectionModal from './components/modals/NewSectionModal';
 import LoadTemplateModal from './components/modals/LoadTemplateModal';
 import CreateTemplateModal from './components/modals/CreateTemplateModal';
 import Loading from './components/Loading';
-import Comment from './components/Comment.js';
-import Test from './components/modals/Test';
 
 class App extends React.Component {
     constructor(props) {
@@ -103,6 +101,7 @@ class App extends React.Component {
             .then(data => {
                 this.setState({
                     template: this.templateFromDBFormat(data),
+                    templateLoaded: true,
                     loading: false
                 });
                 $("#loadTemplateModal").removeClass("fade");
@@ -172,8 +171,7 @@ class App extends React.Component {
                     id={i}
                     title={sections.compulsory[i].title}
                     value={sections.compulsory[i].value}
-                    hasComments={false}
-                    removeable={false}
+                    compulsory={true}
                     handleSectionTextChange={this.handleCompulsoryTextChange}
                 />
             );
@@ -194,34 +192,34 @@ class App extends React.Component {
                     ?
                         <Loading text="Loading template..." />
                     :
-                        (this.state.template &&
-                            <div>
-                                <h2>{this.state.template.name}</h2>
-                                <button type="button" className="mb-3 btn btn-lg btn-block btn-light" onClick={() => $("#newSectionModal").modal('show')}>
-                                + Add new section
-                                </button>
-                                <div className="sections">
-                                    {this.renderSections()}
-                                </div>
-
-                                <div className="save">
-                                    <button type="button" className='btn btn-danger' onClick={() => {if(confirm('All entered text will be deleted. Are you sure?')) setup()}} id="clearButton">Clear All</button>
-                                    <button type="button" className='btn btn-success' id="nextButton" onClick={this.generatePDF}>Save and Load Next Document</button>
-                                    Save as:
-                                    <div className="btn-group btn-group-toggle" data-toggle="buttons">
-                                        <label className="btn btn-secondary active">
-                                            <input type="radio" name="options" id="option1" autoComplete="off" defaultChecked /> PDF
-                                        </label>
-                                        <label className="btn btn-secondary">
-                                            <input type="radio" name="options" id="option2" autoComplete="off" /> Text
-                                        </label>
-                                    </div>
-                                </div>
-                                <NewSectionModal template_id={this.state.template.id} addSection={this.addSection} data={this.state} />
+                    (this.state.template &&
+                        <div>
+                            <h2>{this.state.template.name}</h2>
+                            <button type="button" className="mb-3 btn btn-lg btn-block btn-light" onClick={() => $("#newSectionModal").modal('show')}>
+                            + Add new section
+                            </button>
+                            <div className="sections">
+                                {this.renderSections()}
                             </div>
-                        )
-                    }
-                </div>
+
+                            <div className="save">
+                                <button type="button" className='btn btn-danger' onClick={() => {if(confirm('All entered text will be deleted. Are you sure?')) setup()}} id="clearButton">Clear All</button>
+                                <button type="button" className='btn btn-success' id="nextButton" onClick={this.generatePDF}>Save and Load Next Document</button>
+                                Save as:
+                                <div className="btn-group btn-group-toggle" data-toggle="buttons">
+                                    <label className="btn btn-secondary active">
+                                        <input type="radio" name="options" id="option1" autoComplete="off" defaultChecked /> PDF
+                                    </label>
+                                    <label className="btn btn-secondary">
+                                        <input type="radio" name="options" id="option2" autoComplete="off" /> Text
+                                    </label>
+                                </div>
+                            </div>
+                            <NewSectionModal template_id={this.state.template.id} addSection={this.addSection} data={this.state} />
+                        </div>
+                    )
+                }
+            </div>
 
                 <LoadTemplateModal handleSelectTemplate={this.handleSelectTemplate}/>
                 <CreateTemplateModal handleCreate={this.handleCreateClick}/>

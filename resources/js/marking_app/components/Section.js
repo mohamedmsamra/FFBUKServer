@@ -234,24 +234,37 @@ class Section extends React.Component {
                             :
                             <div>
                                 <h4 className="float-left" onDoubleClick={this.handleEditTitle}>{this.state.title}</h4>
-                                <button type="button" className="invisibleBtn" onClick={this.handleEditTitle} data-toggle="tooltip" data-placement="top" title="Edit Title">
-                                    <i className="far fa-edit"></i>
-                                </button>
+                                {!this.props.compulsory && (
+                                    <button 
+                                        type="button" 
+                                        className="invisibleBtn" 
+                                        onClick={this.handleEditTitle} 
+                                        data-toggle="tooltip" 
+                                        data-placement="top" 
+                                        title="Edit Title">
+                                        <i className="far fa-edit"></i>
+                                    </button>)
+                                }
+                                
                             </div>
                             
                         }
                     </div>
                     <div>
-                        {this.props.removeable && removeBtn}
+                        {!this.props.compulsory && removeBtn}
                     </div>
                 </div>
                 <div className="card-body">
                     <div className="form-group">
-                        <TextEditor id={this.props.id} value={this.props.value} handleSectionTextChange={(val) => this.props.handleSectionTextChange(this.props.id, val)}/>
+                        <TextEditor 
+                            id={this.props.id} 
+                            value={this.props.value} 
+                            handleSectionTextChange={(val) => this.props.handleSectionTextChange(this.props.id, val)}
+                        />
                     </div>
 
                     {/* If this section should have comments, display them */}
-                    {this.props.hasComments && commentsDiv}
+                    {!this.props.compulsory && commentsDiv}
                 </div>
             </div>
         );
@@ -262,8 +275,7 @@ Section.defaultProps = {
     title: 'Section Title',
     posComments: [],
     negComments: [],
-    hasComments: true,
-    removeable: true
+    compulsory: false
 }
 
 export default Section;

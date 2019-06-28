@@ -1,5 +1,4 @@
 import React from 'react';
-import DangerAlert from '../alerts/DangerAlert.js';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 
@@ -54,7 +53,7 @@ class CreateTemplateModal extends React.Component {
                         {/* Modal Header */}
                         <div className="modal-header">
                             <h5 className="modal-title" id="createTemplateModalLabel">New Template</h5>
-                            <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                            <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={this.handleCancel}>
                             <span aria-hidden="true">&times;</span>
                             </button>
                         </div> 
