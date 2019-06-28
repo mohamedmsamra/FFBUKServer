@@ -12,22 +12,18 @@ class App extends React.Component {
         super(props);
         // this.handleClick = this.handleClick.bind(this);
         this.deleteSection = this.deleteSection.bind(this);
-        this.handleCreateClick = this.handleCreateClick.bind(this);
-        this.setTemplate = this.setTemplate.bind(this);
-        this.loadTemplate = this.loadTemplate.bind(this);
         this.addSection = this.addSection.bind(this);
+        this.handleCreateClick = this.handleCreateClick.bind(this);
         this.handleSectionTextChange = this.handleSectionTextChange.bind(this);
+        this.handleCompulsoryTextChange = this.handleCompulsoryTextChange.bind(this);
         this.handleAppendComment = this.handleAppendComment.bind(this);
+        this.handleSelectTemplate = this.handleSelectTemplate.bind(this);
         this.generatePDF = this.generatePDF.bind(this);
         this.state = {
             loading: false,
-            templates: [],
-            sections: [],
             templateLoaded: false,
-            action: '',
             template: {},
-            content: (<h1>Nothing</h1>),
-            sectionValues: []
+            content: (<h1>Nothing</h1>)
         };
     }
 
@@ -44,20 +40,20 @@ class App extends React.Component {
         }).then(function(response) {
             return response.json();
         }).then((data) => {
-            console.log(data);
             $("#confirmationModal").removeClass("fade");
             $("#confirmationModal").modal('hide');
             $("#confirmationModal").addClass("fade");
         });
-        let items = this.state.sections.filter(item => item.id !== id);
-        this.setState({sections: items});
+        this.setState(prevState => {
+            prevState.template.sections.custom = prevState.template.sections.custom.filter(item => item.id !== id);
+            return prevState;
+        });
 
     }
 
     handleCreateClick(templateName) {
         // post()
-        this.setState({loadButtons: false, action: 'create'}, function () {
-            console.log(this.state.action)});
+        this.setState({loadButtons: false});
 
         fetch('/api/templates', {
             method: 'post',
@@ -71,8 +67,7 @@ class App extends React.Component {
         }).then(function(response) {
             return response.json();
         }).then((data) => {
-            console.log(data);
-            this.setTemplate(data.id);
+            this.setState({template: this.templateFromDBFormat(data)});
             $("#createTemplateModal").removeClass("fade");
             $("#createTemplateModal").modal('hide');
             $("#createTemplateModal").addClass("fade");
@@ -80,54 +75,70 @@ class App extends React.Component {
         
     }
 
-    setTemplate(temp) {
-        $("#loadTemplateModal").removeClass("fade");
-        $("#loadTemplateModal").modal('hide');
-        $("#loadTemplateModal").addClass("fade");
-        this.setState({template: temp, action: 'load'}, function() {
-            this.loadTemplate();
-        });
-    }
-
     addSection(section) {
-        this.setState(prevState => prevState.sections.push(section));
+        this.setState(prevState => prevState.template.sections.custom.push(section));
     }
 
-    loadTemplate() {
-        // console.log(templateId);
-        // console.log(this.state.templates)
-        console.log('Template selected in app has id: ' + this.state.template.id);
-        fetch('/api/templates/' + this.state.template.id)
+    templateFromDBFormat(dbTemplate) {
+        return {
+            name: dbTemplate.name,
+            id: dbTemplate.id,
+            sections: {
+                custom: dbTemplate.sections ? dbTemplate.sections.map(s => {s.value = ''; return s;}) : [],
+                compulsory: [
+                    {
+                        title: "3 Points Done Well",
+                        value: ""
+                    }, {
+                        title: "3 Points To Improve",
+                        value: ""
+                    }
+                ]
+            }
+        };
+    }
+
+    handleSelectTemplate(templateID) {
+        fetch('/api/templates/' + templateID)
             .then(data => data.json())
-            .then(data => this.setState({sections: data.sections.map(s => {s.value = ''; return s;}), loading: false}))  
-            .then()
-            .then(() => {
-                this.setState({loading: false, templateLoaded: true});
+            .then(data => {
+                this.setState({
+                    template: this.templateFromDBFormat(data),
+                    templateLoaded: true,
+                    loading: false
+                });
+                $("#loadTemplateModal").removeClass("fade");
+                $("#loadTemplateModal").modal('hide');
+                $("#loadTemplateModal").addClass("fade");
             });
 
-        // const sectionsToRender = this.state.sections.map(section => <Section handleDeleteClick={this.deleteSection} id={section.id} title={section.title} posComments={section.positiveComments} negComments={section.negativeComments}/>)
         this.setState({loading: true});
-        
     }
 
     handleSectionTextChange(id, value) {
-        this.setState(prevState => {prevState.sections.find(x => x.id == id).value = value; return prevState;});
+        this.setState(prevState => {prevState.template.sections.custom.find(x => x.id == id).value = value; return prevState;});
+    }
+
+    handleCompulsoryTextChange(id, value) {
+        this.setState(prevState => {prevState.template.sections.compulsory[id].value = value; return prevState;});
     }
 
     handleAppendComment(id, comment) {
         this.setState(prevState => {
-            prevState.sections.find(x => x.id == id).value += "<p>" + comment + "</p>";
+            prevState.template.sections.custom.find(x => x.id == id).value += "<p>" + comment + "</p>";
             return prevState;
         });
     }
 
     generatePDF() {
         let html = "";
-        const sections = this.state.sections;
-        for (let i = 0; i < sections.length; i++) {
-            if (sections[i].value != "") {
-                html += "<h1>" + sections[i].title + "</h1>";
-                html += sections[i].value;
+        const stateSections = this.state.template.sections;
+        const outSections = stateSections.custom.concat(stateSections.compulsory);
+
+        for (let i = 0; i < outSections.length; i++) {
+            if (outSections[i].value != "") {
+                html += "<h1>" + outSections[i].title + "</h1>";
+                html += outSections[i].value;
             }
         }
 
@@ -138,8 +149,9 @@ class App extends React.Component {
         doc.save('sample-file.pdf');
     }
 
-    render() {
-        const sectionsToRender = this.state.sections.map(section => { return (
+    renderSections() {
+        const sections = this.state.template.sections;
+        const customSections = sections.custom.map(section => { return (
             <Section
                 handleDeleteClick={this.deleteSection}
                 handleSectionTextChange={this.handleSectionTextChange}
@@ -154,6 +166,24 @@ class App extends React.Component {
             />
         )});
 
+        const compulsorySections = [];
+        for (let i = 0; i < sections.compulsory.length; i++) {
+            compulsorySections.push(
+                <Section
+                    key={-(i + 1)}
+                    id={i}
+                    title={sections.compulsory[i].title}
+                    value={sections.compulsory[i].value}
+                    hasComments={false}
+                    removeable={false}
+                    handleSectionTextChange={this.handleCompulsoryTextChange}
+                />
+            );
+        }
+        return <div>{customSections}{compulsorySections}</div>;
+    }
+
+    render() {
         return (
             <div>
                 <div className="loadCreateBtns">
@@ -173,9 +203,7 @@ class App extends React.Component {
                                 + Add new section
                                 </button>
                                 <div className="sections">
-                                    {sectionsToRender}
-                                    <Section title="3 Points Done Well" hasComments={false} removeable={false}/>
-                                    <Section title="3 Points To Impove" hasComments={false} removeable={false}/>
+                                    {this.renderSections()}
                                 </div>
 
                                 <div className="save">
@@ -196,8 +224,8 @@ class App extends React.Component {
                     }
                 </div>
 
-                <NewSectionModal addSection={this.addSection} data={this.state} />
-                <LoadTemplateModal handleSelectTemplate={this.setTemplate}/>
+                <NewSectionModal template_id={this.state.template.id} addSection={this.addSection} data={this.state} />
+                <LoadTemplateModal handleSelectTemplate={this.handleSelectTemplate}/>
                 <CreateTemplateModal handleSubmit={this.handleCreateClick}/>
                 
             </div>

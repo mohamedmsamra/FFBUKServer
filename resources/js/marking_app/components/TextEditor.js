@@ -17,7 +17,7 @@ class TextEditor extends React.Component {
     render() {
         const quillModules = {
             toolbar: [
-                [{ 'header': [1, 2, 3, false] }],
+                [{ 'header': [2, 3, false] }],
                 ['bold', 'italic', 'underline'],
                 [{ 'color': [] }]
             ]

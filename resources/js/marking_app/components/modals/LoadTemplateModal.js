@@ -6,17 +6,13 @@ class LoadTemplateModal extends React.Component {
         super(props);
         this.state = {
             loading: true,
-            templates: []
+            templates: [],
+            selectedTemplateID: -1
         };
-        this.handleClick = this.handleClick.bind(this);
-    }
-
-    handleClick(temp) {
-        this.setState({template: temp});
     }
 
     componentDidMount() {
-        fetch('/api/templates')
+        fetch('/api/templates?assignment_id=' + assignment_id)
             .then(data => data.json())   
             .then(data => this.setState({templates: data, loading: false}));
     }
@@ -27,7 +23,7 @@ class LoadTemplateModal extends React.Component {
         } else {
             const displayTemplates = this.state.templates.map(template => {
                 return (
-                    <a onClick={() => this.handleClick(template)}  onDoubleClick={() => {this.handleClick(template); this.props.handleSelectTemplate(this.state.template)}} className="list-group-item list-group-item-action" href={'#' + template.id} key={template.id} data-toggle="list" role="tab">
+                    <a onClick={() => this.setState({selectedTemplateID: template.id})} onDoubleClick={() => {this.props.handleSelectTemplate(template.id)}} className="list-group-item list-group-item-action" href={'#' + template.id} key={template.id} data-toggle="list" role="tab">
                         {template.name}
                         <p className="float-right date"><span>{template.created_at}</span></p>
                     </a>
@@ -46,7 +42,7 @@ class LoadTemplateModal extends React.Component {
                     {/* Modal Footer */}
                     <div className="modal-footer">
                         <button type="button" className="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                        <button onClick={() => this.props.handleSelectTemplate(this.state.template)} type="button" className="btn btn-primary">Load Template</button>
+                        <button onClick={() => this.props.handleSelectTemplate(this.state.selectedTemplateID)} type="button" className="btn btn-primary">Load Template</button>
                     </div>
                 </div>
             );
