@@ -4,9 +4,9 @@
     /* padding: 20px; */
 	border-radius: 10px!important;
     margin-bottom: 30px;
-    -webkit-box-shadow: 0 8px 12px -5px rgba(0, 0, 0, 0.3);
-    -moz-box-shadow: 0 8px 12px -5px rgba(0, 0, 0, 0.3);
-    box-shadow: 0 8px 12px -5px rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow: 0 5px 12px 0px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: 0 5px 12px 0px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 5px 12px 0px rgba(0, 0, 0, 0.3);
 }
 
 .section .sectionText {

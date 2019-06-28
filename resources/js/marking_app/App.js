@@ -6,6 +6,7 @@ import LoadTemplateModal from './components/modals/LoadTemplateModal';
 import CreateTemplateModal from './components/modals/CreateTemplateModal';
 import Loading from './components/Loading';
 import Comment from './components/Comment.js';
+import Test from './components/modals/Test';
 
 class App extends React.Component {
     constructor(props) {
@@ -24,7 +25,6 @@ class App extends React.Component {
             templates: [],
             sections: [],
             templateLoaded: false,
-            action: '',
             template: {},
             content: (<h1>Nothing</h1>),
             sectionValues: []
@@ -56,27 +56,30 @@ class App extends React.Component {
 
     handleCreateClick(templateName) {
         // post()
-        this.setState({loadButtons: false, action: 'create'}, function () {
-            console.log(this.state.action)});
+        console.log(templateName);
+        if (templateName != '') {
+            this.setState({loadButtons: false});
 
-        fetch('/api/templates', {
-            method: 'post',
-            body: JSON.stringify({assignment_id: assignment_id, name: templateName}),
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json, text-plain, */*",
-                "X-Requested-With": "XMLHttpRequest",
-                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content')
-            }
-        }).then(function(response) {
-            return response.json();
-        }).then((data) => {
-            console.log(data);
-            this.setTemplate(data.id);
-            $("#createTemplateModal").removeClass("fade");
-            $("#createTemplateModal").modal('hide');
-            $("#createTemplateModal").addClass("fade");
-        });
+            fetch('/api/templates', {
+                method: 'post',
+                body: JSON.stringify({assignment_id: assignment_id, name: templateName}),
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json, text-plain, */*",
+                    "X-Requested-With": "XMLHttpRequest",
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content')
+                }
+            }).then(function(response) {
+                return response.json();
+            }).then((data) => {
+                console.log(data);
+                this.setTemplate(data.id);
+                $("#createTemplateModal").removeClass("fade");
+                $("#createTemplateModal").modal('hide');
+                $("#createTemplateModal").addClass("fade");
+            });
+        }
+        
         
     }
 
@@ -84,7 +87,7 @@ class App extends React.Component {
         $("#loadTemplateModal").removeClass("fade");
         $("#loadTemplateModal").modal('hide');
         $("#loadTemplateModal").addClass("fade");
-        this.setState({template: temp, action: 'load'}, function() {
+        this.setState({template: temp}, function() {
             this.loadTemplate();
         });
     }
@@ -198,7 +201,7 @@ class App extends React.Component {
 
                 <NewSectionModal addSection={this.addSection} data={this.state} />
                 <LoadTemplateModal handleSelectTemplate={this.setTemplate}/>
-                <CreateTemplateModal handleSubmit={this.handleCreateClick}/>
+                <CreateTemplateModal handleCreate={this.handleCreateClick}/>
                 
             </div>
         );

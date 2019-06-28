@@ -36,7 +36,10 @@ class NewSectionModal extends React.Component {
     }
 
     handleFormChange(event) {
+        console.log("New Section Form Change " + event.target.value);
         const {name, value, type, checked} = event.target;
+        console.log({name, value, type, checked});
+
         type === "checkbox" ? this.setState({ [name]: checked }) : this.setState({ [name]: value });
     }
 
