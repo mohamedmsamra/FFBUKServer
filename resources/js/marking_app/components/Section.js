@@ -226,24 +226,29 @@ class Section extends React.Component {
         );
        
         return (
-            <div className="card section">
+            <div className="card section shadow-sm">
                 <div className="card-header">
                     <div className="float-left titleDiv">
                         {this.state.editTitle ? 
                             this.renderTitleEditView()
                             :
                             <div>
-                                <h4 className="float-left" onDoubleClick={this.handleEditTitle}>{this.state.title}</h4>
                                 {!this.props.compulsory && (
-                                    <button 
-                                        type="button" 
-                                        className="invisibleBtn" 
-                                        onClick={this.handleEditTitle} 
-                                        data-toggle="tooltip" 
-                                        data-placement="top" 
-                                        title="Edit Title">
-                                        <i className="far fa-edit"></i>
-                                    </button>)
+                                    <div className="float-left">
+                                        <input type="text" pattern="[0-9]" className="form-control markInput"  data-toggle="tooltip" data-placement="top" title="Mark"/>
+                                    </div>)
+                                }
+                                <h4  className="float-left" onDoubleClick={this.handleEditTitle}>{this.state.title}</h4>
+                                {!this.props.compulsory && (
+                                        <button 
+                                            type="button" 
+                                            className="invisibleBtn float-left" 
+                                            onClick={this.handleEditTitle} 
+                                            data-toggle="tooltip" 
+                                            data-placement="top" 
+                                            title="Edit Title">
+                                            <i className="far fa-edit"></i>
+                                        </button>)
                                 }
                                 
                             </div>

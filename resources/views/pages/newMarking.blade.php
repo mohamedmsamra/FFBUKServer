@@ -12,6 +12,7 @@
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat|Raleway&display=swap" rel="stylesheet">
 
     <!-- Styles -->
     <link href="{{ asset('builds/css/app.css') }}" rel="stylesheet">
@@ -26,6 +27,8 @@
     
     {{-- Font Awesome icons --}}
     <script src="https://kit.fontawesome.com/736a6a7946.js"></script>
+
+    
     
     <script src="{{ asset('../js_ffbuk/pdfobject.js')}}"></script>
     <script src="{{ asset('../js_ffbuk/marking.js')}}"></script>
