@@ -14,12 +14,11 @@ class CreateTemplateModal extends React.Component {
         this.state = initialState;
         this.submit = this.submit.bind(this);
         this.handleFormChange = this.handleFormChange.bind(this);
+        this.handleCancel = this.handleCancel.bind(this);
     }
 
     handleFormChange(event) {
-        console.log("New Section Form Change " + event.target.value);
         const {name, value, type, checked} = event.target;
-        console.log({name, value, type, checked});
         type === "checkbox" ? this.setState({ [name]: checked }) : this.setState({ [name]: value });
     }
 
@@ -32,19 +31,21 @@ class CreateTemplateModal extends React.Component {
     }
 
     handleSubmit(event) {
+        event.preventDefault();
+        event.stopPropagation();
         const form = event.currentTarget;
-        if (form.checkValidity() === false) {
-            event.preventDefault();
-            event.stopPropagation();
-        }
         this.setState({ validated: true });
         this.submit();
     } 
 
+    handleCancel(e) {
+        e.preventDefault;
+        this.setState(initialState);
+    }
+
  
     render() {
         const validated = this.state.validated;
-        console.log(validated);
         return (
             <div className="modal fade" id="createTemplateModal" tabIndex="-1" role="dialog" aria-labelledby="createTemplateModalLabel" aria-hidden="true">
                 <div className="modal-dialog" role="document">
@@ -88,7 +89,7 @@ class CreateTemplateModal extends React.Component {
                                     type="button" 
                                     className="btn btn-secondary" 
                                     data-dismiss="modal" 
-                                    onClick={(e)=> {e.preventDefault();this.hideAlert}}>
+                                    onClick={this.handleCancel}>
                                     Cancel
                                 </Button>
 

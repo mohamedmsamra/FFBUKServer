@@ -1,25 +1,27 @@
 import React from 'react';
 import Loading from '../Loading';
 
-const initialState = {
-    submitting: false,
-    newSectionTitle: "",
-    selectedCategory: "positive",
-    posComments: [],
-    negComments: [],
-    newComment: "",
-    idCounter: 0
-};
-
 class NewSectionModal extends React.Component {
     constructor(props) {
         super(props);
-        this.state = initialState;
+        this.state = this.initialState();
         this.handleAddComment = this.handleAddComment.bind(this);
         this.handleFormChange = this.handleFormChange.bind(this);
         this.handleChangeCommentType = this.handleChangeCommentType.bind(this);
         this.handleRemoveComment = this.handleRemoveComment.bind(this);
         this.handleSubmitSection = this.handleSubmitSection.bind(this);
+    }
+
+    initialState() {
+        return {
+            submitting: false,
+            newSectionTitle: "",
+            selectedCategory: "positive",
+            posComments: [],
+            negComments: [],
+            newComment: "",
+            idCounter: 0
+        };
     }
 
     handleAddComment(event) {
@@ -61,21 +63,17 @@ class NewSectionModal extends React.Component {
 
     handleSubmitSection() {
         this.setState({submitting: true});
-        console.log(JSON.stringify({
+        const postBody = JSON.stringify({
             title: this.state.newSectionTitle,
-            template_id: 1,
+            template_id: this.props.template_id,
             positiveComments: this.state.posComments.map(c => c.text),
             negativeComments: this.state.negComments.map(c => c.text)
-        }))
+        });
+        console.log(postBody)
         // Submit the section to the server
         fetch("/api/sections/new-section", {
             method: 'post',
-            body: JSON.stringify({
-                title: this.state.newSectionTitle,
-                template_id: this.props.data.template.id,
-                positiveComments: this.state.posComments.map(c => c.text),
-                negativeComments: this.state.negComments.map(c => c.text)
-            }),
+            body: postBody,
             headers: {
                 "Content-Type": "application/json",
                 "Accept": "application/json, text-plain, */*",
@@ -90,7 +88,8 @@ class NewSectionModal extends React.Component {
                 $("#newSectionModal").removeClass("fade");
                 $("#newSectionModal").modal('hide');
                 $("#newSectionModal").addClass("fade");
-                this.setState(initialState);
+                console.log(this.initialState());
+                this.setState(this.initialState());
             });
     }
 
