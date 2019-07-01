@@ -78,7 +78,7 @@ class Comment extends React.Component {
                 
         return (<div>
                     <div 
-                        className="float-left clickableComment" 
+                        className={"float-left clickableComment" + (this.state.added ? " added" : '')}
                         onClick={() => {
                             let temp = {
                                 id: this.props.id,

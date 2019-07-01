@@ -189,6 +189,12 @@ h1, h2, h3, h4, h5, h6 {
     padding: .75rem 1.25rem;
 }
 
+.clickableComment.added {
+    color: grey;
+    /* font-style: italic; */
+    text-decoration: line-through;
+}
+
 .commentBtns {
     /* background-color: green; */
     width: 89px;
