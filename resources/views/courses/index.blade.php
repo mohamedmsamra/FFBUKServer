@@ -14,6 +14,9 @@
                         <!-- this the title, when clickable it take us to the indiviual page of each post-->
                         <!-- it load the show function in the PostsController-->
                         <h3 class="card-title"><a href="/courses/{{$course->id}}"> {{$course->title}}</a></h3>
+                        @foreach ($course->assignments()->get() as $assignment)
+                            <p><a href="/marking/{{ $assignment->id }}">{{ $assignment->name }}</a></p>
+                        @endforeach
                         <small> Written On {{$course->created_at}} by {{$course->user->name}}</small>
                     </div>
                 </div>

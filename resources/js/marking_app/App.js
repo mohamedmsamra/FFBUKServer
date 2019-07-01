@@ -1,13 +1,13 @@
 import React from 'react';
 import jsPDF from 'jspdf';
 import { withAlert } from 'react-alert'
-import Section from './components/Section';
-import NewSectionModal from './components/modals/NewSectionModal';
-import LoadTemplateModal from './components/modals/LoadTemplateModal';
-import CreateTemplateModal from './components/modals/CreateTemplateModal';
-import Loading from './components/Loading';
+import Section from './Section';
+import NewSectionModal from './modals/NewSectionModal';
+import LoadTemplateModal from './modals/LoadTemplateModal';
+import CreateTemplateModal from './modals/CreateTemplateModal';
+import Loading from './Loading';
 
-class App extends React.Component {
+class MarkingSide extends React.Component {
     constructor(props) {
         super(props);
         // this.handleClick = this.handleClick.bind(this);
@@ -180,7 +180,7 @@ class App extends React.Component {
 
     render() {
         return (
-            <div>
+            <div className="col">
                 <div className="loadCreateBtns">
                     <button type="button" className="btn btn-outline-primary" onClick={() => $("#loadTemplateModal").modal('show')}>Load Template</button>
                     <button onClick={() => $("#createTemplateModal").modal('show')} type="button" className="btn btn-outline-success">Create New Template</button>
@@ -242,4 +242,4 @@ class App extends React.Component {
     }
 }
 
-export default withAlert()(App);
+export default withAlert()(MarkingSide);

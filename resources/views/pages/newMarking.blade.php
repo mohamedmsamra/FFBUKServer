@@ -31,7 +31,6 @@
     
     
     <script src="{{ asset('../js_ffbuk/pdfobject.js')}}"></script>
-    <script src="{{ asset('../js_ffbuk/marking.js')}}"></script>
 
     <!-- zip file library -->
     <script src="{{ asset('../js_ffbuk/jszip.js')}}"></script>
@@ -51,43 +50,7 @@
                 @include('inc.messages')
                 <h2>{{ $assignment['name'] }}</h2>
                 <div>
-                    {{-- PDF display side --}}
-                    <div class="leftSide">
-                            <div class="pdfUpload">
-                                <form>
-                                    <div id="select-pdfs" class="input-group mb-3">
-                                        <div class="custom-file">
-                                            <input type="file" class="custom-file-input" name="pdfChoose" id="pdfChoose" accept=".pdf" multiple >
-                                            <label class="custom-file-label" for="inputGroupFile01">Choose files to mark</label>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                            
-                            <div class="clear" style="height: 10px"></div>
-                            
-                            {{-- <embed id="myEmbed" src="/Report 1.pdf" width= "500" height= "375"> --}}
-
-                            <div class="pdfEmbed"></div> <!--Filled by tabtoggle.js on upload to PDFChoose-->
-                    </div>
-
-                    {{-- Template marking side --}}
-                    <div class="rightSide">
-                        <div id="react-root"></div>
-                        
-                        {{-- <div class="save">
-                            <button type="button" class='btn btn-danger' onclick="if(confirm('All entered text will be deleted. Are you sure?')) setup()" id="clearButton">Clear All</button>
-                            <button type="button" class='btn btn-success' onclick="Save(event); getPDF()" id="nextButton">Save and Load Next Document</button>
-                            Save as:
-                            <input type="radio" name="txtorpdf" value="pdf" checked="checked">PDF</input>
-                            <input type="radio" name="txtorpdf" value="txt">Text</input>
-                        </div> --}}
-                        
-                        </div>
-                        
-                    </div>
-                    <div class="clear"></div>
-                    <div></div>
+                    <div id="react-root"></div>
                 </div>
             {{-- </main> --}}
          </div>
