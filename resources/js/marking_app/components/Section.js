@@ -233,9 +233,9 @@ class Section extends React.Component {
                             this.renderTitleEditView()
                             :
                             <div>
-                                {!this.props.compulsory && (
+                                {(this.props.enableMarking && !this.props.compulsory) && (
                                     <div className="float-left">
-                                        <input type="text" pattern="[0-9]" className="form-control markInput"  data-toggle="tooltip" data-placement="top" title="Mark"/>
+                                        <input value={this.props.mark} onChange={(e) => this.props.handleMarkChange(this.props.id, e.target.value)} type="number" className="form-control markInput"  data-toggle="tooltip" data-placement="top" title="Mark"/>
                                     </div>)
                                 }
                                 <h4  className="float-left" onDoubleClick={this.handleEditTitle}>{this.state.title}</h4>
