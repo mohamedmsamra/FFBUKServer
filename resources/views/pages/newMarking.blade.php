@@ -10,8 +10,8 @@
     <title>{{ config('app.name', 'SWiFT') }}</title>
 
     <!-- Fonts -->
-    <link rel="dns-prefetch" href="//fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
+    {{-- <link rel="dns-prefetch" href="//fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css"> --}}
     <link href="https://fonts.googleapis.com/css?family=Montserrat|Raleway&display=swap" rel="stylesheet">
 
     <!-- Styles -->
@@ -27,8 +27,6 @@
     
     {{-- Font Awesome icons --}}
     <script src="https://kit.fontawesome.com/736a6a7946.js"></script>
-
-    
     
     <script src="{{ asset('../js_ffbuk/pdfobject.js')}}"></script>
 
@@ -37,9 +35,6 @@
     <script src="{{ asset('../js_ffbuk/fileSaver.js')}}"></script>
     <script mimeType=text/plain; charset=x-user-defined src="{{ asset('../js_ffbuk/jszip-utils.js')}}"></script>
 
-    {{-- <script crossorigin src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script> --}} {{-- TODO: Only temporary --}}
 	<meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 <body>
@@ -61,12 +56,6 @@
     <script>
         const assignment_id = {{ $assignment['id'] }};
     </script>
-    {{-- <script type="text/jsx" src="/marking_app/components/modals/CreateTemplateModal.js"></script>
-    <script type="text/jsx" src="/marking_app/components/modals/LoadTemplateModal.js"></script>
-    <script type="text/jsx" src="/marking_app/components/Loading.js"></script>
-    <script type="text/jsx" src="/marking_app/components/modals/NewSectionModal.js"></script>
-    <script type="text/jsx" src="/marking_app/components/Section.js"></script>
-    <script type="text/jsx" src="/marking_app/App.js"></script> --}}
     <script src="/builds/js/marking_app/index.js"></script>
 </body>
 </html>
