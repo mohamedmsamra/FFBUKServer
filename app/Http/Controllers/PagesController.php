@@ -4,10 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Assignment;
+use Auth;
 
 class PagesController extends Controller
 {
     public function index(){
+        return Auth::user() ? redirect('/courses') : redirect('/home');
+    }
+    public function home(){
         $title = 'Welcome To SWiFT!';
         //these are the two ways to pass a variable, either by calling compact, or just using with
         //return view('pages.index', compact('title'));
@@ -15,7 +19,6 @@ class PagesController extends Controller
         //with (what we want to call the passed variable, its name in this context)
         return view('pages.index') -> with('title', $title);
     }
-
     public function about(){
         $title = 'About';
         return view('pages.about')-> with('title', $title);
