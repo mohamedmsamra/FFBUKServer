@@ -6,14 +6,14 @@
 @import 'variables';
 
 // Font Awesome Icons
-// @import "node_modules/font-awesome/css/font-awesome";
+@import '~@fortawesome/fontawesome-free/css/all.css';
 
 // Bootstrap
 // @import '~bootstrap/scss/bootstrap';
-@import "node_modules/bootstrap/dist/css/bootstrap";
+@import "~bootstrap/dist/css/bootstrap";
 
 // React Quill text editor
-@import "node_modules/react-quill/dist/quill.snow";
+@import "~react-quill/dist/quill.snow";
 
 .navbar-laravel {
   background-color: #fff;

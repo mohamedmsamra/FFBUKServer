@@ -29,7 +29,7 @@
         "vue-template-compiler": "^2.5.22"
     },
     "dependencies": {
-        "font-awesome": "^4.7.0",
+        "@fortawesome/fontawesome-free": "^5.9.0",
         "jspdf": "^1.5.3",
         "prop-types": "^15.7.2",
         "react": "^16.8.6",
