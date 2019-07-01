@@ -50,6 +50,7 @@ Route::get('/about', function () {
 //ControllerName@MethodName
 //This method should load the specific view
 Route::get('/', 'PagesController@index');
+Route::get('/home', 'PagesController@home');
 Route::get('/about', 'PagesController@about');
 Route::get('/marking/{assignment_id}', 'PagesController@marking');
 Route::get('/faqs', 'PagesController@faqs');

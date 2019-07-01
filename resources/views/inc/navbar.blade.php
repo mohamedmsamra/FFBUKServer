@@ -14,21 +14,20 @@
                 </ul>
 
                 <ul class="nav navbar-nav">
-                  <li class="nav-item">
-                    <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
-                  </li>
-
-                  <li class="nav-item">
-                        <a class="nav-link" href="/courses">Courses</a>
-                    </li>
-
                     <li class="nav-item">
-                        <a class="nav-link" href="/dashboard">Dashboard</a>
+                        <a class="nav-link" href="/home">Home <span class="sr-only">(current)</span></a>
                     </li>
+                    @if (Auth::user())
+                        <li class="nav-item">
+                            <a class="nav-link" href="/courses">Courses</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/dashboard">Dashboard</a>
+                        </li>
+                    @endif
                     <li class="nav-item">
                             <a class="nav-link" href="/faqs">F.A.Q.</a>
                     </li>
-
                 </ul>
 
 
