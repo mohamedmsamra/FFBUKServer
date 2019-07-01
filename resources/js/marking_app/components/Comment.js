@@ -6,20 +6,25 @@ class Comment extends React.Component {
         this.state = {
             id: this.props.id,
             text: this.props.text,
+            editingText: this.props.text,
             type: this.props.type,
             section_id: this.props.section_id,
-            edit: false,
-            added: false
+            edit: false
         }
         this.handleEditChange = this.handleEditChange.bind(this);
+        this.handleFormChange = this.handleFormChange.bind(this);
         this.update = this.update.bind(this);
         this.renderCommentView = this.renderCommentView.bind(this);
         this.renderEditCommentView = this.renderEditCommentView.bind(this);
-        this.setCommentAdded = this.setCommentAdded.bind(this);
     }
 
     handleEditChange(e) {
         this.setState({edit: !this.state.edit});
+    }
+
+    handleFormChange(event) {
+        const {name, value, type, checked} = event.target;
+        type === "checkbox" ? this.setState({ [name]: checked }) : this.setState({ [name]: value });
     }
 
     update() {
@@ -29,7 +34,7 @@ class Comment extends React.Component {
             method: 'put',
             mode: 'cors',
             body: JSON.stringify({
-                text: this.refs.commentInput.value,
+                text: this.state.editingText,
                 type: this.props.type,
                 section_id: this.props.section_id
             }),
@@ -42,7 +47,8 @@ class Comment extends React.Component {
         }).then(function(data) {
             console.log(data);
         });
-        this.setState({edit: false, text: this.refs.commentInput.value, added: false});
+        this.setState({edit: false});
+        this.props.handleCommentChange(this.props.section_id, this.props.id, this.props.type, this.state.editingText);
     }
 
     setCommentAdded(value) {
@@ -54,8 +60,10 @@ class Comment extends React.Component {
             <div className="input-group editView">
                 <input type="text" 
                 className="form-control" 
-                defaultValue={this.state.text} 
-                ref="commentInput"/>
+                value={this.state.editingText}
+                onChange={this.handleFormChange}
+                ref="commentInput"
+                name="editingText" />
                 <div className="input-group-append" id="button-addon4">
                     <button 
                         onClick={this.handleEditChange} 
@@ -78,23 +86,12 @@ class Comment extends React.Component {
                 
         return (<div>
                     <div 
-                        className={"float-left clickableComment" + (this.state.added ? " added" : '')}
-                        onClick={() => {
-                            let temp = {
-                                id: this.props.id,
-                                text: this.state.text,
-                                type: this.props.type,
-                                section_id: this.props.section_id,
-                                added: this.state.added
-                            };
-                            this.props.handleClick(temp);
-                            this.setCommentAdded(true);
-                        }
-                            }
+                        className={"float-left clickableComment" + (this.props.added ? " added" : '')}
+                        onClick={() => {if (!this.props.added) this.props.handleClick(this.props.id, this.props.type, this.props.text)}}
                         data-toggle="tooltip" 
                         data-placement="top" 
                         title="Click to Add">
-                        {this.state.text}
+                        {this.props.text}
                     </div>
                     <div className="float-right commentBtns">
                         <button 

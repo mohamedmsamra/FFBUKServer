@@ -6,6 +6,7 @@ import NewSectionModal from './modals/NewSectionModal';
 import LoadTemplateModal from './modals/LoadTemplateModal';
 import CreateTemplateModal from './modals/CreateTemplateModal';
 import Loading from './Loading';
+import { timingSafeEqual } from 'crypto';
 
 class MarkingSide extends React.Component {
     constructor(props) {
@@ -18,10 +19,15 @@ class MarkingSide extends React.Component {
         this.handleCompulsoryTextChange = this.handleCompulsoryTextChange.bind(this);
         this.handleAppendComment = this.handleAppendComment.bind(this);
         this.handleSelectTemplate = this.handleSelectTemplate.bind(this);
-        this.generatePDF = this.generatePDF.bind(this);
         this.handleMarkingEnabledChange = this.handleMarkingEnabledChange.bind(this);
         this.handleMarkChange = this.handleMarkChange.bind(this);
+        this.handleSubmitSection = this.handleSubmitSection.bind(this);
+        this.handleCommentAdded = this.handleCommentAdded.bind(this);
+        this.handleCommentChange = this.handleCommentChange.bind(this);
+        this.updateComment = this.updateComment.bind(this);
+        this.generatePDF = this.generatePDF.bind(this);
         this.state = {
+            submitting: false,
             loading: false,
             template: null,
             content: (<h1>Nothing</h1>),
@@ -57,13 +63,47 @@ class MarkingSide extends React.Component {
         this.setState(prevState => prevState.template.sections.custom.push(section));
     }
 
+    handleSubmitSection() {
+        this.setState({submitting: true});
+        const postBody = JSON.stringify({
+            title: "Section Title",
+            template_id: this.state.template.id,
+            positiveComments: [],
+            negativeComments: []
+        });
+        console.log(postBody)
+        // Submit the section to the server
+        fetch("/api/sections/new-section", {
+            method: 'post',
+            body: postBody,
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json, text-plain, */*",
+                "X-Requested-With": "XMLHttpRequest",
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content')
+            }
+        })
+            .then(data => data.json())
+            .then(data => {
+                console.log(data);
+                this.addSection(data);
+                this.setState({submitting: false});
+            });
+    }
+
     templateFromDBFormat(dbTemplate) {
         return {
             name: dbTemplate.name,
             id: dbTemplate.id,
             totalMark: 0,
             sections: {
-                custom: dbTemplate.sections ? dbTemplate.sections.map(s => {s.value = ''; s.mark = 0; return s;}) : [],
+                custom: dbTemplate.sections ? dbTemplate.sections.map(s => {
+                    s.value = '';
+                    s.mark = 0;
+                    s.negativeComments.map(c => {c.added = false; return c});
+                    s.positiveComments.map(c => {c.added = false; return c});
+                    return s;
+                }) : [],
                 compulsory: [
                     {
                         title: "3 Points Done Well",
@@ -127,6 +167,24 @@ class MarkingSide extends React.Component {
         });
     }
 
+    handleCommentAdded(sectionID, commentID, type) {
+        this.updateComment(sectionID, commentID, type, c => {c.added = true; return c});
+    }
+
+    handleCommentChange(sectionID, commentID, type, text) {
+        this.updateComment(sectionID, commentID, type, c => {c.text = text; c.added = false; return c});
+    }
+
+    updateComment(sectionID, commentID, type, f) {
+        this.setState(prevState => {
+            let section = prevState.template.sections.custom.find(section => section.id == sectionID);
+            let comments = (type == 'positive') ? section.positiveComments : section.negativeComments;
+            let comment = comments.find(c => c.id == commentID);
+            comment = f(comment);
+            return prevState;
+        });
+    }
+
     generatePDF() {
         const isEmpty = htmlString => {
             const parser = new DOMParser();
@@ -163,7 +221,6 @@ class MarkingSide extends React.Component {
             'width': 170,
         });
         doc.save('sample-file.pdf');
-        
     }
 
     renderSections() {
@@ -173,6 +230,8 @@ class MarkingSide extends React.Component {
                 handleDeleteClick={this.deleteSection}
                 handleSectionTextChange={this.handleSectionTextChange}
                 handleAppendComment={this.handleAppendComment}
+                handleCommentAdded={this.handleCommentAdded}
+                handleCommentChange={this.handleCommentChange}
                 handleMarkChange={this.handleMarkChange}
                 id={section.id}
                 mark={section.mark}
@@ -203,6 +262,8 @@ class MarkingSide extends React.Component {
     }
 
     render() {
+        const loadingNewSection = () => {this.state.submitting &&  <Loading text="Creating new section..." />};
+
         return (
             <div className="col">
                 <div className="loadCreateBtns">
@@ -243,9 +304,16 @@ class MarkingSide extends React.Component {
                                                    
                             
                                 {/* Add new section button */}
-                                <button type="button" className="mb-3 btn btn-lg btn-block btn-light shadow-sm" onClick={() => $("#newSectionModal").modal('show')}>
+                                <button 
+                                    type="button" 
+                                    className="mb-3 btn btn-lg btn-block btn-light shadow-sm" 
+                                    // onClick={() => $("#newSectionModal").modal('show')}
+                                    onClick={this.handleSubmitSection}
+                                    >
                                     + Add new section
                                 </button>
+
+                                {loadingNewSection()}
 
                                 {/* Template sections */}
                                 <div className="sections">
@@ -267,7 +335,7 @@ class MarkingSide extends React.Component {
                                     </label>
                                 </div>
                             </div>
-                            <NewSectionModal template_id={this.state.template.id} addSection={this.addSection} data={this.state} />
+                            {/* <NewSectionModal template_id={this.state.template.id} addSection={this.addSection} data={this.state} /> */}
                         </div>
                     )
                 }
