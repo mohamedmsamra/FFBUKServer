@@ -17,10 +17,24 @@
 }
 
 // The pdf
-#pdf-side embed {
-    height: 500px;
-    width: 100%;
- }
+#pdf-side {
+    embed {
+        height: 500px;
+        width: 100%;
+    }
+    
+    #pdf-name-display {
+        height: 58px;
+    }
+
+    #pdf-name-display p {
+        margin: 0;
+    }
+
+    #pdf-name-display p.disp-num {
+        color: grey;
+    }
+}
 
 // Marking Side
 .leftSide {
@@ -226,3 +240,5 @@
     background-color: #fff8f9;
     border-color: #dcafb4;
 }
+
+

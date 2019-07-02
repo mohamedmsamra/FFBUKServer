@@ -20,7 +20,10 @@ class PDFSide extends React.Component {
                     </form>
                 :
                     <div>
-                        <p>{"Marking (" + (this.props.pdfPointer + 1) + "/" + this.props.pdfsSelected.length + "): " + currentPdf.name}</p>
+                        <div id="pdf-name-display">
+                            <p>{"Marking " + currentPdf.name}</p>
+                            <p className="disp-num">{(this.props.pdfPointer + 1) + "/" + this.props.pdfsSelected.length}</p>
+                        </div>
                         <embed
                             src={currentPdf.url}
                             type="application/pdf">

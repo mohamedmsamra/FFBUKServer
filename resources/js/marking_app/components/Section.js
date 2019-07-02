@@ -204,8 +204,8 @@ class Section extends React.Component {
         let commentsDiv = (
             <div className="comments">
                 <div className="buttons">
-                    <button type="button" className="btn btn-success" onClick={() => this.openComments("positive")}> Positive</button>
-                    <button type="button" className="btn btn-danger" onClick={() => this.openComments("negative")} >Negative</button>
+                    <button type="button" className="btn btn-success" onClick={() => this.openComments("positive")}>Positive</button>
+                    <button type="button" className="btn btn-danger" onClick={() => this.openComments("negative")}>Negative</button>
                 </div>
                 
                 {this.state.openComments &&
@@ -228,7 +228,7 @@ class Section extends React.Component {
         );
        
         return (
-            <div className="card section shadow-sm">
+            <div id={"section" + this.props.id} className="card section shadow-sm">
                 <div className="card-header">
                     <div className="float-left titleDiv">
                         {this.state.editTitle ? 

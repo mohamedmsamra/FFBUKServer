@@ -28,9 +28,13 @@
 
 // Components style
 @import 'components/buttons';
+@import 'components/loading';
 
 // Pages style
 @import 'pages/marking';
+
+// Themes style
+@import 'themes/blue-orange';
 
 
 .navbar-laravel {
