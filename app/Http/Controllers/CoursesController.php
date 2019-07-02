@@ -139,11 +139,11 @@ class CoursesController extends Controller
     {
         //it gets the id from the URL
         //http://ffbuk.test/posts/1
-       //return this specific post which its id is in the link
-        $course=  Course::find($id);
-        $assignment = Assignment::where('course_id',$course->id)->get();
+        //return this specific post which its id is in the link
+        $course = Course::find($id);
+        $assignments = Assignment::where('course_id',$course->id)->get();
         return view('courses.show') -> with('course', $course)
-                                  -> with( 'assignment',$assignment);
+                                    -> with( 'assignments', $assignments);
 
     }
 

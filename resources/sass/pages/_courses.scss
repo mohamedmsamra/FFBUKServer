@@ -1,0 +1,36 @@
+#assignments-table {
+    width: 100%;
+
+    img.loading {
+        height: 20px;
+        width: 20px;
+        margin: 0;
+        opacity: 0.4;
+    }
+
+    tr td:last-child {
+        width: 1%;
+        white-space: nowrap;
+    }
+
+    tr {
+        transition: background-color .25s ease-in-out;
+    }
+
+    tr p {
+        transition: color .25s ease-in-out;
+    }
+    
+    tr.disabled {
+        background-color: lightgrey; 
+    }
+
+    tr.disabled p {
+        color: grey;
+    }
+
+    button {
+        margin-right: 10px;
+    }
+}
+

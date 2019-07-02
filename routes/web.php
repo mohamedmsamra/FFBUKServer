@@ -74,6 +74,8 @@ Route::resource('/api/templates', 'Api\TemplatesController');
 Route::resource('/api/sections', 'Api\SectionsController');
 Route::post('api/sections/new-section', 'Api\SectionsController@postNewSection');
 Route::resource('/api/comments', 'Api\CommentsController');
+Route::resource('/api/assignments', 'Api\AssignmentsController');
+Route::post('/api/assignments/edit-name', 'Api\AssignmentsController@editName');
 
 Auth::routes();
 
