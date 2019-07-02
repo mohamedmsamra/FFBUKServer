@@ -153,12 +153,6 @@
         h4 {
             line-height: 1.7;
         }
-        .invisibleBtn {
-            background-color: transparent;
-            border: none;
-            padding: 8px 10px;
-            margin: 0;
-        }
     }
 
     h4 {
@@ -242,3 +236,12 @@
 }
 
 
+
+
+// Marking Scheme Image
+.markingSchemeImg {
+    padding: 20px 20px 0px;
+    // width: auto;
+    // height: auto;
+    max-width: 100%;
+}

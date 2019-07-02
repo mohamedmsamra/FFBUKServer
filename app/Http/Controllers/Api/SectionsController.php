@@ -40,12 +40,14 @@ class SectionsController extends Controller
             'title' => 'required',
             'template_id' => 'required',
             'positiveComments' => 'present|array',
-            'negativeComments' => 'present|array'
+            'negativeComments' => 'present|array',
+            'marking_scheme' => 'string|nullable'
         ]);
 
         $section = new Section;
         $section->title = $request->input('title');
         $section->template_id = $request->input('template_id');
+        $section->marking_scheme = $request->input('marking_scheme');
         $section->save();
         
         foreach ($request->positiveComments as $pc) {
@@ -86,17 +88,26 @@ class SectionsController extends Controller
             'title' => 'required',
             'template_id' => 'required',
             'positiveComments' => 'present|array',
-            'negativeComments' => 'present|array'
+            'negativeComments' => 'present|array',
+            'marking_scheme' => 'string|nullable'
         ]);
 
          //update this Post, find it by id
          $section = Section::find($id);
          $section -> title = $request->input('title'); 
-
+         $section -> marking_scheme = $request->input('marking_scheme'); 
          $section -> save();
  
          //direct the page back to the index
          //set the success message to Post Created
          return json_encode("Section Updated!");
+    }
+
+    public function storeImg(Request $request) {
+        $img = str_replace('data:image/png;base64,', '', $request->input('file'));
+        $img = str_replace(' ', '+', $img);
+        echo file_put_contents("/resources/img/test.png", base64_decode($img));
+
+        return json_encode($img);
     }
 }

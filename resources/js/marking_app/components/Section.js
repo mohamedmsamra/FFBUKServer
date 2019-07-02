@@ -16,6 +16,7 @@ class Section extends React.Component {
             newComment: '',
             commentID: 0,
             editTitle: false,
+            schemeOpen: true
         }
         this.openComments = this.openComments.bind(this);
         this.handleCommentClick = this.handleCommentClick.bind(this);
@@ -27,8 +28,44 @@ class Section extends React.Component {
         this.renderAddCommentInput = this.renderAddCommentInput.bind(this);
         this.renderTitleEditView = this.renderTitleEditView.bind(this);
         this.addComment = this.addComment.bind(this);
+        this.handleUploadScheme = this.handleUploadScheme.bind(this);
+        this.handleOpenScheme = this.handleOpenScheme.bind(this);
     }
 
+    handleUploadScheme(e) {
+        const img = URL.createObjectURL(e.target.files[0]);
+        // let files = e.target.files;
+        // let reader = new FileReader();
+        // reader.readAsDataURL(files[0]);
+
+        // reader.onload = (e) => {
+        //     const url = "http://127.0.0.1:8000/api/images";
+        //     const img = {file: e.target.result};
+        //     console.log(img);
+        //     fetch("/api/sections/" + this.props.id + "/img", {
+        //         method: 'post',
+        //         body: img,
+        //         headers: {
+        //             "Content-Type": "application/json",
+        //             "Accept": "application/json, text-plain, */*",
+        //             "X-Requested-With": "XMLHttpRequest",
+        //             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content')
+        //         }
+        //     }).then(function(data) {
+        //         console.log("here" + JSON.stringify(data));
+        //     });
+        // }
+        this.setState({markingScheme: img})
+    }
+
+    handleOpenScheme() {
+        // this.state.schemeOpen ? $("#toggle" + this.props.id).slideUp() : $("#toggle" + this.props.id).slideDown();
+        // $("#toggle" + this.props.id).removeClass("hiddenFileInput");
+        $("#toggle" + this.props.id).slideToggle();
+        this.setState((prevState) => Object.assign(prevState, {schemeOpen: !prevState.schemeOpen}));
+               
+    }
+    
     // Display list of comments 
     openComments(type) {
         if (type == this.state.openComments) {
@@ -143,7 +180,8 @@ class Section extends React.Component {
                 title: this.refs.sectionTitleInput.value,
                 template_id: this.props.template_id,
                 positiveComments: this.state.posComments.map(c => c.text),
-                negativeComments: this.state.negComments.map(c => c.text)
+                negativeComments: this.state.negComments.map(c => c.text),
+                marking_scheme: this.props.marking_scheme
             }),
             headers: {
                 "Content-Type": "application/json",
@@ -245,6 +283,7 @@ class Section extends React.Component {
                                 }
                                 <h4  className="float-left" onDoubleClick={this.handleEditTitle}>{this.state.title}</h4>
                                 {!this.props.compulsory && (
+                                    <div className="float-left">
                                         <button 
                                             type="button" 
                                             className="invisibleBtn float-left" 
@@ -252,8 +291,38 @@ class Section extends React.Component {
                                             data-toggle="tooltip" 
                                             data-placement="top" 
                                             title="Edit Title">
-                                            <i className="far fa-edit"></i>
-                                        </button>)
+                                            <i className="fas fa-edit"></i>
+                                        </button>
+                                        <input 
+                                            onChange={(e) => this.handleUploadScheme(e)} 
+                                            type="file" 
+                                            id={"scheme" + this.props.id} 
+                                            className="hiddenFileInput" 
+                                            accept="image/*"/>
+                                        <button 
+                                            type="button" 
+                                            id={"upload" + this.props.id}
+                                            className="invisibleBtn float-left" 
+                                            onClick={() => {$("#scheme" + this.props.id).click()}} 
+                                            data-toggle="tooltip" 
+                                            data-placement="top" 
+                                            title="Upload Marking Scheme">
+                                            <i className="fas fa-upload"></i>
+                                        </button>
+                                        
+                                        {this.state.markingScheme &&
+                                            <button 
+                                                type="button" 
+                                                className="invisibleBtn float-left" 
+                                                onClick={this.handleOpenScheme} 
+                                                data-toggle="tooltip" 
+                                                data-placement="top" 
+                                                title="Toggle Marking Scheme">
+                                                <i className="fas fa-file-image"></i>
+                                                  <small>Marking Scheme</small>
+                                            </button>}
+                                                
+                                    </div>)
                                 }
                                 
                             </div>
@@ -264,6 +333,10 @@ class Section extends React.Component {
                         {!this.props.compulsory && removeBtn}
                     </div>
                 </div>
+                {/* {console.log("scheme open is " + this.state.schemeOpen)} */}
+                {this.state.markingScheme &&
+                    <img src={this.state.markingScheme} className="markingSchemeImg" id={"toggle" + this.props.id}/>
+                } 
                 <div className="card-body">
                     <div className="form-group">
                         <TextEditor 
@@ -272,10 +345,12 @@ class Section extends React.Component {
                             handleSectionTextChange={(val) => this.props.handleSectionTextChange(this.props.id, val)}
                         />
                     </div>
-
                     {/* If this section should have comments, display them */}
                     {!this.props.compulsory && commentsDiv}
                 </div>
+                
+                
+                
             </div>
         );
     }

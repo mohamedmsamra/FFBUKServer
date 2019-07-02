@@ -27,7 +27,9 @@ class App extends React.Component {
                     handlePdfsSelected={this.handlePdfsSelected}
                     pdfsSelected={this.state.pdfsSelected}
                     pdfPointer={this.state.pdfPointer} />
-                <MarkingSide />
+                <MarkingSide 
+                    pdfsSelected={this.state.pdfsSelected}
+                    pdfPointer={this.state.pdfPointer}/>
             </div>
         )
     }

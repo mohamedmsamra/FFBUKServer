@@ -74,7 +74,8 @@ class MarkingSide extends React.Component {
             title: "Section Title",
             template_id: this.state.template.id,
             positiveComments: [],
-            negativeComments: []
+            negativeComments: [],
+            marking_scheme: ''
         });
         console.log(postBody)
         // Submit the section to the server
@@ -116,6 +117,7 @@ class MarkingSide extends React.Component {
                     s.mark = 0;
                     s.negativeComments.map(c => {c.added = false; return c});
                     s.positiveComments.map(c => {c.added = false; return c});
+                    s.marking_scheme = '';
                     return s;
                 }) : [],
                 compulsory: [
@@ -201,7 +203,7 @@ class MarkingSide extends React.Component {
         });
     }
 
-    generatePDF() {
+    generatePDF(name) {
         const isEmpty = htmlString => {
             const parser = new DOMParser();
          
@@ -236,7 +238,7 @@ class MarkingSide extends React.Component {
         doc.fromHTML(html, 15, 15, {
             'width': 170,
         });
-        doc.save('sample-file.pdf');
+        doc.save(name);
     }
 
     renderSections() {
@@ -258,6 +260,7 @@ class MarkingSide extends React.Component {
                 negComments={section.negativeComments}
                 template_id={this.state.template.id}
                 enableMarking={this.state.enableMarking}
+                marking_scheme={section.marking_scheme}
             />
         )});
 
@@ -278,6 +281,7 @@ class MarkingSide extends React.Component {
     }
 
     render() {
+        const currentPdf = this.props.pdfsSelected[this.props.pdfPointer];
         const loadingNewSection = () => {this.state.submitting &&  <Loading text="Creating new section..." />};
 
         return (
@@ -340,7 +344,7 @@ class MarkingSide extends React.Component {
                             {/* Buttons to export feedback */}
                             <div className="save">
                                 <button type="button" className='btn btn-danger' onClick={() => {if(confirm('All entered text will be deleted. Are you sure?')) setup()}} id="clearButton">Clear All</button>
-                                <button type="button" className='btn btn-success' id="nextButton" onClick={this.generatePDF}>Save and Load Next Document</button>
+                                <button type="button" className='btn btn-success' id="nextButton" onClick={() => this.generatePDF(currentPdf.name)}>Save and Load Next Document</button>
                                 Save as:
                                 <ToggleButtonGroup type="radio" name="selectedExportType" defaultValue={'pdf'} onChange={() => console.log('change')}>
                                     <ToggleButton value={'pdf'}>PDF</ToggleButton>
