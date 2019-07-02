@@ -2,6 +2,7 @@ import React from 'react';
 import Comment from './Comment.js';
 import ConfirmationModal from './modals/ConfirmationModal';
 import TextEditor from './TextEditor';
+import { withAlert } from 'react-alert'
 
 class Section extends React.Component {
     constructor(props) {
@@ -62,6 +63,8 @@ class Section extends React.Component {
             return response.json();
         }).then((data) => {
             console.log(data);
+            if (data.length > 12) data = data.substring(0,12) + "...";
+            this.props.alert.success("Removed comment \n '" + data + "'");
         }).then( () => {
             this.setState(prevState => {
                 const category = prevState.openComments == "positive" ? "posComments" : "negComments";
@@ -204,8 +207,8 @@ class Section extends React.Component {
         let commentsDiv = (
             <div className="comments">
                 <div className="buttons">
-                    <button type="button" className="btn btn-success" onClick={() => this.openComments("positive")}> Positive</button>
-                    <button type="button" className="btn btn-danger" onClick={() => this.openComments("negative")} >Negative</button>
+                    <button type="button" className="btn btn-success" onClick={() => this.openComments("positive")}>Positive</button>
+                    <button type="button" className="btn btn-danger" onClick={() => this.openComments("negative")}>Negative</button>
                 </div>
                 
                 {this.state.openComments &&
@@ -228,7 +231,7 @@ class Section extends React.Component {
         );
        
         return (
-            <div className="card section shadow-sm">
+            <div id={"section" + this.props.id} className="card section shadow-sm">
                 <div className="card-header">
                     <div className="float-left titleDiv">
                         {this.state.editTitle ? 
@@ -285,4 +288,4 @@ Section.defaultProps = {
     compulsory: false
 }
 
-export default Section;
+export default withAlert()(Section);

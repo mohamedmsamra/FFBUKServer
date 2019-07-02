@@ -53,11 +53,14 @@ class MarkingSide extends React.Component {
             $("#confirmationModal").removeClass("fade");
             $("#confirmationModal").modal('hide');
             $("#confirmationModal").addClass("fade");
+            this.props.alert.success("Removed section '" + data + "'");
         });
         this.setState(prevState => {
             prevState.template.sections.custom = prevState.template.sections.custom.filter(item => item.id !== id);
             return prevState;
         });
+
+        
 
     }
 
@@ -90,7 +93,16 @@ class MarkingSide extends React.Component {
                 console.log(data);
                 this.addSection(data);
                 this.setState({submitting: false});
+
+                this.scrollToElement("#section" + data.id);
+                
             });
+    }
+
+    scrollToElement(element_id) {
+        $([document.documentElement, document.body]).animate({
+            scrollTop: $(element_id).offset().top - 15
+        }, 1000);
     }
 
     templateFromDBFormat(dbTemplate) {
@@ -160,10 +172,7 @@ class MarkingSide extends React.Component {
     }
 
     handleMarkingEnabledChange() {
-        this.setState(prevState => {
-            prevState.enableMarking = !prevState.enableMarking;
-            return prevState;
-        });
+        this.setState((prevState) => Object.assign(prevState, {enableMarking: !prevState.enableMarking}));
     }
 
     handleMarkChange(sectionID, mark) {

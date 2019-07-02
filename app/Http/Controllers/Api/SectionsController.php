@@ -75,8 +75,9 @@ class SectionsController extends Controller
 
     public function destroy($id) {
         $section = Section::find($id);
+        $title = $section->title;
         $section -> delete();
-        return json_encode("done");
+        return json_encode($title);
     }
 
     public function update(Request $request, $id)

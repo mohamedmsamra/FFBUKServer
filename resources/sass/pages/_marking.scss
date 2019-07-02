@@ -1,161 +1,54 @@
-
 // Style for the marking page
-
-body, input, p, div, li, a {
-    font-family: 'Raleway', sans-serif!important;
-}
-
-h1, h2, h3, h4, h5, h6 {
-    font-family: 'Montserrat', sans-serif!important;
-}
-
-.template {
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    margin-top: 20px;
-}
-
-.template .templateTitle {
-    padding: 20px 20px 0px;
-}
-
-.template .templateBody {
-    padding: 20px;
-}
-
-
-.markingSwitch {
-    height: 30px;
-    border: 1px solid #eee;
-    padding: 7px 10px 35px 10px;
-    border-radius: 5px;
-    margin-bottom: 20px;
-    -webkit-box-shadow: inset 0px 0px 4px 0px rgba(0,0,0,0.08);
-    -moz-box-shadow: inset 0px 0px 4px 0px rgba(0,0,0,0.08);
-    box-shadow: inset 0px 0px 4px 0px rgba(0,0,0,0.08);
-}
-
-.markingSwitch p {
-    font-size: 20px;
-}
-
-.markingSwitch .custom-switch .custom-control-label::before {
-    width: 2.5rem;
-}
-
-.markingSwitch .custom-control-label::before {
-    height:0.4rem;
-    top: 1rem;
-    left: -2.5rem;
-}
-
-.markingSwitch .custom-control-label::before {
-    height:0.4rem;
-    top: 1rem;
-    left: -2.5rem;
-}
-
-.markingSwitch .custom-switch label::before:focus, .markingSwitch .custom-switch input::before:focus  {
-    outline:none!important;
-    border: 5px solid red!important;
-}
-
-.markingSwitch .custom-switch .custom-control-label::after {
-    top: calc(0.5rem + 2px);
-    width: calc(1.4rem - 4px);
-    height: calc(1.4rem - 4px);
-    border-radius: 0.6rem;
-    left: calc(-2.8rem + 2px);
-}
-
-
-.custom-switch .custom-control-input:checked ~ .custom-control-label::after {
-    background-color: #eee;
-    -webkit-transform: translateX(0.75rem);
-    transform: translateX(1.8rem);
-}
-
-.section {
-	border-radius: 10px!important;
-    margin-bottom: 30px;
-}
-
-.section .sectionText {
-    width: 100%;
-    margin-bottom: 10px;
-}
-
-.section .titleDiv h4{
-    line-height: 1.7;
-}
-
-.section h4 {
-    margin-bottom: 0!important;
-}
-
-.comments .buttons {
-    width: 100%;
-    display: flex;
-}
-
-.comments .buttons button {
-    flex: 1 0;
-}
-
-.comments .buttons button:not(:first-child) {
-    margin-left: 20px;
-}
-
-.leftSide {
-    float: left;
-    width: 53%;
-}
-
-.rightSide {
-    float: right;
-    width: 43%;
-}
 
 .leftSide, .rightSide {
     margin: 1%;
 }
 
-
-.clear {
-    clear: both;
+// Pdf Side
+.rightSide {
+    float: right;
+    width: 43%;
 }
 
+// Choose files button
 .custom-file-label::after {
     /* content: "Browse"!important; */
     background-color: transparent!important;
 }
 
-.commentsList {
-    cursor: pointer;
-    margin-top: 16px;
+// The pdf
+#pdf-side {
+    embed {
+        height: 500px;
+        width: 100%;
+    }
+    
+    #pdf-name-display {
+        height: 58px;
+    }
+
+    #pdf-name-display p {
+        margin: 0;
+    }
+
+    #pdf-name-display p.disp-num {
+        color: grey;
+    }
 }
 
-.loading {
-    margin: 20px auto;
-    text-align: center;
-    font-weight: bold;
+// Marking Side
+.leftSide {
+    float: left;
+    width: 53%;
 }
 
-.loading img {
-    margin-bottom: 10px;
-}
-
-.commentsToggle {
-    margin-bottom: 20px;
-    width: 100%;
-}
-
+// Buttons to load template or create new one
 .loadCreateBtns .btn {
     margin-right: 1%;
     width:49%;
-
 }
 
+// Load template modal
 #loadTemplateModal .date {
     color: grey;
     font-style: italic;
@@ -173,18 +66,138 @@ h1, h2, h3, h4, h5, h6 {
     line-height: normal;
 }
 
-.invisibleBtn {
-    background-color: transparent;
-    border: none;
-    padding: 0.5rem 0.7rem;
-    margin: 0;
+// Template style
+.template {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    margin-top: 20px;
+
+    .templateTitle {
+        padding: 20px 20px 0px;
+    }
+
+    .templateBody {
+        padding: 20px;
+    }
 }
 
-.titleDiv .invisibleBtn {
-    background-color: transparent;
-    border: none;
-    padding: 8px 10px;
-    margin: 0;
+// Marking switch div (including witch btn and paragraph)
+.markingSwitch {
+    height: 30px;
+    border: 1px solid #eee;
+    padding: 7px 10px 35px 10px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    -webkit-box-shadow: inset 0px 0px 4px 0px rgba(0,0,0,0.08);
+    -moz-box-shadow: inset 0px 0px 4px 0px rgba(0,0,0,0.08);
+    box-shadow: inset 0px 0px 4px 0px rgba(0,0,0,0.08);
+
+    p {
+        font-size: 20px;
+    }
+
+    .custom-switch .custom-control-label::before {
+        width: 2.5rem;
+    }
+
+    .custom-control-label::before {
+        height:0.4rem;
+        top: 1rem;
+        left: -2.5rem;
+    }
+
+    .custom-control-label::before {
+        height:0.4rem;
+        top: 1rem;
+        left: -2.5rem;
+    }
+
+    .custom-switch label::before:focus, .markingSwitch .custom-switch input::before:focus  {
+        outline:none!important;
+        border: 5px solid red!important;
+    }
+
+    .custom-switch .custom-control-label::after {
+        top: calc(0.5rem + 2px);
+        width: calc(1.4rem - 4px);
+        height: calc(1.4rem - 4px);
+        border-radius: 0.6rem;
+        left: calc(-2.8rem + 2px);
+    }
+
+    .custom-switch .custom-control-input:checked ~ .custom-control-label::after {
+        background-color: #eee;
+        -webkit-transform: translateX(0.75rem);
+        transform: translateX(1.8rem);
+    }
+}
+
+// Total mark
+.totalMark {
+    padding: 0px 10px 10px;
+    font-size:20px;
+    font-weight: 600;
+}
+
+// Section style
+.section {
+	border-radius: 10px!important;
+    margin-bottom: 30px;
+
+    .sectionText {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .titleDiv {
+        h4 {
+            line-height: 1.7;
+        }
+        .invisibleBtn {
+            background-color: transparent;
+            border: none;
+            padding: 8px 10px;
+            margin: 0;
+        }
+    }
+
+    h4 {
+        margin-bottom: 0!important;
+    }
+}
+
+/* Mark */
+.markInput {
+    margin: 5px 10px 0px 0px;
+    width: 2.5rem;
+    height: 2rem;
+    padding: 3px;
+    font-size: 1.2rem;
+    text-align: right;
+}
+
+// Comments style
+.comments .buttons {
+    width: 100%;
+    display: flex;
+
+    button {
+        flex: 1 0;
+    }
+
+    button:not(:first-child) {
+        margin-left: 20px;
+    }
+}
+
+.commentsList {
+    cursor: pointer;
+    margin-top: 16px;
+}
+
+.commentsToggle {
+    margin-bottom: 20px;
+    width: 100%;
 }
 
 .clickableComment {
@@ -208,14 +221,14 @@ h1, h2, h3, h4, h5, h6 {
 
 .sectionComment {
     padding: 0!important;
-}
 
-.sectionComment .editView input[type="text"], .sectionComment .editView .btn{
-    border: none!important;
-}
+    .editView {
+        padding: 0.315rem 0.5rem;
 
-.sectionComment .editView {
-    padding: 0.315rem 0.5rem;
+        input[type="text"], .sectionComment .editView .btn{
+            border: none!important;
+        }
+    }
 }
 
 .commentsList .sectionComment.positive {
@@ -229,96 +242,3 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 
-/* SWITCH BTN */
-.material-switch {
-    padding: 5px;
-}
-
-.material-switch > input[type="checkbox"] {
-    display: none;   
-}
-
-.material-switch > label {
-    cursor: pointer;
-    height: 0px;
-    position: relative; 
-    width: 40px;  
-}
-
-.material-switch > label::before {
-    background: rgb(0, 0, 0);
-    box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.5);
-    border-radius: 8px;
-    content: '';
-    height: 16px;
-    margin-top: -8px;
-    position:absolute;
-    opacity: 0.3;
-    transition: all 0.4s ease-in-out;
-    width: 40px;
-}
-.material-switch > label::after {
-    background: rgb(255, 255, 255);
-    border-radius: 16px;
-    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
-    content: '';
-    height: 24px;
-    left: -4px;
-    margin-top: -8px;
-    position: absolute;
-    top: -4px;
-    transition: all 0.3s ease-in-out;
-    width: 24px;
-}
-.material-switch > input[type="checkbox"].checked + label::before {
-    background: inherit;
-    opacity: 0.5;
-}
-.material-switch > input[type="checkbox"].checked + label::after {
-    background: inherit;
-    left: 20px;
-}
-
-/* Mark */
-
-.markInput {
-    margin: 5px 10px 0px 0px;
-    width: 2.5rem;
-    height: 2rem;
-    padding: 3px;
-    font-size: 1.2rem;
-    text-align: right;
-}
-
-
-/* Total mark */
-.totalMark {
-    padding: 0px 10px 10px;
-    font-size:20px;
-    font-weight: 600;
-}
-
-input[type=number]::-webkit-inner-spin-button, 
-input[type=number]::-webkit-outer-spin-button { 
-  -webkit-appearance: none; 
-  margin: 0; 
-}
-
-#pdf-side {
-    embed {
-        height: 500px;
-        width: 100%;
-    }
-    
-    #pdf-name-display {
-        height: 58px;
-    }
-
-    #pdf-name-display p {
-        margin: 0;
-    }
-
-    #pdf-name-display p.disp-num {
-        color: grey;
-    }
-}

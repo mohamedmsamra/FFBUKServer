@@ -17,6 +17,7 @@
 
 // Base style
 @import 'base/reset';
+@import 'base/typography';
 
 // Layout style
 @import 'layout/navigation';
@@ -27,10 +28,15 @@
 
 // Components style
 @import 'components/buttons';
+@import 'components/loading';
+@import 'components/alerts';
 
 // Pages style
 @import 'pages/marking';
 @import "pages/courses";
+
+// Themes style
+@import 'themes/blue-orange';
 
 
 .navbar-laravel {

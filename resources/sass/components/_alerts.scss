@@ -1,0 +1,35 @@
+.alert-box {
+    background-color: white;
+    // color: white;
+    padding: 10px;
+    border: 1px solid #eee;
+    border-radius: 5px;
+    // display: flex;
+    // justify-content: space-between;
+    // align-items: center;
+    width: 270px;
+    box-sizing: border-box;
+    .alert-text {
+        width: calc(100% - 25px - 20px);
+        padding: 0px 15px;
+    }
+
+    .alert-btn {
+        width: 20px;
+        height: 20px;
+        padding: 0;
+        line-height: 1;
+        text-transform: lowercase;
+        font-weight: 600;
+        color: grey;
+        background-color: transparent;
+        border: none;
+    }
+
+    .alert-icon {
+
+        width:25px;
+        font-size: 27px;
+        padding: 5px 0px 0px;
+    }
+}
