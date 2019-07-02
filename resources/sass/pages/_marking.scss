@@ -1,0 +1,309 @@
+body, input, p, div, li, a {
+    font-family: 'Raleway', sans-serif!important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Montserrat', sans-serif!important;
+}
+
+
+
+.template {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    margin-top: 20px;
+}
+
+.template .templateTitle {
+    padding: 20px 20px 0px;
+}
+
+.template .templateBody {
+    padding: 20px;
+}
+
+
+.markingSwitch {
+    height: 30px;
+    border: 1px solid #eee;
+    padding: 7px 10px 35px 10px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    -webkit-box-shadow: inset 0px 0px 4px 0px rgba(0,0,0,0.08);
+    -moz-box-shadow: inset 0px 0px 4px 0px rgba(0,0,0,0.08);
+    box-shadow: inset 0px 0px 4px 0px rgba(0,0,0,0.08);
+}
+
+.markingSwitch p {
+    font-size: 20px;
+}
+
+.markingSwitch .custom-switch .custom-control-label::before {
+    width: 2.5rem;
+}
+
+.markingSwitch .custom-control-label::before {
+    height:0.4rem;
+    top: 1rem;
+    left: -2.5rem;
+}
+
+.markingSwitch .custom-control-label::before {
+    height:0.4rem;
+    top: 1rem;
+    left: -2.5rem;
+}
+
+.markingSwitch .custom-switch label::before:focus, .markingSwitch .custom-switch input::before:focus  {
+    outline:none!important;
+    border: 5px solid red!important;
+}
+
+.markingSwitch .custom-switch .custom-control-label::after {
+    top: calc(0.5rem + 2px);
+    width: calc(1.4rem - 4px);
+    height: calc(1.4rem - 4px);
+    border-radius: 0.6rem;
+    left: calc(-2.8rem + 2px);
+}
+
+
+.custom-switch .custom-control-input:checked ~ .custom-control-label::after {
+    background-color: #eee;
+    -webkit-transform: translateX(0.75rem);
+    transform: translateX(1.8rem);
+}
+
+.section {
+	border-radius: 10px!important;
+    margin-bottom: 30px;
+}
+
+.section .sectionText {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.section .titleDiv h4{
+    line-height: 1.7;
+}
+
+.section h4 {
+    margin-bottom: 0!important;
+}
+
+.comments .buttons {
+    width: 100%;
+    display: flex;
+}
+
+.comments .buttons button {
+    flex: 1 0;
+}
+
+.comments .buttons button:not(:first-child) {
+    margin-left: 20px;
+}
+
+.leftSide {
+    float: left;
+    width: 53%;
+}
+
+.rightSide {
+    float: right;
+    width: 43%;
+}
+
+.leftSide, .rightSide {
+    margin: 1%;
+}
+
+
+.clear {
+    clear: both;
+}
+
+.custom-file-label::after {
+    /* content: "Browse"!important; */
+    background-color: transparent!important;
+}
+
+.commentsList {
+    cursor: pointer;
+    margin-top: 16px;
+}
+
+.loading {
+    margin: 20px auto;
+    text-align: center;
+    font-weight: bold;
+}
+
+.loading img {
+    margin-bottom: 10px;
+}
+
+.commentsToggle {
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.loadCreateBtns .btn {
+    margin-right: 1%;
+    width:49%;
+
+}
+
+#loadTemplateModal .date {
+    color: grey;
+    font-style: italic;
+    margin-bottom: 0;
+}
+
+#loadTemplateModal .list-group-item.active .date {
+    color: white;
+}
+
+#loadTemplateModal .date span {
+    font-size: 0.7rem;
+    display: inline-block;
+    vertical-align: middle;
+    line-height: normal;
+}
+
+.invisibleBtn {
+    background-color: transparent;
+    border: none;
+    padding: 0.5rem 0.7rem;
+    margin: 0;
+}
+
+.titleDiv .invisibleBtn {
+    background-color: transparent;
+    border: none;
+    padding: 8px 10px;
+    margin: 0;
+}
+
+.clickableComment {
+    /* background-color: red; */
+    width: calc(100% - 89px);
+    padding: .75rem 1.25rem;
+}
+
+.clickableComment.added {
+    color: grey;
+    /* font-style: italic; */
+    text-decoration: line-through;
+}
+
+.commentBtns {
+    /* background-color: green; */
+    width: 89px;
+    /* width: 15%; */
+    padding: .25rem 0.3rem;
+}
+
+.sectionComment {
+    padding: 0!important;
+}
+
+.sectionComment .editView input[type="text"], .sectionComment .editView .btn{
+    border: none!important;
+}
+
+.sectionComment .editView {
+    padding: 0.315rem 0.5rem;
+}
+
+.commentsList .sectionComment.positive {
+    background-color: #f4fff7;
+    border-color: #aac1af;
+}
+
+.commentsList .sectionComment.negative {
+    background-color: #fff8f9;
+    border-color: #dcafb4;
+}
+
+
+/* SWITCH BTN */
+.material-switch {
+    padding: 5px;
+}
+
+.material-switch > input[type="checkbox"] {
+    display: none;   
+}
+
+.material-switch > label {
+    cursor: pointer;
+    height: 0px;
+    position: relative; 
+    width: 40px;  
+}
+
+.material-switch > label::before {
+    background: rgb(0, 0, 0);
+    box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.5);
+    border-radius: 8px;
+    content: '';
+    height: 16px;
+    margin-top: -8px;
+    position:absolute;
+    opacity: 0.3;
+    transition: all 0.4s ease-in-out;
+    width: 40px;
+}
+.material-switch > label::after {
+    background: rgb(255, 255, 255);
+    border-radius: 16px;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+    content: '';
+    height: 24px;
+    left: -4px;
+    margin-top: -8px;
+    position: absolute;
+    top: -4px;
+    transition: all 0.3s ease-in-out;
+    width: 24px;
+}
+.material-switch > input[type="checkbox"].checked + label::before {
+    background: inherit;
+    opacity: 0.5;
+}
+.material-switch > input[type="checkbox"].checked + label::after {
+    background: inherit;
+    left: 20px;
+}
+
+/* Mark */
+
+.markInput {
+    margin: 5px 10px 0px 0px;
+    width: 2.5rem;
+    height: 2rem;
+    padding: 3px;
+    font-size: 1.2rem;
+    text-align: right;
+}
+
+
+/* Total mark */
+.totalMark {
+    padding: 0px 10px 10px;
+    font-size:20px;
+    font-weight: 600;
+}
+
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+
+#pdf-side embed {
+    height: 500px;
+    width: 100%;
+ }
