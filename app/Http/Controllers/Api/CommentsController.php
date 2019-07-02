@@ -35,8 +35,9 @@ class CommentsController extends Controller
 
     public function destroy($id) {
         $comment = Comment::find($id);
+        $text = $comment->text;
         $comment -> delete();
-        return json_encode("done");
+        return json_encode($text);
     }
 
     public function update(Request $request, $id)
