@@ -6,6 +6,7 @@ import NewSectionModal from './modals/NewSectionModal';
 import LoadTemplateModal from './modals/LoadTemplateModal';
 import CreateTemplateModal from './modals/CreateTemplateModal';
 import Loading from './Loading';
+import { ToggleButtonGroup, ToggleButton } from 'react-bootstrap';
 import { timingSafeEqual } from 'crypto';
 
 class MarkingSide extends React.Component {
@@ -31,7 +32,8 @@ class MarkingSide extends React.Component {
             loading: false,
             template: null,
             content: (<h1>Nothing</h1>),
-            enableMarking: false
+            enableMarking: false,
+            selectedExportType: 'pdf'
         };
     }
 
@@ -115,6 +117,11 @@ class MarkingSide extends React.Component {
                 ]
             }
         };
+    }
+
+    handleFormChange(event) {
+        const {name, value, type, checked} = event.target;
+        type === "checkbox" ? this.setState({ [name]: checked }) : this.setState({ [name]: value });
     }
 
     handleSelectTemplate(templateID) {
@@ -326,14 +333,10 @@ class MarkingSide extends React.Component {
                                 <button type="button" className='btn btn-danger' onClick={() => {if(confirm('All entered text will be deleted. Are you sure?')) setup()}} id="clearButton">Clear All</button>
                                 <button type="button" className='btn btn-success' id="nextButton" onClick={this.generatePDF}>Save and Load Next Document</button>
                                 Save as:
-                                <div className="btn-group btn-group-toggle" data-toggle="buttons">
-                                    <label className="btn btn-secondary active">
-                                        <input type="radio" name="options" id="option1" autoComplete="off" defaultChecked /> PDF
-                                    </label>
-                                    <label className="btn btn-secondary">
-                                        <input type="radio" name="options" id="option2" autoComplete="off" /> Text
-                                    </label>
-                                </div>
+                                <ToggleButtonGroup type="radio" name="selectedExportType" defaultValue={'pdf'} onChange={() => console.log('change')}>
+                                    <ToggleButton value={'pdf'}>PDF</ToggleButton>
+                                    <ToggleButton value={'text'}>Text</ToggleButton>
+                                </ToggleButtonGroup>
                             </div>
                             {/* <NewSectionModal template_id={this.state.template.id} addSection={this.addSection} data={this.state} /> */}
                         </div>
