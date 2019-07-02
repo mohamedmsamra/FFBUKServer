@@ -15,6 +15,23 @@
 // React Quill text editor
 @import "~react-quill/dist/quill.snow";
 
+// Base style
+@import 'base/reset';
+
+// Layout style
+@import 'layout/navigation';
+@import 'layout/header';
+@import 'layout/footer';
+@import 'layout/sidebar';
+@import 'layout/forms';
+
+// Components style
+@import 'components/buttons';
+
+// Pages style
+@import 'pages/marking';
+
+
 .navbar-laravel {
   background-color: #fff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);

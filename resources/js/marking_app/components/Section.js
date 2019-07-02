@@ -38,10 +38,9 @@ class Section extends React.Component {
     }
 
     // On click, add comment to the text box if it wasn't added already
-    handleCommentClick(comment) {
-        if(!comment.added) {
-            this.props.handleAppendComment(this.props.id, comment.text);
-        }
+    handleCommentClick(id, type, text) {
+        this.props.handleCommentAdded(this.props.id, id, type);
+        this.props.handleAppendComment(this.props.id, text);
     }
 
     handleEditTitle(e) {
@@ -190,10 +189,13 @@ class Section extends React.Component {
                     <Comment 
                         id={comment.id} 
                         text={comment.text} 
-                        type={comment.type} 
+                        type={comment.type}
+                        added={comment.added}
                         section_id={comment.section_id} 
                         handleRemove={this.handleRemoveComment} 
-                        handleClick={this.handleCommentClick}/>                    
+                        handleClick={this.handleCommentClick}
+                        handleCommentAdded={this.props.handleCommentAdded}
+                        handleCommentChange={this.props.handleCommentChange} />
                 </li>
                 
             )});
@@ -262,8 +264,8 @@ class Section extends React.Component {
                 <div className="card-body">
                     <div className="form-group">
                         <TextEditor 
-                            id={this.props.id} 
-                            value={this.props.value} 
+                            id={this.props.id}
+                            value={this.props.value}
                             handleSectionTextChange={(val) => this.props.handleSectionTextChange(this.props.id, val)}
                         />
                     </div>
