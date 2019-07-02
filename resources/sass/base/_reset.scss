@@ -1,0 +1,20 @@
+// reduce browser inconsistencies in things like default line heights, margins and font sizes of headings
+
+  /* HTML5 display-role reset for older browsers */
+  
+  blockquote, q {
+    quotes: none; }
+  
+  blockquote {
+    &:before, &:after {
+      content: '';
+      content: none; } }
+  
+  q {
+    &:before, &:after {
+      content: '';
+      content: none; } }
+  
+  table {
+    border-collapse: collapse;
+    border-spacing: 0; }
