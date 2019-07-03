@@ -2,7 +2,7 @@ import React from 'react';
 import Comment from './Comment.js';
 import ConfirmationModal from './modals/ConfirmationModal';
 import TextEditor from './TextEditor';
-import { withAlert } from 'react-alert'
+import { withAlert } from 'react-alert';
 
 class Section extends React.Component {
     constructor(props) {
@@ -160,7 +160,7 @@ class Section extends React.Component {
         }).then((data) => {
             console.log(data);
             if (data.length > 12) data = data.substring(0,12) + "...";
-            this.props.alert.success("Removed comment \n '" + data + "'");
+            this.props.alert.success({text: "Removed comment \n '" + data + "'"});
         }).then( () => {
             this.setState(prevState => {
                 const category = prevState.openComments == "positive" ? "posComments" : "negComments";
@@ -322,7 +322,14 @@ class Section extends React.Component {
 
         // The button to delete a section
         let removeBtn = (
-            <button onClick={() => this.props.handleDeleteClick(this.props.id)} type="button" className="close" aria-label="Close">
+            <button
+            onClick={() => {this.props.alert.show({
+                text: "Are you sure you want to delete this section?",
+                onConfirm: () => this.props.handleDeleteClick(this.props.id)
+            })}}
+            type="button"
+            className="close"
+            aria-label="Close" >
                 <span aria-hidden="true">&times;</span>
             </button>
         );

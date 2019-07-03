@@ -87,6 +87,44 @@ class App extends React.Component {
         });
     }
 
+    handleDeleteClick(id) {
+        fetch("/api/assignments/edit-name", {
+            method: 'delete',
+            body: JSON.stringify({id: id}),
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json, text-plain, */*",
+                "X-Requested-With": "XMLHttpRequest",
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content')
+            }
+        })
+        .then(data => {if (!data.ok) throw new Error('Error'); return data;})
+        .then(data => data.json())
+        .then(data => {
+            this.setState((prevState) => {
+                prevState.assignments.filter(function(a) { 
+                    return a.id !== id;
+                })
+                return prevState;
+            });
+        })
+        .catch(error => {
+            console.log(error);
+            this.setState((prevState) => {
+                const assignment = prevState.assignments.find(x => x.id == id);
+                assignment.waitingForResponse = false;
+                assignment.name = assignment.editName;
+                return prevState;
+            });
+        });
+
+        this.setState((prevState) => {
+            const assignment = prevState.assignments.find(x => x.id == id);
+            assignment.waitingForResponse = true;
+            return prevState;
+        });
+    }
+
     render() {
         const assignments = this.state.assignments.map(assignment => (
             <tr key={assignment.id} className={assignment.waitingForResponse ? "disabled" : ''}>
@@ -118,7 +156,7 @@ class App extends React.Component {
                                             <button type="button" className="btn btn-primary btn-sm" disabled={assignment.waitingForResponse}>Start marking</button>
                                         </a>
                                         <button type="button" className="btn btn-info btn-sm" disabled={assignment.waitingForResponse} onClick={() => this.handleEditClick(assignment.id)}>Edit</button>
-                                        <button type="button" className="btn btn-danger btn-sm" disabled={assignment.waitingForResponse}>Delete</button>
+                                        <button type="button" className="btn btn-danger btn-sm" disabled={assignment.waitingForResponse} onClick={() => this.handleDeleteClick(assignment.id)}>Delete</button>
                                     </>
                                 }
                             </td>

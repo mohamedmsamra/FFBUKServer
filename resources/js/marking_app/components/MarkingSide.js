@@ -26,7 +26,9 @@ class MarkingSide extends React.Component {
         this.handleCommentAdded = this.handleCommentAdded.bind(this);
         this.handleCommentChange = this.handleCommentChange.bind(this);
         this.updateComment = this.updateComment.bind(this);
+        this.handleSaveAndLoad = this.handleSaveAndLoad.bind(this);
         this.generatePDF = this.generatePDF.bind(this);
+        this.clearSectionsContent = this.clearSectionsContent.bind(this);
         this.state = {
             submitting: false,
             loading: false,
@@ -53,7 +55,7 @@ class MarkingSide extends React.Component {
             $("#confirmationModal").removeClass("fade");
             $("#confirmationModal").modal('hide');
             $("#confirmationModal").addClass("fade");
-            this.props.alert.success("Removed section '" + data + "'");
+            this.props.alert.success({text: "Removed section '" + data + "'"});
         });
         this.setState(prevState => {
             prevState.template.sections.custom = prevState.template.sections.custom.filter(item => item.id !== id);
@@ -142,16 +144,16 @@ class MarkingSide extends React.Component {
         fetch('/api/templates/' + templateID)
             .then(data => data.json())
             .then(data => {
-                this.setState({
+                this.setState( {
                     template: this.templateFromDBFormat(data),
                     loading: false
                 });
-                $("#loadTemplateModal").removeClass("fade");
-                $("#loadTemplateModal").modal('hide');
-                $("#loadTemplateModal").addClass("fade");
             });
 
         this.setState({loading: true});
+        $("#loadTemplateModal").removeClass("fade");
+        $("#loadTemplateModal").modal('hide');
+        $("#loadTemplateModal").addClass("fade");
     }
 
     handleCreatedNewTemplate(data) {
@@ -168,7 +170,14 @@ class MarkingSide extends React.Component {
 
     handleAppendComment(id, comment) {
         this.setState(prevState => {
-            prevState.template.sections.custom.find(x => x.id == id).value += "<p>" + comment + "</p>";
+            const section = prevState.template.sections.custom.find(x => x.id == id);
+            // Check if the section is empty after inputting values
+            if (section.value == "<p><br></p>") {
+                section.value = "<p>" + comment + "</p>";
+            } else {
+                section.value += "<p>" + comment + "</p>";
+            }
+            
             return prevState;
         });
     }
@@ -193,6 +202,14 @@ class MarkingSide extends React.Component {
         this.updateComment(sectionID, commentID, type, c => {c.text = text; c.added = false; return c});
     }
 
+    handleSaveAndLoad() {
+        this.generatePDF().then(() => {
+            this.clearSectionsContent();
+            this.props.handleNextPdf();
+            // if (this.props.isLastPdf) alert.success({text: "Session complete!", isConfirm: false});
+        });
+    }
+
     updateComment(sectionID, commentID, type, f) {
         this.setState(prevState => {
             let section = prevState.template.sections.custom.find(section => section.id == sectionID);
@@ -203,42 +220,58 @@ class MarkingSide extends React.Component {
         });
     }
 
-    generatePDF(name) {
-        const isEmpty = htmlString => {
-            const parser = new DOMParser();
-         
-            const { textContent } = parser.parseFromString(htmlString, "text/html").documentElement;
-         
-            return !textContent.trim();
-        }
-        let section;
-        for(let i = 0; i < this.state.template.sections.compulsory.length; i++) {
-            section = this.state.template.sections.compulsory[i];
-            console.log("value of " + section.title + ' is ' + section.value);
-            if(isEmpty(section.value)) {
-                this.props.alert.error("Entering " + section.title + " is compulsory!");
-                return;
+    generatePDF() {
+        return new Promise(next => {
+            const isEmpty = htmlString => {
+                const parser = new DOMParser();
+                const { textContent } = parser.parseFromString(htmlString, "text/html").documentElement;
+                return !textContent.trim();
             }
-        }
-        let html = "";
-        if (this.state.enableMarking) {
-            html += "<h3>Total mark: " + this.state.template.totalMark + "</h3>";
-        }
-        const stateSections = this.state.template.sections;
-        const outSections = stateSections.custom.concat(stateSections.compulsory);
-
-        for (let i = 0; i < outSections.length; i++) {
-            if (outSections[i].value != "") {
-                html += "<h1>" + outSections[i].title + "</h1>";
-                html += outSections[i].value;
+            let section;
+            for(let i = 0; i < this.state.template.sections.compulsory.length; i++) {
+                section = this.state.template.sections.compulsory[i];
+                console.log("value of " + section.title + ' is ' + section.value);
+                if(isEmpty(section.value)) {
+                    this.props.alert.error({text: "Entering " + section.title + " is compulsory!"});
+                    return;
+                }
             }
-        }
-
-        var doc = new jsPDF();
-        doc.fromHTML(html, 15, 15, {
-            'width': 170,
+            let html = "";
+            if (this.state.enableMarking) {
+                html += "<h3>Total mark: " + this.state.template.totalMark + "</h3>";
+            }
+            const stateSections = this.state.template.sections;
+            const outSections = stateSections.custom.concat(stateSections.compulsory);
+    
+            for (let i = 0; i < outSections.length; i++) {
+                if (outSections[i].value != "") {
+                    html += "<h1>" + outSections[i].title + "</h1>";
+                    html += outSections[i].value;
+                }
+            }
+    
+            var doc = new jsPDF();
+            doc.fromHTML(html, 15, 15, {
+                'width': 170,
+            });
+            doc.save("sample-pdf");
+            next();
         });
-        doc.save(name);
+    }
+
+    clearSectionsContent() {
+        this.setState(prevState => {
+            const sections = prevState.template.sections;
+            sections.compulsory.forEach(s => s.value = "");
+            sections.custom.forEach(s => s.value = "");
+            sections.custom.forEach(custom => {
+                custom.positiveComments.forEach(c => c.added = false);
+                custom.negativeComments.forEach(c => c.added = false);
+            });
+            // prevState = prevState.template.sections.custom.map(s => s.positiveComments.map(c => Object.assign(c, {added: false})));
+            // prevState = prevState.template.sections.custom.map(s => s.negativeComments.map(c => Object.assign(c, {added: false})));
+            return prevState;
+        })
     }
 
     renderSections() {
@@ -280,8 +313,14 @@ class MarkingSide extends React.Component {
         return <div>{customSections}{compulsorySections}</div>;
     }
 
+    renderNextPdfButton() {
+        if (this.props.pdfPointer >= 0) {
+            return <button type="button" className='btn btn-success' id="nextButton" onClick={this.handleSaveAndLoad}>{this.props.isLastPdf() ? 'Save and finish' : 'Save and Load Next Document'}</button>
+        }
+    }
+
     render() {
-        const currentPdf = this.props.pdfsSelected[this.props.pdfPointer];
+        // const currentPdf = this.props.pdfsSelected[this.props.pdfPointer];
         const loadingNewSection = () => {this.state.submitting &&  <Loading text="Creating new section..." />};
 
         return (
@@ -343,8 +382,8 @@ class MarkingSide extends React.Component {
 
                             {/* Buttons to export feedback */}
                             <div className="save">
-                                <button type="button" className='btn btn-danger' onClick={() => {if(confirm('All entered text will be deleted. Are you sure?')) setup()}} id="clearButton">Clear All</button>
-                                <button type="button" className='btn btn-success' id="nextButton" onClick={() => this.generatePDF(currentPdf.name)}>Save and Load Next Document</button>
+                                <button type="button" className='btn btn-danger' onClick={() => {if(confirm('All entered text will be deleted. Are you sure?')) this.clearSectionsContent()}} id="clearButton">Clear All</button>
+                                {this.renderNextPdfButton()}
                                 Save as:
                                 <ToggleButtonGroup type="radio" name="selectedExportType" defaultValue={'pdf'} onChange={() => console.log('change')}>
                                     <ToggleButton value={'pdf'}>PDF</ToggleButton>
