@@ -225,7 +225,14 @@ class Section extends React.Component {
 
         // The button to delete a section
         let removeBtn = (
-            <button onClick={() => this.props.handleDeleteClick(this.props.id)} type="button" className="close" aria-label="Close">
+            <button
+            onClick={() => {this.props.alert.show({
+                text: "Are you sure you want to delete this section?",
+                onConfirm: () => this.props.handleDeleteClick(this.props.id)
+            })}}
+            type="button"
+            className="close"
+            aria-label="Close" >
                 <span aria-hidden="true">&times;</span>
             </button>
         );
