@@ -103,11 +103,28 @@ class SectionsController extends Controller
          return json_encode("Section Updated!");
     }
 
-    public function storeImg(Request $request) {
-        $img = str_replace('data:image/png;base64,', '', $request->input('file'));
-        $img = str_replace(' ', '+', $img);
-        echo file_put_contents("/resources/img/test.png", base64_decode($img));
+    public function imageUpload($id)
+    {
+        $section =  Section::find($id);
+        return json_encode($section->marking_scheme);
+    }
 
-        return json_encode($img);
+    public function imageUploadPost(Request $request, $id)
+    {
+        $this -> validate($request,[
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg'
+        ]);
+        
+        $img = $request -> image;
+        $imageName = 'marking'.$id.'.'.$img->getClientOriginalExtension();
+        \Log::info($imageName);
+        $img->move(public_path('images'), $imageName);
+        // \Image::make($request->get('image'))->save(public_path('images/').$imageName);
+
+        $section = Section::find($id);
+        $section -> marking_scheme = $imageName; 
+        $section -> save();
+
+        return json_encode($imageName);
     }
 }

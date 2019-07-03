@@ -16,7 +16,9 @@ class Section extends React.Component {
             newComment: '',
             commentID: 0,
             editTitle: false,
-            schemeOpen: false
+            schemeOpen: false,
+            hasScheme: false,
+            markingScheme: ''
         }
         this.openComments = this.openComments.bind(this);
         this.handleCommentClick = this.handleCommentClick.bind(this);
@@ -30,33 +32,90 @@ class Section extends React.Component {
         this.addComment = this.addComment.bind(this);
         this.handleUploadScheme = this.handleUploadScheme.bind(this);
         this.handleOpenScheme = this.handleOpenScheme.bind(this);
+        this.loadScheme = this.loadScheme.bind(this);
     }
+
+    componentDidMount() {
+        this.loadScheme();
+    }
+
+    loadScheme() {
+        if (!this.props.compulsory) {
+            fetch("/api/sections/" + this.props.id + "/image-upload")
+            .then(data => data.json())
+            .then(data => {
+                console.log('marking scheme is set to: ' + data)
+                if (data) {
+                    this.setState({hasScheme: true, markingScheme: '/images/' + data});
+                }
+            });
+        }
+        
+    }
+
+    // handleUploadScheme(e) {
+    //     var formData = new FormData();
+    //         formData.append("file",e.target.files[0]);
+    //         formData.append('name', 'some value user types');
+    //         formData.append('description', 'some value user types');
+    //         console.log(e.target.files[0]);
+
+    //         fetch("/api/sections/" + this.props.id + "/image-upload", {
+    //             method: 'post',
+    //             body: {image: e.target.files[0]},
+    //             headers: {
+    //                 "Content-Type": "multipart/form-data",
+    //                 "Accept": "application/json, text-plain, */*",
+    //                 "X-Requested-With": "XMLHttpRequest",
+    //                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content')
+    //             }
+    //         }).then(data => data.json())
+    //         .then(data => {
+    //             console.log('fetch finished with data: ' + data)
+    //             // if(JSON.stringify(data))
+    //             // this.setState({markingScheme: img})
+    //         });
+    //     // }
+    
+        
+    // }
 
     handleUploadScheme(e) {
-        const img = URL.createObjectURL(e.target.files[0]);
-        // let files = e.target.files;
-        // let reader = new FileReader();
-        // reader.readAsDataURL(files[0]);
+        // debugger;
+        $.ajax({
+            // Your server script to process the upload
+            url: '/api/sections/' + this.props.id + '/image-upload',
+            type: 'POST',
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content')
+            },
+            // Form data
+            data: new FormData($(e.target).parent()[0]),
 
-        // reader.onload = (e) => {
-        //     const url = "http://127.0.0.1:8000/api/images";
-        //     const img = {file: e.target.result};
-        //     console.log(img);
-        //     fetch("/api/sections/" + this.props.id + "/img", {
-        //         method: 'post',
-        //         body: img,
-        //         headers: {
-        //             "Content-Type": "application/json",
-        //             "Accept": "application/json, text-plain, */*",
-        //             "X-Requested-With": "XMLHttpRequest",
-        //             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content')
-        //         }
-        //     }).then(function(data) {
-        //         console.log("here" + JSON.stringify(data));
-        //     });
-        // }
-        this.setState({markingScheme: img})
+            // Tell jQuery not to process data or worry about content-type
+            // You *must* include these options!
+            cache: false,
+            contentType: false,
+            processData: false,
+
+            // Custom XMLHttpRequest
+            xhr: function () {
+                var myXhr = $.ajaxSettings.xhr();
+                if (myXhr.upload) {
+                    // For handling the progress of the upload
+                    myXhr.upload.addEventListener('load', function (e) {
+                        console.log(e)
+                    }, false);
+                }
+                return myXhr;
+            },
+            success: function(data){
+                var json = $.parseJSON(data); // create an object with the key of the array
+                this.setState({hasScheme: true, markingScheme: '/images/' + json});
+            }.bind(this)
+        });
     }
+
 
     handleOpenScheme() {
         // this.state.schemeOpen ? $("#toggle" + this.props.id).slideUp() : $("#toggle" + this.props.id).slideDown();
@@ -293,24 +352,28 @@ class Section extends React.Component {
                                             title="Edit Title">
                                             <i className="fas fa-edit"></i>
                                         </button>
-                                        <input 
-                                            onChange={(e) => this.handleUploadScheme(e)} 
-                                            type="file" 
-                                            id={"scheme" + this.props.id} 
-                                            className="hiddenFileInput" 
-                                            accept="image/*"/>
-                                        <button 
-                                            type="button" 
-                                            id={"upload" + this.props.id}
-                                            className="invisibleBtn float-left" 
-                                            onClick={() => {$("#scheme" + this.props.id).click()}} 
-                                            data-toggle="tooltip" 
-                                            data-placement="top" 
-                                            title="Upload Marking Scheme">
-                                            <i className="fas fa-upload"></i>
-                                        </button>
+                                        <form encType="multipart/form-data" action="">
+                                            <input 
+                                                onChange={this.handleUploadScheme.bind(this)}
+                                                name="image"
+                                                type="file" 
+                                                id={"scheme" + this.props.id} 
+                                                className="hiddenFileInput" 
+                                                accept="image/*"/>
+                                            <button 
+                                                type="button" 
+                                                id={"upload" + this.props.id}
+                                                className="invisibleBtn float-left" 
+                                                onClick={() => {$("#scheme" + this.props.id).click()}} 
+                                                data-toggle="tooltip" 
+                                                data-placement="top" 
+                                                title="Upload Marking Scheme">
+                                                <i className="fas fa-upload"></i>
+                                            </button>
+                                        </form>
                                         
-                                        {this.state.markingScheme &&
+                                        
+                                        {this.state.hasScheme &&
                                             <button 
                                                 type="button" 
                                                 className="invisibleBtn float-left" 
@@ -332,9 +395,8 @@ class Section extends React.Component {
                     {!this.props.compulsory && removeBtn}
                 </div>
                 {/* {console.log("scheme open is " + this.state.schemeOpen)} */}
-                {this.state.markingScheme &&
+                {this.state.hasScheme &&
                     <img src={this.state.markingScheme} className={this.state.schemeOpen ? "markingSchemeImg" : "markingSchemeImg hideImg"} id={"toggle" + this.props.id}/>
-
                 } 
                 <div className="card-body">
                     <div className="form-group">
