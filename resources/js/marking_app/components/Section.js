@@ -2,7 +2,7 @@ import React from 'react';
 import Comment from './Comment.js';
 import ConfirmationModal from './modals/ConfirmationModal';
 import TextEditor from './TextEditor';
-import { withAlert } from 'react-alert'
+import { withAlert } from 'react-alert';
 
 class Section extends React.Component {
     constructor(props) {
@@ -64,7 +64,7 @@ class Section extends React.Component {
         }).then((data) => {
             console.log(data);
             if (data.length > 12) data = data.substring(0,12) + "...";
-            this.props.alert.success("Removed comment \n '" + data + "'");
+            this.props.alert.success({text: "Removed comment \n '" + data + "'"});
         }).then( () => {
             this.setState(prevState => {
                 const category = prevState.openComments == "positive" ? "posComments" : "negComments";

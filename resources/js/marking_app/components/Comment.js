@@ -1,4 +1,5 @@
 import React from 'react';
+import { withAlert } from 'react-alert';
 
 class Comment extends React.Component {
     constructor(props) {
@@ -102,7 +103,10 @@ class Comment extends React.Component {
                         <button 
                             type="button" 
                             className="invisibleBtn" 
-                            onClick={() => this.props.handleRemove(this.props.id)}
+                            onClick={() => this.props.alert.show({
+                                text: "Are you sure you want to remove this comment?",
+                                onConfirm: () => this.props.handleRemove(this.props.id)
+                            })}
                             data-placement="top" 
                             title="Delete Comment">
                             <i className="fas fa-times"></i>
@@ -124,4 +128,4 @@ class Comment extends React.Component {
 Comment.defaultProps = {
 }
 
-export default Comment;
+export default withAlert()(Comment);

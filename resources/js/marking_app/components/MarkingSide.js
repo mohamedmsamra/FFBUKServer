@@ -55,7 +55,7 @@ class MarkingSide extends React.Component {
             $("#confirmationModal").removeClass("fade");
             $("#confirmationModal").modal('hide');
             $("#confirmationModal").addClass("fade");
-            this.props.alert.success("Removed section '" + data + "'");
+            this.props.alert.success({text: "Removed section '" + data + "'"});
         });
         this.setState(prevState => {
             prevState.template.sections.custom = prevState.template.sections.custom.filter(item => item.id !== id);
@@ -230,7 +230,7 @@ class MarkingSide extends React.Component {
                 section = this.state.template.sections.compulsory[i];
                 console.log("value of " + section.title + ' is ' + section.value);
                 if(isEmpty(section.value)) {
-                    this.props.alert.error("Entering " + section.title + " is compulsory!");
+                    this.props.alert.error({text: "Entering " + section.title + " is compulsory!"});
                     return;
                 }
             }
