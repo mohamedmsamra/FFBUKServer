@@ -42,7 +42,7 @@
                 @include('inc.messages')
                 <h2>{{ $assignment['name'] }}</h2>
                 <div>
-                    <div id="react-root"></div>
+                    <div id="marking-react-root"></div>
                 </div>
             {{-- </main> --}}
          </div>

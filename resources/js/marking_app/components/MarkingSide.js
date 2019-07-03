@@ -285,7 +285,7 @@ class MarkingSide extends React.Component {
         const loadingNewSection = () => {this.state.submitting &&  <Loading text="Creating new section..." />};
 
         return (
-            <div className="col">
+            <div className="col-6">
                 <div className="loadCreateBtns">
                     <button type="button" className="btn btn-outline-primary" onClick={() => $("#loadTemplateModal").modal('show')}>Load Template</button>
                     <button onClick={() => $("#createTemplateModal").modal('show')} type="button" className="btn btn-outline-success">Create New Template</button>

@@ -32,4 +32,4 @@ const Root = () => (
     </AlertProvider>
 )
 
-ReactDOM.render(<Root />, document.getElementById('react-root'));
+ReactDOM.render(<Root />, document.getElementById('marking-react-root'));

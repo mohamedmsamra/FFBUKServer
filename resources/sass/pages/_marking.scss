@@ -7,7 +7,7 @@
 // Pdf Side
 .rightSide {
     float: right;
-    width: 43%;
+    // width: 43%;
 }
 
 // Choose files button
@@ -39,7 +39,7 @@
 // Marking Side
 .leftSide {
     float: left;
-    width: 53%;
+    // width: 50%;
 }
 
 // Buttons to load template or create new one
@@ -244,4 +244,9 @@
     // width: auto;
     // height: auto;
     max-width: 100%;
+}
+
+
+#marking-react-root > .row {
+    margin: 0;
 }
