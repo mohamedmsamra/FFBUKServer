@@ -10,6 +10,8 @@ class App extends React.Component {
             pdfPointer: -1
         }
         this.handlePdfsSelected = this.handlePdfsSelected.bind(this);
+        this.handleNextPdf = this.handleNextPdf.bind(this);
+        this.isLastPdf = this.isLastPdf.bind(this);
     }
 
     handlePdfsSelected(files) {
@@ -20,6 +22,23 @@ class App extends React.Component {
         this.setState({pdfsSelected: pdfsSelected, pdfPointer: 0});
     }
 
+    handleNextPdf() {
+        this.setState(prevState => {
+            console.log(this.isLastPdf());
+            if (this.isLastPdf()) {
+                prevState.pdfPointer = -1;
+                prevState.pdfsSelected = [];
+            } else {
+                prevState.pdfPointer++;
+            }
+            return prevState;
+        });
+    }
+
+    isLastPdf() {
+        return this.state.pdfsSelected.length == (this.state.pdfPointer + 1);
+    }
+
     render() {
         return (
             <div className="row">
@@ -27,7 +46,10 @@ class App extends React.Component {
                     handlePdfsSelected={this.handlePdfsSelected}
                     pdfsSelected={this.state.pdfsSelected}
                     pdfPointer={this.state.pdfPointer} />
-                <MarkingSide />
+                <MarkingSide
+                    pdfPointer={this.state.pdfPointer}
+                    handleNextPdf={this.handleNextPdf}
+                    isLastPdf={this.isLastPdf} />
             </div>
         )
     }

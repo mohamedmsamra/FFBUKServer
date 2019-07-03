@@ -51,10 +51,6 @@ class Comment extends React.Component {
         this.props.handleCommentChange(this.props.section_id, this.props.id, this.props.type, this.state.editingText);
     }
 
-    setCommentAdded(value) {
-        this.setState({added : value});
-    }
-
     renderEditCommentView() {
         return (
             <div className="input-group editView">

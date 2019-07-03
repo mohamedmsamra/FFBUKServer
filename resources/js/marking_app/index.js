@@ -5,7 +5,7 @@ import App from './App';
 
 const alertOptions = {
     position: positions.TOP_RIGHT,
-    timeout: 5000,
+    timeout: 0,
     offset: '10px',
     transition: transitions.SCALE
 }
@@ -18,8 +18,9 @@ const AlertTemplate = ({ style, options, message, close }) => (
             {options.type === 'error' && <i className="fas fa-exclamation-circle text-danger"></i>}
         </div>
         <div className="float-left alert-text">
-            {message}
+            {message.text}
         </div>
+        {(() => {if (message.autoClose) setTimeout(close, 1000)})()}
         <button className="float-right alert-btn" onClick={close}>x</button>
         <div className="clear"></div>
     </div>
