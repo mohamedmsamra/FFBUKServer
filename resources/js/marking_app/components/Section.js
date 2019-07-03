@@ -16,7 +16,7 @@ class Section extends React.Component {
             newComment: '',
             commentID: 0,
             editTitle: false,
-            schemeOpen: true
+            schemeOpen: false
         }
         this.openComments = this.openComments.bind(this);
         this.handleCommentClick = this.handleCommentClick.bind(this);
@@ -61,7 +61,7 @@ class Section extends React.Component {
     handleOpenScheme() {
         // this.state.schemeOpen ? $("#toggle" + this.props.id).slideUp() : $("#toggle" + this.props.id).slideDown();
         // $("#toggle" + this.props.id).removeClass("hiddenFileInput");
-        $("#toggle" + this.props.id).slideToggle();
+        // $("#toggle" + this.props.id).slideToggle();
         this.setState((prevState) => Object.assign(prevState, {schemeOpen: !prevState.schemeOpen}));
                
     }
@@ -319,7 +319,7 @@ class Section extends React.Component {
                                                 data-placement="top" 
                                                 title="Toggle Marking Scheme">
                                                 <i className="fas fa-file-image"></i>
-                                                  <small>Marking Scheme</small>
+                                                  <small> Toggle Marking Scheme</small>
                                             </button>}
                                                 
                                     </div>)
@@ -329,13 +329,12 @@ class Section extends React.Component {
                             
                         }
                     </div>
-                    <div>
-                        {!this.props.compulsory && removeBtn}
-                    </div>
+                    {!this.props.compulsory && removeBtn}
                 </div>
                 {/* {console.log("scheme open is " + this.state.schemeOpen)} */}
                 {this.state.markingScheme &&
-                    <img src={this.state.markingScheme} className="markingSchemeImg" id={"toggle" + this.props.id}/>
+                    <img src={this.state.markingScheme} className={this.state.schemeOpen ? "markingSchemeImg" : "markingSchemeImg hideImg"} id={"toggle" + this.props.id}/>
+
                 } 
                 <div className="card-body">
                     <div className="form-group">
