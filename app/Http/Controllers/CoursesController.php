@@ -93,40 +93,71 @@ class CoursesController extends Controller
             'body' => 'required',
             //adding some validation to the image to upload, it has to be an image, optional to include or not, not required
             //and finally has a max size of 1999mb
-            'cover_image' => 'image| nullable | max:1999'
+            'cover_image' => 'image | mimes:jpeg,png,jpg,gif,svg | nullable | max:1999'
         ]);
 
-
-        //Handle File upload
-        //make sure an actual file was chosen
-        if($request -> hasFile('cover_image')){
-            //Get Filename with the extension
-            $filenameWithExt = $request->file('cover_image') ->getClientOriginalName();
-            //Get just filename
-            $filename= pathinfo( $filenameWithExt, PATHINFO_FILENAME);
-            //Get just extenstion
-            $extension = $request->file('cover_image')->getClientOriginalExtension();
-            //Filename to store (to make the filename to be stored veru unique and avoid any possible overriding)
-            $fileNameToStore = $filename.'_'.time().'_'.$extension;
-            //Upload Image
-            $path = $request -> file('cover_image') -> storeAs('public/cover_images',$fileNameToStore);
-
-        } else{
-            //so if the user has not chosen an image, this default image will show
-            $fileNameToStore= 'noImage.jpg';
-        }
         //Create Post
         $course = new Course;
         $course ->title = $request->input('title');
         $course ->body = $request->input('body');
         //the user_id is not coming from the form, we read it from auth(), which will read the id of current signed_in user
         $course ->user_id = auth()->user()->id;
-        $course ->cover_image = $fileNameToStore;
+        $course ->cover_image = "default";
         $course ->save();
+
+        $this -> imageUpload($request, $course['id']);
+
+        // $returnCourse
 
         //direct the page back to the index
         //set the success message to Post Created
         return redirect('/courses')-> with('success', 'Your Course has been added successfully!');
+    }
+
+    public function imageUpload(Request $request, $id) 
+    {
+        $this -> validate($request,[
+            'cover_image' => 'image | mimes:jpeg,png,jpg,gif,svg | nullable | max:1999'
+        ]);
+
+        $course = Course::find($id);
+
+        //Handle File upload
+        //make sure an actual file was chosen
+        if($request -> hasFile('cover_image')){
+
+            $img = $request -> cover_image;
+
+            $user_id = auth()->user()->id;
+
+            // Check if user folder exists and create it if not
+            $path = public_path('storage/user_'.$user_id);
+            if(!file_exists($path)) {
+                // path does not exist
+                \File::makeDirectory($path);
+            }
+
+            $matches = glob($path.'/course_'.$course->id.'*');
+            foreach ($matches as $match) {
+                \Log::info($match);
+                unlink($match);
+            }
+
+            $imageName = 'course_'.$course->id.'_'.date("YmdHis").'.'.$img->getClientOriginalExtension();
+
+            // Save image to user folder
+            $img->move($path, $imageName);
+
+            $fileNameToStore = 'user_'.$user_id.'/'.$imageName;
+            
+        } else{
+            //so if the user has not chosen an image, this default image will show
+            $fileNameToStore= 'default';
+        }
+        $course -> cover_image = $fileNameToStore;
+        $course -> save();
+
+        return json_encode($fileNameToStore);
     }
 
     /**

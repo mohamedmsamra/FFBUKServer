@@ -61,6 +61,7 @@ Route::get('/services', 'PagesController@services');
 
 // will create all the routes associated with the post editing deleteing and so on
 Route::resource('courses', 'CoursesController');
+Route::post('/courses/{course}/imageUpload', 'CoursesController@imageUpload');
 
 // will create all the routes associated with the assignment editing deleteing and so on
 Route::resource('assignments', 'AssignmentsController');

@@ -12,7 +12,7 @@
     <!-- Fonts -->
     {{-- <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css"> --}}
-    <link href="https://fonts.googleapis.com/css?family=Montserrat|Raleway&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700|Raleway:400,700&display=swap" rel="stylesheet">
 
     <!-- Styles -->
     <link href="{{ asset('builds/css/app.css') }}" rel="stylesheet">
@@ -40,7 +40,7 @@
         <div>
             {{-- <main class="py-4"> --}}
                 @include('inc.messages')
-                <h2>{{ $assignment['name'] }}</h2>
+                <h2 class="marking-heading text-center"> Marking assignment {{ $assignment['name'] }}</h2>
                 <div>
                     <div id="marking-react-root"></div>
                 </div>

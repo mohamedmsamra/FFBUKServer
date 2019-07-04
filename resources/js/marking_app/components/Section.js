@@ -361,7 +361,6 @@ class Section extends React.Component {
                                             </button>
                                         </form>
                                         
-                                        {console.log(this.state.markingScheme)}
                                         {(this.state.markingScheme != null) &&
                                             <button 
                                                 type="button" 
