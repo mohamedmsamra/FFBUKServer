@@ -11,7 +11,8 @@ class App extends React.Component {
             assignments: assignments.map(a => Object.assign(a, {
                 editing: false,
                 editName: a.name,
-                waitingForResponse: false
+                waitingForResponse: false,
+                deleted: false
             }))
         }
     }
@@ -88,9 +89,15 @@ class App extends React.Component {
     }
 
     handleDeleteClick(id) {
-        fetch("/api/assignments/edit-name", {
+        this.setState((prevState) => {
+            const assignment = prevState.assignments.find(x => x.id == id);
+            assignment.waitingForResponse = true;
+            return prevState;
+        });
+
+        fetch("/api/assignments/" + id, {
             method: 'delete',
-            body: JSON.stringify({id: id}),
+            body: JSON.stringify({}),
             headers: {
                 "Content-Type": "application/json",
                 "Accept": "application/json, text-plain, */*",
@@ -102,9 +109,8 @@ class App extends React.Component {
         .then(data => data.json())
         .then(data => {
             this.setState((prevState) => {
-                prevState.assignments.filter(function(a) { 
-                    return a.id !== id;
-                })
+                const assignment = prevState.assignments.find(x => x.id == id);
+                assignment.deleted = true;
                 return prevState;
             });
         })
@@ -117,16 +123,11 @@ class App extends React.Component {
                 return prevState;
             });
         });
-
-        this.setState((prevState) => {
-            const assignment = prevState.assignments.find(x => x.id == id);
-            assignment.waitingForResponse = true;
-            return prevState;
-        });
     }
 
     render() {
         const assignments = this.state.assignments.map(assignment => (
+            !assignment.deleted &&
             <tr key={assignment.id} className={assignment.waitingForResponse ? "disabled" : ''}>
                         <td>
                             <p hidden={assignment.editing}>{assignment.name}</p>

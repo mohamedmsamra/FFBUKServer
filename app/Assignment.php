@@ -18,9 +18,10 @@ class Assignment extends Model
     //Timestamps
     public $timestamps= true;
 
+    protected $fillable = ['name', 'desc', 'course_id'];
 
     public function course(){
-        return $this-> belongsTo('App\Course');
+        return $this->belongsTo('App\Course');
     }
 
     public function templates(){

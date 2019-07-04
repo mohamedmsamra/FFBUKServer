@@ -18,12 +18,9 @@ class AssignmentsController extends Controller {
         return json_encode(['name' => $assignment->name]);
     }
 
-    public function destroy(Request $request) {
-        $this -> validate($request,[
-            'id' => 'required'
-        ]);
-        $assignment = Assignment::find($request->id);
+    public function destroy($id) {
+        $assignment = Assignment::find($id);
         $assignment -> delete();
-        return json_encode("success");
+        return json_encode(['ok' => true]);
     }
 }
