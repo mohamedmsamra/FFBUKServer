@@ -24,7 +24,8 @@
         </div> 
 
         <div class="form-group">
-            {{Form::file('cover_image')}}
+            <input type="file" name="cover_image" accept="image/*">
+            {{-- {{Form::file('cover_image')}} --}}
         </div>
         <!-- when we submit , it is going to make a post request to store function in PostsController.php-->
         {{Form::submit('Submit', ['class'=> 'btn btn-primary'])}}
