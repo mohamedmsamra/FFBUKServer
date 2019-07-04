@@ -65,9 +65,9 @@
     {{-- @else 
         <p> No Assignments Found </p>    
     @endif    --}}
-    <a href='/courses/{{$course->id}}/assignments/create' class="btn btn-primary"> Add New Assignment </a>
     <script>
         const assignments = <?php echo json_encode($assignments) ?>;
+        const course_id = {{$course->id}};
     </script>
     <script src="/builds/js/assignments_table/index.js"></script>
 @endsection
