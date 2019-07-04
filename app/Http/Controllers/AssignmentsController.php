@@ -48,6 +48,7 @@ class AssignmentsController extends Controller
         $this -> validate($request,[
             'title' => 'required',
             'body' => 'required',
+            'course_id' => 'required'
         ]);
         
         //Create Assignment
@@ -57,8 +58,6 @@ class AssignmentsController extends Controller
         //the user_id is not coming from the form, we read it from auth(), which will read the id of current signed_in user
         $assignment ->course_id = $request->input('course_id');
         $assignment ->save();
-
-        $course_id = $request->input('course_id');
         
         //direct the page back to the index
         //set the success message to Post Created
