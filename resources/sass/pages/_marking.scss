@@ -1,5 +1,9 @@
 // Style for the marking page
 
+.marking-heading{
+    padding: 40px;
+}
+
 .leftSide, .rightSide {
     margin: 1%;
 }
@@ -261,4 +265,9 @@
 
 #marking-react-root > .row {
     margin: 0;
+}
+
+// if load templates modal is empty
+.loadEmpty {
+    padding: 30px 18px;
 }

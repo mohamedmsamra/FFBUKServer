@@ -40,7 +40,7 @@
         <div>
             {{-- <main class="py-4"> --}}
                 @include('inc.messages')
-                <h2>{{ $assignment['name'] }}</h2>
+                <h2 class="marking-heading text-center"> Marking assignment {{ $assignment['name'] }}</h2>
                 <div>
                     <div id="marking-react-root"></div>
                 </div>

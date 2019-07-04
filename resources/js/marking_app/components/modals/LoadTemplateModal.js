@@ -30,6 +30,11 @@ class LoadTemplateModal extends React.Component {
                 )
             });
             return (
+                this.state.templates.length == 0 ?
+                <div className="loadEmpty modal-body">
+                    There are no templates for this assignment yet. 
+                </div>
+                :
                 <div>
                     {/* Modal Body */}
                     <div className="modal-body">
