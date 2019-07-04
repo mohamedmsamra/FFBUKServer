@@ -18,7 +18,7 @@ class Section extends React.Component {
             editTitle: false,
             schemeOpen: false,
             hasScheme: false,
-            markingScheme: ''
+            markingScheme: this.props.marking_scheme
         }
         this.openComments = this.openComments.bind(this);
         this.handleCommentClick = this.handleCommentClick.bind(this);
@@ -32,25 +32,6 @@ class Section extends React.Component {
         this.addComment = this.addComment.bind(this);
         this.handleUploadScheme = this.handleUploadScheme.bind(this);
         this.handleOpenScheme = this.handleOpenScheme.bind(this);
-        this.loadScheme = this.loadScheme.bind(this);
-    }
-
-    componentDidMount() {
-        this.loadScheme();
-    }
-
-    loadScheme() {
-        if (!this.props.compulsory) {
-            fetch("/api/sections/" + this.props.id + "/image-upload")
-            .then(data => data.json())
-            .then(data => {
-                console.log('marking scheme is set to: ' + data)
-                if (data) {
-                    this.setState({hasScheme: true, markingScheme: '/images/' + data});
-                }
-            });
-        }
-        
     }
 
     // handleUploadScheme(e) {
@@ -110,17 +91,18 @@ class Section extends React.Component {
                 return myXhr;
             },
             success: function(data){
+                console.log("got here");
                 var json = $.parseJSON(data); // create an object with the key of the array
-                this.setState({hasScheme: true, markingScheme: '/images/' + json});
+                if(this.state.markingScheme === json) {
+                    console.log("they are the same");
+                }
+                this.setState({hasScheme: true, markingScheme: json});
             }.bind(this)
         });
     }
 
 
     handleOpenScheme() {
-        // this.state.schemeOpen ? $("#toggle" + this.props.id).slideUp() : $("#toggle" + this.props.id).slideDown();
-        // $("#toggle" + this.props.id).removeClass("hiddenFileInput");
-        // $("#toggle" + this.props.id).slideToggle();
         this.setState((prevState) => Object.assign(prevState, {schemeOpen: !prevState.schemeOpen}));
                
     }
@@ -359,7 +341,7 @@ class Section extends React.Component {
                                             title="Edit Title">
                                             <i className="fas fa-edit"></i>
                                         </button>
-                                        <form encType="multipart/form-data" action="">
+                                        <form encType="multipart/form-data" action="" className="float-left">
                                             <input 
                                                 onChange={this.handleUploadScheme.bind(this)}
                                                 name="image"
@@ -379,8 +361,8 @@ class Section extends React.Component {
                                             </button>
                                         </form>
                                         
-                                        
-                                        {this.state.hasScheme &&
+                                        {console.log(this.state.markingScheme)}
+                                        {(this.state.markingScheme != null) &&
                                             <button 
                                                 type="button" 
                                                 className="invisibleBtn float-left" 
@@ -402,8 +384,8 @@ class Section extends React.Component {
                     {!this.props.compulsory && removeBtn}
                 </div>
                 {/* {console.log("scheme open is " + this.state.schemeOpen)} */}
-                {this.state.hasScheme &&
-                    <img src={this.state.markingScheme} className={this.state.schemeOpen ? "markingSchemeImg" : "markingSchemeImg hideImg"} id={"toggle" + this.props.id}/>
+                {(this.state.markingScheme != null) &&
+                    <img src={"/storage/" + this.state.markingScheme} className={this.state.schemeOpen ? "markingSchemeImg" : "markingSchemeImg hideImg"} id={"toggle" + this.props.id}/>
                 } 
                 <div className="card-body">
                     <div className="form-group">

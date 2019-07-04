@@ -109,6 +109,8 @@ class MarkingSide extends React.Component {
     }
 
     templateFromDBFormat(dbTemplate) {
+        // console.log('in temp format');
+        // console.log(dbTemplate);
         return {
             name: dbTemplate.name,
             id: dbTemplate.id,
@@ -119,7 +121,6 @@ class MarkingSide extends React.Component {
                     s.mark = 0;
                     s.negativeComments.map(c => {c.added = false; return c});
                     s.positiveComments.map(c => {c.added = false; return c});
-                    s.marking_scheme = '';
                     return s;
                 }) : [],
                 compulsory: [

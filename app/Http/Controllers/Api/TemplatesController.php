@@ -46,7 +46,10 @@ class TemplatesController extends Controller
 
         // Add sections
         $sections = Section::where('template_id', "=", $template['id'])->get();
+        \Log::info($sections);
         foreach ($sections as $section) {
+            \Log::info('Section '.$section->id.': ');
+            \Log::info($section->marking_scheme);
             $pos_comments = Comment::where('section_id', '=', $section['id'])->where('type', '=', 'positive')->get();
             $neg_comments = Comment::where('section_id', '=', $section['id'])->where('type', '=', 'negative')->get();
             $section['positiveComments'] = $pos_comments;
@@ -54,6 +57,7 @@ class TemplatesController extends Controller
         }
         
         $template['sections'] = $sections;
+        \Log::info($template['sections']);
 
         return $template ? json_encode($template) : "{error: 'Template not found'}";
     }
