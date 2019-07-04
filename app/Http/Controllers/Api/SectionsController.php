@@ -114,17 +114,39 @@ class SectionsController extends Controller
         $this -> validate($request,[
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg'
         ]);
-        
+
+        // Get image from request
         $img = $request -> image;
-        $imageName = 'marking'.$id.'.'.$img->getClientOriginalExtension();
-        \Log::info($imageName);
-        $img->move(public_path('images'), $imageName);
-        // \Image::make($request->get('image'))->save(public_path('images/').$imageName);
+
+        $user_id = auth()->user()->id;
+
+        // Check if user folder exists and create it if not
+        $path = public_path('storage\user_'.$user_id);
+        if(!file_exists($path)) {
+            // path does not exist
+            \File::makeDirectory($path);
+        }
+
+        $matches = glob($path.'\markingScheme_'.$id.'*');
+        foreach ($matches as $match) {
+            \Log::info($match);
+            unlink($match);
+        }
+
+        // Generate image name
+        $imageName = 'markingScheme_'.$id.'_'.date("YmdHis").'.'.$img->getClientOriginalExtension();
+
+        // Save image to user folder
+        $img->move($path, $imageName);
+        \Log::info(date("YmdHis"));
+               
+
+        $toDB = 'user_'.$user_id.'\\'.$imageName;
 
         $section = Section::find($id);
-        $section -> marking_scheme = $imageName; 
+        $section -> marking_scheme = $toDB; 
         $section -> save();
 
-        return json_encode($imageName);
+        return json_encode($toDB);
     }
 }

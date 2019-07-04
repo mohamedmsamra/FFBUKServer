@@ -109,6 +109,8 @@ class MarkingSide extends React.Component {
     }
 
     templateFromDBFormat(dbTemplate) {
+        // console.log('in temp format');
+        // console.log(dbTemplate);
         return {
             name: dbTemplate.name,
             id: dbTemplate.id,
@@ -119,7 +121,6 @@ class MarkingSide extends React.Component {
                     s.mark = 0;
                     s.negativeComments.map(c => {c.added = false; return c});
                     s.positiveComments.map(c => {c.added = false; return c});
-                    s.marking_scheme = '';
                     return s;
                 }) : [],
                 compulsory: [
@@ -186,12 +187,19 @@ class MarkingSide extends React.Component {
         this.setState((prevState) => Object.assign(prevState, {enableMarking: !prevState.enableMarking}));
     }
 
-    handleMarkChange(sectionID, mark) {
-        this.setState(prevState => {
-            prevState.template.sections.custom.find(x => x.id == sectionID).mark = mark;
-            prevState.template.totalMark = prevState.template.sections.custom.reduce((a, s) => (a + parseFloat(s.mark || 0)), 0);
-            return prevState;
-        });
+    handleMarkChange(sectionID, markInput) {
+        let mark = markInput.value;
+        if(mark == null || (0 <= mark && mark <= 100)) {
+            $($(markInput)[0]).tooltip('hide');
+            this.setState(prevState => {
+                prevState.template.sections.custom.find(x => x.id == sectionID).mark = mark;
+                prevState.template.totalMark = prevState.template.sections.custom.reduce((a, s) => (a + parseFloat(s.mark || 0)), 0);
+                return prevState;
+            });
+        } else {
+            $($(markInput)[0]).tooltip('show');
+        }
+        
     }
 
     handleCommentAdded(sectionID, commentID, type) {
@@ -203,7 +211,8 @@ class MarkingSide extends React.Component {
     }
 
     handleSaveAndLoad() {
-        this.generatePDF().then(() => {
+        let name = this.props.pdfsSelected[this.props.pdfPointer].name;
+        this.generatePDF(name).then(() => {
             this.clearSectionsContent();
             this.props.handleNextPdf();
             // if (this.props.isLastPdf) alert.success({text: "Session complete!", isConfirm: false});
@@ -220,7 +229,7 @@ class MarkingSide extends React.Component {
         });
     }
 
-    generatePDF() {
+    generatePDF(name) {
         return new Promise(next => {
             const isEmpty = htmlString => {
                 const parser = new DOMParser();
@@ -254,7 +263,7 @@ class MarkingSide extends React.Component {
             doc.fromHTML(html, 15, 15, {
                 'width': 170,
             });
-            doc.save("sample-pdf");
+            doc.save(name);
             next();
         });
     }
@@ -320,7 +329,6 @@ class MarkingSide extends React.Component {
     }
 
     render() {
-        // const currentPdf = this.props.pdfsSelected[this.props.pdfPointer];
         const loadingNewSection = () => {this.state.submitting &&  <Loading text="Creating new section..." />};
 
         return (
