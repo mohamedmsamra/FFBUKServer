@@ -48,6 +48,7 @@ class App extends React.Component {
                     pdfPointer={this.state.pdfPointer} />
 
                 <MarkingSide
+                    pdfsSelected={this.state.pdfsSelected}
                     pdfPointer={this.state.pdfPointer}
                     handleNextPdf={this.handleNextPdf}
                     isLastPdf={this.isLastPdf} />

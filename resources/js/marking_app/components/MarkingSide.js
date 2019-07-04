@@ -210,7 +210,8 @@ class MarkingSide extends React.Component {
     }
 
     handleSaveAndLoad() {
-        this.generatePDF().then(() => {
+        let name = this.props.pdfsSelected[this.props.pdfPointer].name;
+        this.generatePDF(name).then(() => {
             this.clearSectionsContent();
             this.props.handleNextPdf();
             // if (this.props.isLastPdf) alert.success({text: "Session complete!", isConfirm: false});
@@ -227,7 +228,7 @@ class MarkingSide extends React.Component {
         });
     }
 
-    generatePDF() {
+    generatePDF(name) {
         return new Promise(next => {
             const isEmpty = htmlString => {
                 const parser = new DOMParser();
@@ -261,7 +262,7 @@ class MarkingSide extends React.Component {
             doc.fromHTML(html, 15, 15, {
                 'width': 170,
             });
-            doc.save("sample-pdf");
+            doc.save(name);
             next();
         });
     }
@@ -327,7 +328,6 @@ class MarkingSide extends React.Component {
     }
 
     render() {
-        // const currentPdf = this.props.pdfsSelected[this.props.pdfPointer];
         const loadingNewSection = () => {this.state.submitting &&  <Loading text="Creating new section..." />};
 
         return (
