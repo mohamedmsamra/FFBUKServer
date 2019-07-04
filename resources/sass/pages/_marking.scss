@@ -1,5 +1,16 @@
 // Style for the marking page
 
+.cont {
+    display: flex;
+  justify-content: space-around;
+  align-items: flex-start;
+    height: auto;
+}
+
+.sticky {
+    position: sticky;
+    top: 0;
+}
 .marking-heading{
     padding: 40px;
 }
@@ -23,7 +34,7 @@
 // The pdf
 #pdf-side {
     embed {
-        height: 500px;
+        height: 90vh;
         width: 100%;
     }
     

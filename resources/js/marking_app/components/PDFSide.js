@@ -8,7 +8,10 @@ class PDFSide extends React.Component {
     render() {
         const currentPdf = this.props.pdfsSelected[this.props.pdfPointer];
         return (
-            <div className="col-6" id="pdf-side">
+            <div className="col-6 sticky" id="pdf-side">
+                {/* <div className="sticky">
+                    hello
+                </div> */}
                 {this.props.pdfPointer < 0 ?
                     <form>
                         <div id="select-pdfs" className="input-group mb-3">

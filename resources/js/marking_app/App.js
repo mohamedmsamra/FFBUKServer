@@ -41,7 +41,7 @@ class App extends React.Component {
 
     render() {
         return (
-            <div className="row">
+            <div className="row cont">
                 <PDFSide
                     handlePdfsSelected={this.handlePdfsSelected}
                     pdfsSelected={this.state.pdfsSelected}
