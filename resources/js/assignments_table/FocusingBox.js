@@ -13,6 +13,10 @@ class FocusingBox extends React.Component {
         }
     }
 
+    componentDidMount() {
+        this.ref.current.focus();
+    }
+
     render() {
         return (
             <Form.Control

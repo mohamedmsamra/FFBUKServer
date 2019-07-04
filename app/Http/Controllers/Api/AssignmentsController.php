@@ -7,6 +7,22 @@ use App\Http\Controllers\Controller;
 use App\Assignment;
 
 class AssignmentsController extends Controller {
+    public function store(Request $request) {
+        \Log::info($request);
+        $this -> validate($request,[
+            'title' => 'required',
+            'course_id' => 'required'
+        ]);
+        //Create Assignment
+        $assignment = new Assignment;
+        $assignment->name = $request->input('title');
+        $assignment->course_id = $request->input('course_id');
+        $assignment->desc = 'a';
+        $assignment->save();
+
+        return json_encode($assignment);
+    }
+
     public function editName(Request $request) {
         $this -> validate($request,[
             'id' => 'required',
