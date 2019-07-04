@@ -14,14 +14,6 @@
             {{Form::text('title','',['class' =>'form-control','placeholder' => 'Title'])}}
         </div>   
         
-        <div class= "form-group">
-                <!-- define label for title=  Title-->
-            {{Form::label('body', 'Assignment Description')}}
-                <!-- this for the text input, name of the field is title
-                    (name of the variable, value, any other attributes such as Class (bootstrap and a placeholder))
-                id here so the text area can include the ck editor-->
-            {{Form::textArea('body','',['id'=>'article-ckeditor', 'class' =>'form-control','placeholder' => 'Body Text'])}}
-        </div> 
         <!-- when we submit , it is going to make a post request to store function in PostsController.php-->
         {{Form::submit('Submit', ['class'=> 'btn btn-primary'])}}
     {!! Form::close() !!}

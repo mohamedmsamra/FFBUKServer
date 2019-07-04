@@ -17,7 +17,6 @@ class AssignmentsController extends Controller {
         $assignment = new Assignment;
         $assignment->name = $request->input('title');
         $assignment->course_id = $request->input('course_id');
-        $assignment->desc = 'a';
         $assignment->save();
 
         return json_encode($assignment);

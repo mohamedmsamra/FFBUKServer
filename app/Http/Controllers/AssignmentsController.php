@@ -98,8 +98,7 @@ class AssignmentsController extends Controller
     public function update(Request $request, $id)
     {
         $this -> validate($request,[
-            'title' => 'required',
-            'body' => 'required',
+            'title' => 'required'
         ]);
 
         //Handle File upload
@@ -120,8 +119,7 @@ class AssignmentsController extends Controller
         } 
          //update this Post, find it by id
          $assignment = Assignment::find($id);
-         $assignment -> name = $request->input('title');   
-         $assignment -> desc = $request->input('body'); 
+         $assignment -> name = $request->input('title');
          if($request->hasFile('cover_image')){
              $course->cover_image = $fileNameToStore;
          }
