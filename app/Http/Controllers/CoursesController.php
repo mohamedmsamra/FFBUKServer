@@ -131,13 +131,13 @@ class CoursesController extends Controller
             $user_id = auth()->user()->id;
 
             // Check if user folder exists and create it if not
-            $path = public_path('storage\user_'.$user_id);
+            $path = public_path('storage/user_'.$user_id);
             if(!file_exists($path)) {
                 // path does not exist
                 \File::makeDirectory($path);
             }
 
-            $matches = glob($path.'\course_'.$course->id.'*');
+            $matches = glob($path.'/course_'.$course->id.'*');
             foreach ($matches as $match) {
                 \Log::info($match);
                 unlink($match);
@@ -148,7 +148,7 @@ class CoursesController extends Controller
             // Save image to user folder
             $img->move($path, $imageName);
 
-            $fileNameToStore = 'user_'.$user_id.'\\'.$imageName;
+            $fileNameToStore = 'user_'.$user_id.'/'.$imageName;
             
         } else{
             //so if the user has not chosen an image, this default image will show
