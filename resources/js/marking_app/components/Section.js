@@ -344,7 +344,7 @@ class Section extends React.Component {
                             <div>
                                 {(this.props.enableMarking && !this.props.compulsory) && (
                                     <div className="float-left">
-                                        <input value={this.props.mark} onChange={(e) => this.props.handleMarkChange(this.props.id, e.target.value)} type="number" className="form-control markInput"  data-toggle="tooltip" data-placement="top" title="Mark"/>
+                                        <input value={this.props.mark} onChange={(e) => this.props.handleMarkChange(this.props.id, e.target)} type="number" className="form-control markInput"  data-toggle="tooltip" data-placement="top" title="Mark must be between 0 and 100"/>
                                     </div>)
                                 }
                                 <h4  className="float-left" onDoubleClick={this.handleEditTitle}>{this.state.title}</h4>

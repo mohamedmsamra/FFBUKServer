@@ -186,12 +186,19 @@ class MarkingSide extends React.Component {
         this.setState((prevState) => Object.assign(prevState, {enableMarking: !prevState.enableMarking}));
     }
 
-    handleMarkChange(sectionID, mark) {
-        this.setState(prevState => {
-            prevState.template.sections.custom.find(x => x.id == sectionID).mark = mark;
-            prevState.template.totalMark = prevState.template.sections.custom.reduce((a, s) => (a + parseFloat(s.mark || 0)), 0);
-            return prevState;
-        });
+    handleMarkChange(sectionID, markInput) {
+        let mark = markInput.value;
+        if(mark == null || (0 <= mark && mark <= 100)) {
+            $($(markInput)[0]).tooltip('hide');
+            this.setState(prevState => {
+                prevState.template.sections.custom.find(x => x.id == sectionID).mark = mark;
+                prevState.template.totalMark = prevState.template.sections.custom.reduce((a, s) => (a + parseFloat(s.mark || 0)), 0);
+                return prevState;
+            });
+        } else {
+            $($(markInput)[0]).tooltip('show');
+        }
+        
     }
 
     handleCommentAdded(sectionID, commentID, type) {
