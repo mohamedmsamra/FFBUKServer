@@ -27,6 +27,8 @@ class MarkingSide extends React.Component {
         this.handleCommentChange = this.handleCommentChange.bind(this);
         this.updateComment = this.updateComment.bind(this);
         this.handleSaveAndLoad = this.handleSaveAndLoad.bind(this);
+        this.generateHtmlOutput = this.generateHtmlOutput.bind(this);
+        this.copyTextToClipboard = this.copyTextToClipboard.bind(this);
         this.generatePDF = this.generatePDF.bind(this);
         this.clearSectionsContent = this.clearSectionsContent.bind(this);
         this.state = {
@@ -212,11 +214,17 @@ class MarkingSide extends React.Component {
 
     handleSaveAndLoad() {
         let name = this.props.pdfsSelected[this.props.pdfPointer].name;
-        this.generatePDF(name).then(() => {
+        const methodToSave = this.state.selectedExportType == 'pdf' ? this.generatePDF : this.copyTextToClipboard;
+        
+        methodToSave(name).then(() => {
             this.clearSectionsContent();
             this.props.handleNextPdf();
             // if (this.props.isLastPdf) alert.success({text: "Session complete!", isConfirm: false});
         });
+    }
+
+    handleSelectedExportType(type) {
+        this.setState({selectedExportType: type});
     }
 
     updateComment(sectionID, commentID, type, f) {
@@ -229,35 +237,72 @@ class MarkingSide extends React.Component {
         });
     }
 
+    generateHtmlOutput() {
+        const isEmpty = htmlString => {
+            const parser = new DOMParser();
+            const { textContent } = parser.parseFromString(htmlString, "text/html").documentElement;
+            return !textContent.trim();
+        }
+        let section;
+        for(let i = 0; i < this.state.template.sections.compulsory.length; i++) {
+            section = this.state.template.sections.compulsory[i];
+            console.log("value of " + section.title + ' is ' + section.value);
+            if(isEmpty(section.value)) {
+                this.props.alert.error({text: "Entering " + section.title + " is compulsory!"});
+                return;
+            }
+        }
+        let html = "";
+        if (this.state.enableMarking) {
+            html += "<h3>Total mark: " + this.state.template.totalMark + "</h3>";
+        }
+        const stateSections = this.state.template.sections;
+        const outSections = stateSections.custom.concat(stateSections.compulsory);
+
+        for (let i = 0; i < outSections.length; i++) {
+            if (outSections[i].value != "") {
+                html += "<h1>" + outSections[i].title + "</h1>";
+                html += outSections[i].value;
+            }
+        }
+
+        return html;
+    }
+
+    copyTextToClipboard() {
+        function copyStringToClipboard (str) {
+            var el = document.createElement('textarea');
+            el.value = str;
+            el.setAttribute('readonly', '');
+            el.style = {position: 'absolute', left: '-9999px'};
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+        }
+
+        return new Promise(next => {
+            let html = this.generateHtmlOutput();
+            html = html.replace(/<br>/g, "<br>\n");
+            html = html.replace(/<p>/g, "<p>\n");
+            html = html.replace(/<h1>/g, "<h1>\n\n");
+            html = html.replace(/<h2>/g, "<h2>\n");
+            html = html.replace(/<h3>/g, "<h3>\n");
+            html = html.replace(/<li>/g, "<li>\n- ");
+            function strip(html) {
+                var tmp = document.createElement("DIV");
+                tmp.innerHTML = html;
+                return tmp.textContent || tmp.innerText || "";
+            }
+            copyStringToClipboard(strip(html).trim());
+            this.props.alert.show({text: "Text copied to clipboard successfully!"});
+            next();
+        });
+    }
+
     generatePDF(name) {
         return new Promise(next => {
-            const isEmpty = htmlString => {
-                const parser = new DOMParser();
-                const { textContent } = parser.parseFromString(htmlString, "text/html").documentElement;
-                return !textContent.trim();
-            }
-            let section;
-            for(let i = 0; i < this.state.template.sections.compulsory.length; i++) {
-                section = this.state.template.sections.compulsory[i];
-                console.log("value of " + section.title + ' is ' + section.value);
-                if(isEmpty(section.value)) {
-                    this.props.alert.error({text: "Entering " + section.title + " is compulsory!"});
-                    return;
-                }
-            }
-            let html = "";
-            if (this.state.enableMarking) {
-                html += "<h3>Total mark: " + this.state.template.totalMark + "</h3>";
-            }
-            const stateSections = this.state.template.sections;
-            const outSections = stateSections.custom.concat(stateSections.compulsory);
-    
-            for (let i = 0; i < outSections.length; i++) {
-                if (outSections[i].value != "") {
-                    html += "<h1>" + outSections[i].title + "</h1>";
-                    html += outSections[i].value;
-                }
-            }
+            const html = this.generateHtmlOutput();
     
             var doc = new jsPDF();
             doc.fromHTML(html, 15, 15, {
@@ -323,8 +368,10 @@ class MarkingSide extends React.Component {
     }
 
     renderNextPdfButton() {
+        const textWithMore = this.state.selectedExportType == 'pdf' ? 'Save and load next document' : 'Copy to clipboard and load next document';
+        const textWithLast = this.state.selectedExportType == 'pdf' ? 'Save and finish' : 'Copy to clipboard and finish';
         if (this.props.pdfPointer >= 0) {
-            return <button type="button" className='btn btn-success' id="nextButton" onClick={this.handleSaveAndLoad}>{this.props.isLastPdf() ? 'Save and finish' : 'Save and Load Next Document'}</button>
+            return <button type="button" className='btn btn-success' id="nextButton" onClick={this.handleSaveAndLoad}>{this.props.isLastPdf() ? textWithLast : textWithMore}</button>
         }
     }
 
@@ -393,16 +440,29 @@ class MarkingSide extends React.Component {
                                 <button type="button" className='btn btn-danger' onClick={() => {if(confirm('All entered text will be deleted. Are you sure?')) this.clearSectionsContent()}} id="clearButton">Clear All</button>
                                 {this.renderNextPdfButton()}
                                 Save as:
-                                <ToggleButtonGroup type="radio" name="selectedExportType" defaultValue={'pdf'} onChange={() => console.log('change')}>
-                                    <ToggleButton value={'pdf'}>PDF</ToggleButton>
-                                    <ToggleButton value={'text'}>Text</ToggleButton>
-                                </ToggleButtonGroup>
+                                <div className="btn-group btn-group-toggle" data-toggle="buttons">
+                                    <label className="btn btn-secondary active" onClick={() => this.handleSelectedExportType("pdf")}>
+                                        <input
+                                            type="radio"
+                                            checked={this.state.selectedExportType === "pdf"}
+                                            id="selectPositive"
+                                            onChange={() => {}}
+                                        /> PDF
+                                    </label>
+                                    <label className="btn btn-secondary" onClick={() => this.handleSelectedExportType("text")}>
+                                        <input
+                                            type="radio"
+                                            checked={this.state.selectedExportType === "text"}
+                                            id="addNegative"
+                                            onChange={() => {}}
+                                        /> Text
+                                    </label>
+                                </div>
                             </div>
                             {/* <NewSectionModal template_id={this.state.template.id} addSection={this.addSection} data={this.state} /> */}
-                        </div>
-                    )
-                }
-            </div>
+                        </div>)
+                    }
+                </div>
 
                 <LoadTemplateModal handleSelectTemplate={this.handleSelectTemplate}/>
                 <CreateTemplateModal handleCreate={this.handleCreatedNewTemplate}/>
