@@ -7,7 +7,7 @@
 // Pdf Side
 .rightSide {
     float: right;
-    width: 43%;
+    // width: 43%;
 }
 
 // Choose files button
@@ -39,7 +39,7 @@
 // Marking Side
 .leftSide {
     float: left;
-    width: 53%;
+    // width: 50%;
 }
 
 // Buttons to load template or create new one
@@ -143,6 +143,13 @@
 .section {
 	border-radius: 10px!important;
     margin-bottom: 30px;
+    position: relative;
+
+    .card-header > .close {
+        position: absolute;
+        top: 2%;
+        right: 2%;
+    }
 
     .sectionText {
         width: 100%;
@@ -152,12 +159,6 @@
     .titleDiv {
         h4 {
             line-height: 1.7;
-        }
-        .invisibleBtn {
-            background-color: transparent;
-            border: none;
-            padding: 8px 10px;
-            margin: 0;
         }
     }
 
@@ -241,4 +242,23 @@
     border-color: #dcafb4;
 }
 
+// Marking Scheme Image
+.markingSchemeImg {
+    // padding: 0;
+    transition: max-height 1s cubic-bezier(0.46, 0.03, 0.52, 0.96);
+    height: auto;
+    max-height: 200px;
+    width: 100%;
+    // transition: padding 1s;
+}
 
+.hideImg {
+    // width: 100%;
+    max-height: 0;
+    // padding: 20px 20px 0px;
+}
+
+
+#marking-react-root > .row {
+    margin: 0;
+}

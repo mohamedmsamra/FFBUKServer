@@ -76,7 +76,8 @@ class MarkingSide extends React.Component {
             title: "Section Title",
             template_id: this.state.template.id,
             positiveComments: [],
-            negativeComments: []
+            negativeComments: [],
+            marking_scheme: ''
         });
         console.log(postBody)
         // Submit the section to the server
@@ -118,6 +119,7 @@ class MarkingSide extends React.Component {
                     s.mark = 0;
                     s.negativeComments.map(c => {c.added = false; return c});
                     s.positiveComments.map(c => {c.added = false; return c});
+                    s.marking_scheme = '';
                     return s;
                 }) : [],
                 compulsory: [
@@ -252,7 +254,7 @@ class MarkingSide extends React.Component {
             doc.fromHTML(html, 15, 15, {
                 'width': 170,
             });
-            doc.save('sample-file.pdf');
+            doc.save("sample-pdf");
             next();
         });
     }
@@ -291,6 +293,7 @@ class MarkingSide extends React.Component {
                 negComments={section.negativeComments}
                 template_id={this.state.template.id}
                 enableMarking={this.state.enableMarking}
+                marking_scheme={section.marking_scheme}
             />
         )});
 
@@ -317,10 +320,11 @@ class MarkingSide extends React.Component {
     }
 
     render() {
+        // const currentPdf = this.props.pdfsSelected[this.props.pdfPointer];
         const loadingNewSection = () => {this.state.submitting &&  <Loading text="Creating new section..." />};
 
         return (
-            <div className="col">
+            <div className="col-6">
                 <div className="loadCreateBtns">
                     <button type="button" className="btn btn-outline-primary" onClick={() => $("#loadTemplateModal").modal('show')}>Load Template</button>
                     <button onClick={() => $("#createTemplateModal").modal('show')} type="button" className="btn btn-outline-success">Create New Template</button>

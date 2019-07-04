@@ -16,6 +16,9 @@ class Section extends React.Component {
             newComment: '',
             commentID: 0,
             editTitle: false,
+            schemeOpen: false,
+            hasScheme: false,
+            markingScheme: ''
         }
         this.openComments = this.openComments.bind(this);
         this.handleCommentClick = this.handleCommentClick.bind(this);
@@ -27,8 +30,101 @@ class Section extends React.Component {
         this.renderAddCommentInput = this.renderAddCommentInput.bind(this);
         this.renderTitleEditView = this.renderTitleEditView.bind(this);
         this.addComment = this.addComment.bind(this);
+        this.handleUploadScheme = this.handleUploadScheme.bind(this);
+        this.handleOpenScheme = this.handleOpenScheme.bind(this);
+        this.loadScheme = this.loadScheme.bind(this);
     }
 
+    componentDidMount() {
+        this.loadScheme();
+    }
+
+    loadScheme() {
+        if (!this.props.compulsory) {
+            fetch("/api/sections/" + this.props.id + "/image-upload")
+            .then(data => data.json())
+            .then(data => {
+                console.log('marking scheme is set to: ' + data)
+                if (data) {
+                    this.setState({hasScheme: true, markingScheme: '/images/' + data});
+                }
+            });
+        }
+        
+    }
+
+    // handleUploadScheme(e) {
+    //     var formData = new FormData();
+    //         formData.append("file",e.target.files[0]);
+    //         formData.append('name', 'some value user types');
+    //         formData.append('description', 'some value user types');
+    //         console.log(e.target.files[0]);
+
+    //         fetch("/api/sections/" + this.props.id + "/image-upload", {
+    //             method: 'post',
+    //             body: {image: e.target.files[0]},
+    //             headers: {
+    //                 "Content-Type": "multipart/form-data",
+    //                 "Accept": "application/json, text-plain, */*",
+    //                 "X-Requested-With": "XMLHttpRequest",
+    //                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content')
+    //             }
+    //         }).then(data => data.json())
+    //         .then(data => {
+    //             console.log('fetch finished with data: ' + data)
+    //             // if(JSON.stringify(data))
+    //             // this.setState({markingScheme: img})
+    //         });
+    //     // }
+    
+        
+    // }
+
+    handleUploadScheme(e) {
+        // debugger;
+        $.ajax({
+            // Your server script to process the upload
+            url: '/api/sections/' + this.props.id + '/image-upload',
+            type: 'POST',
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content')
+            },
+            // Form data
+            data: new FormData($(e.target).parent()[0]),
+
+            // Tell jQuery not to process data or worry about content-type
+            // You *must* include these options!
+            cache: false,
+            contentType: false,
+            processData: false,
+
+            // Custom XMLHttpRequest
+            xhr: function () {
+                var myXhr = $.ajaxSettings.xhr();
+                if (myXhr.upload) {
+                    // For handling the progress of the upload
+                    myXhr.upload.addEventListener('load', function (e) {
+                        console.log(e)
+                    }, false);
+                }
+                return myXhr;
+            },
+            success: function(data){
+                var json = $.parseJSON(data); // create an object with the key of the array
+                this.setState({hasScheme: true, markingScheme: '/images/' + json});
+            }.bind(this)
+        });
+    }
+
+
+    handleOpenScheme() {
+        // this.state.schemeOpen ? $("#toggle" + this.props.id).slideUp() : $("#toggle" + this.props.id).slideDown();
+        // $("#toggle" + this.props.id).removeClass("hiddenFileInput");
+        // $("#toggle" + this.props.id).slideToggle();
+        this.setState((prevState) => Object.assign(prevState, {schemeOpen: !prevState.schemeOpen}));
+               
+    }
+    
     // Display list of comments 
     openComments(type) {
         if (type == this.state.openComments) {
@@ -143,7 +239,8 @@ class Section extends React.Component {
                 title: this.refs.sectionTitleInput.value,
                 template_id: this.props.template_id,
                 positiveComments: this.state.posComments.map(c => c.text),
-                negativeComments: this.state.negComments.map(c => c.text)
+                negativeComments: this.state.negComments.map(c => c.text),
+                marking_scheme: this.props.marking_scheme
             }),
             headers: {
                 "Content-Type": "application/json",
@@ -252,6 +349,7 @@ class Section extends React.Component {
                                 }
                                 <h4  className="float-left" onDoubleClick={this.handleEditTitle}>{this.state.title}</h4>
                                 {!this.props.compulsory && (
+                                    <div className="float-left">
                                         <button 
                                             type="button" 
                                             className="invisibleBtn float-left" 
@@ -259,18 +357,54 @@ class Section extends React.Component {
                                             data-toggle="tooltip" 
                                             data-placement="top" 
                                             title="Edit Title">
-                                            <i className="far fa-edit"></i>
-                                        </button>)
+                                            <i className="fas fa-edit"></i>
+                                        </button>
+                                        <form encType="multipart/form-data" action="">
+                                            <input 
+                                                onChange={this.handleUploadScheme.bind(this)}
+                                                name="image"
+                                                type="file" 
+                                                id={"scheme" + this.props.id} 
+                                                className="hiddenFileInput" 
+                                                accept="image/*"/>
+                                            <button 
+                                                type="button" 
+                                                id={"upload" + this.props.id}
+                                                className="invisibleBtn float-left" 
+                                                onClick={() => {$("#scheme" + this.props.id).click()}} 
+                                                data-toggle="tooltip" 
+                                                data-placement="top" 
+                                                title="Upload Marking Scheme">
+                                                <i className="fas fa-upload"></i>
+                                            </button>
+                                        </form>
+                                        
+                                        
+                                        {this.state.hasScheme &&
+                                            <button 
+                                                type="button" 
+                                                className="invisibleBtn float-left" 
+                                                onClick={this.handleOpenScheme} 
+                                                data-toggle="tooltip" 
+                                                data-placement="top" 
+                                                title="Toggle Marking Scheme">
+                                                <i className="fas fa-file-image"></i>
+                                                  <small> Toggle Marking Scheme</small>
+                                            </button>}
+                                                
+                                    </div>)
                                 }
                                 
                             </div>
                             
                         }
                     </div>
-                    <div>
-                        {!this.props.compulsory && removeBtn}
-                    </div>
+                    {!this.props.compulsory && removeBtn}
                 </div>
+                {/* {console.log("scheme open is " + this.state.schemeOpen)} */}
+                {this.state.hasScheme &&
+                    <img src={this.state.markingScheme} className={this.state.schemeOpen ? "markingSchemeImg" : "markingSchemeImg hideImg"} id={"toggle" + this.props.id}/>
+                } 
                 <div className="card-body">
                     <div className="form-group">
                         <TextEditor 
@@ -279,10 +413,12 @@ class Section extends React.Component {
                             handleSectionTextChange={(val) => this.props.handleSectionTextChange(this.props.id, val)}
                         />
                     </div>
-
                     {/* If this section should have comments, display them */}
                     {!this.props.compulsory && commentsDiv}
                 </div>
+                
+                
+                
             </div>
         );
     }

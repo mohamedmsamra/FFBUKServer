@@ -98,7 +98,7 @@ class Comment extends React.Component {
                             data-toggle="tooltip" 
                             data-placement="top" 
                             title="Edit Comment">
-                            <i className="far fa-edit"></i>
+                            <i className="fas fa-edit"></i>
                         </button>
                         <button 
                             type="button" 

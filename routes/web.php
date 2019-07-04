@@ -81,6 +81,9 @@ Auth::routes();
 
 Route::get('/dashboard', 'DashboardController@index');
 
+Route::get('/api/sections/{section}/image-upload', 'Api\SectionsController@imageUpload');
+Route::post('/api/sections/{section}/image-upload', 'Api\SectionsController@imageUploadPost');
+
 // TODO: Remove
 Route::get('/apitest', function () {
     return view('apitest');

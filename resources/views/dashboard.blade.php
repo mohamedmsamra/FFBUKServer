@@ -28,7 +28,7 @@
                             @foreach ($courses as $course)
                             <tr>
                                 
-                                <td> {{$course->title}} </td>
+                                <td><a href="/courses/{{$course->id}}">{{$course->title}}</a></td>
                                 <td><a href="/courses/{{$course->id}}/edit" class="btn btn-primary">Edit</a></td>
                                 <td>
                                     {!!Form::open(['action' => ['CoursesController@destroy', $course->id], 'method' => 'POST','class' => 'float-right'])!!}

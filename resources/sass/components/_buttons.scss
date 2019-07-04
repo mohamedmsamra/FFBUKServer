@@ -3,8 +3,17 @@
 .invisibleBtn {
     background-color: transparent;
     border: none;
-    padding: 0.5rem 0.7rem;
+    padding: 8px 0px 8px 10px;
     margin: 0;
+}
+
+.invisibleBtn:focus {
+    outline: none;
+    // transform: scale3d(0.9,0.9,0.9);
+}
+
+.hiddenFileInput {
+    display: none!important;
 }
 
 /* SWITCH BUTTON START */
