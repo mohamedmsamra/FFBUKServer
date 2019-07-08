@@ -94,7 +94,6 @@ class Section extends React.Component {
                 return myXhr;
             },
             success: function(data){
-                console.log("got here");
                 var json = $.parseJSON(data); // create an object with the key of the array
                 if(this.state.markingScheme === json) {
                     console.log("they are the same");
