@@ -5,23 +5,16 @@ class LoadTemplateModal extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            loading: true,
-            templates: [],
             selectedTemplateID: -1
         };
     }
 
-    componentDidMount() {
-        fetch('/api/templates?assignment_id=' + assignment_id)
-            .then(data => data.json())   
-            .then(data => this.setState({templates: data, loading: false}));
-    }
-
     renderModalBody() {
-        if (this.state.loading) {
+        if (this.props.loadingTemplates) {
+            console.log("loading sign");
             return <Loading text="Loading templates..."/>
         } else {
-            const displayTemplates = this.state.templates.map(template => {
+            const displayTemplates = this.props.templates.map(template => {
                 return (
                     <a onClick={() => this.setState({selectedTemplateID: template.id})} onDoubleClick={() => {this.props.handleSelectTemplate(template.id)}} className="list-group-item list-group-item-action" href={'#' + template.id} key={template.id} data-toggle="list" role="tab">
                         {template.name}
@@ -30,7 +23,7 @@ class LoadTemplateModal extends React.Component {
                 )
             });
             return (
-                this.state.templates.length == 0 ?
+                this.props.templates.length == 0 ?
                 <div className="loadEmpty modal-body">
                     There are no templates for this assignment yet. 
                 </div>

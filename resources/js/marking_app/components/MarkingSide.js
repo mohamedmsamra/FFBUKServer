@@ -37,7 +37,9 @@ class MarkingSide extends React.Component {
             template: null,
             content: (<h1>Nothing</h1>),
             enableMarking: false,
-            selectedExportType: 'pdf'
+            selectedExportType: 'pdf',
+            loadingTemplates: false,
+            templates: []
         };
     }
 
@@ -63,9 +65,13 @@ class MarkingSide extends React.Component {
             prevState.template.sections.custom = prevState.template.sections.custom.filter(item => item.id !== id);
             return prevState;
         });
+    }
 
-        
-
+    loadTemplates() {
+        this.setState({loadingTemplates: true});
+        fetch('/api/templates?assignment_id=' + assignment_id)
+            .then(data => data.json())   
+            .then(data => this.setState({templates: data, loadingTemplates: false}));
     }
 
     addSection(section) {
@@ -381,7 +387,7 @@ class MarkingSide extends React.Component {
         return (
             <div className="col-6">
                 <div className="loadCreateBtns">
-                    <button type="button" className="btn btn-outline-primary" onClick={() => $("#loadTemplateModal").modal('show')}>Load Template</button>
+                    <button type="button" className="btn btn-outline-primary" onClick={() => {this.loadTemplates(); $("#loadTemplateModal").modal('show');}}>Load Template</button>
                     <button onClick={() => $("#createTemplateModal").modal('show')} type="button" className="btn btn-outline-success">Create New Template</button>
                 </div>
                 
@@ -464,7 +470,7 @@ class MarkingSide extends React.Component {
                     }
                 </div>
 
-                <LoadTemplateModal handleSelectTemplate={this.handleSelectTemplate}/>
+                <LoadTemplateModal handleSelectTemplate={this.handleSelectTemplate} loadingTemplates={this.state.loadingTemplates} templates={this.state.templates} />
                 <CreateTemplateModal handleCreate={this.handleCreatedNewTemplate}/>
 
             </div>
