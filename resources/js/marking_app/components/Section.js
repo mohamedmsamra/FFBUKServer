@@ -3,6 +3,7 @@ import Comment from './Comment.js';
 import ConfirmationModal from './modals/ConfirmationModal';
 import TextEditor from './TextEditor';
 import { withAlert } from 'react-alert';
+import FocusingInput from './FocusingInput.js';
 
 class Section extends React.Component {
     constructor(props) {
@@ -16,6 +17,7 @@ class Section extends React.Component {
             newComment: '',
             commentID: 0,
             editTitle: false,
+            editTitleText: this.props.title,
             schemeOpen: false,
             hasScheme: false,
             markingScheme: this.props.marking_scheme
@@ -26,6 +28,7 @@ class Section extends React.Component {
         this.handleAddComment = this.handleAddComment.bind(this);
         this.handleFormChange = this.handleFormChange.bind(this);
         this.handleRemoveComment = this.handleRemoveComment.bind(this);
+        this.handleEditTitleChange = this.handleEditTitleChange.bind(this);
         this.updateTitle = this.updateTitle.bind(this);
         this.renderAddCommentInput = this.renderAddCommentInput.bind(this);
         this.renderTitleEditView = this.renderTitleEditView.bind(this);
@@ -123,7 +126,7 @@ class Section extends React.Component {
     }
 
     handleEditTitle(e) {
-        this.setState({editTitle: !this.state.editTitle});
+        this.setState(prevState => Object.assign(prevState, {editTitle: !prevState.editTitle, editTitleText: prevState.title}));
     }
 
     handleRemoveComment(idToRemove) {
@@ -165,6 +168,10 @@ class Section extends React.Component {
         type === "checkbox" ? this.setState({ [name]: checked }) : this.setState({ [name]: value });
     }
 
+    handleEditTitleChange(event) {
+        this.setState({editTitleText: event.target.value});
+    }
+
     addComment(comment) {
         if (comment.type === 'positive') {
             this.setState(prevState => prevState.posComments.push(comment));
@@ -204,7 +211,12 @@ class Section extends React.Component {
 
     renderTitleEditView() {
         return <div className="input-group">
-                    <input type="text" className="form-control form-control-lg" defaultValue={this.state.title} ref="sectionTitleInput"/>
+                    <FocusingInput
+                        className="form-control form-control-lg"
+                        value={this.state.editTitleText}
+                        onEnterKey={this.updateTitle}
+                        onEscapeKey={this.handleEditTitle}
+                        onChange={this.handleEditTitleChange} />
                     <div className="input-group-append" id="button-addon4">
                         <button onClick={this.handleEditTitle} className="btn btn-outline-danger" type="button"><i className="fas fa-times"></i></button>
                         <button onClick={this.updateTitle} className="btn btn-outline-success" type="button"><i className="fas fa-check"></i></button>
@@ -218,7 +230,7 @@ class Section extends React.Component {
             method: 'put',
             mode: 'cors',
             body: JSON.stringify({
-                title: this.refs.sectionTitleInput.value,
+                title: this.state.editTitleText,
                 template_id: this.props.template_id,
                 positiveComments: this.state.posComments.map(c => c.text),
                 negativeComments: this.state.negComments.map(c => c.text),
@@ -234,7 +246,7 @@ class Section extends React.Component {
             console.log(data);
         });
 
-        this.setState({editTitle: false, title: this.refs.sectionTitleInput.value});
+        this.setState({editTitle: false, title: this.state.editTitleText});
     }
 
     renderAddCommentInput() {

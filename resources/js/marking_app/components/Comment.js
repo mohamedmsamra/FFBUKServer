@@ -1,5 +1,6 @@
 import React from 'react';
 import { withAlert } from 'react-alert';
+import FocusingInput from './FocusingInput';
 
 class Comment extends React.Component {
     constructor(props) {
@@ -20,7 +21,7 @@ class Comment extends React.Component {
     }
 
     handleEditChange(e) {
-        this.setState({edit: !this.state.edit});
+        this.setState(prevState => Object.assign(prevState, {edit: !prevState.edit, editingText: prevState.text}));
     }
 
     handleFormChange(event) {
@@ -55,12 +56,14 @@ class Comment extends React.Component {
     renderEditCommentView() {
         return (
             <div className="input-group editView">
-                <input type="text" 
-                className="form-control" 
-                value={this.state.editingText}
-                onChange={this.handleFormChange}
-                ref="commentInput"
-                name="editingText" />
+                <FocusingInput 
+                    className="form-control"
+                    value={this.state.editingText}
+                    onChange={this.handleFormChange}
+                    name="editingText"
+                    onEnterKey={this.update}
+                    onEscapeKey={this.handleEditChange}
+                />
                 <div className="input-group-append" id="button-addon4">
                     <button 
                         onClick={this.handleEditChange} 
