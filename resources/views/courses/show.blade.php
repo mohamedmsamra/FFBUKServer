@@ -3,7 +3,13 @@
 @section('content')
     <div class="course-page" style="padding-left:50px">
         <a href="/courses" class="btn btn-link"> Go Back </a>
-        <h1> {{$course->title}}</h1>
+        <div>
+            <h1 class="float-left"> {{$course->title}}</h1>
+            <button type="button" class="btn invisibleBtn float-left">
+                <i class="fas fa-image"></i> Change Course Image
+            </button>
+        </div>
+        <div class="clear"></div>
         <img class="course-img" src="{{ $course->cover_image == 'default'  ?  '../stuff/default-1.jpg' : '../storage/'.$course->cover_image }}">
         <div>
             {!! $course->body!!}

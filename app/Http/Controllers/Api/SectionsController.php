@@ -121,13 +121,13 @@ class SectionsController extends Controller
         $user_id = auth()->user()->id;
 
         // Check if user folder exists and create it if not
-        $path = public_path('storage\user_'.$user_id);
+        $path = public_path('storage/user_'.$user_id);
         if(!file_exists($path)) {
             // path does not exist
             \File::makeDirectory($path);
         }
 
-        $matches = glob($path.'\markingScheme_'.$id.'*');
+        $matches = glob($path.'/markingScheme_'.$id.'*');
         foreach ($matches as $match) {
             \Log::info($match);
             unlink($match);
