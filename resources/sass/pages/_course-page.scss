@@ -1,5 +1,12 @@
 .course-page {
     .course-img {
-        width: 50vw;
+        width: auto;
+        height: auto;
+        max-width: 50vw;
+        max-height: 50vh;
+    }
+
+    .invisibleBtn {
+        padding-top: 20px;
     }
 }

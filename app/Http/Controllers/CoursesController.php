@@ -160,22 +160,35 @@ class CoursesController extends Controller
         return json_encode($fileNameToStore);
     }
 
+    public function showImage($id) {
+        $course = Course::find($id);
+        return json_encode($course->cover_image);
+    }
+
     /**
      * Display the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
         //it gets the id from the URL
         //http://ffbuk.test/posts/1
         //return this specific post which its id is in the link
         $course = Course::find($id);
         $assignments = Assignment::where('course_id',$course->id)->get();
+        if (strpos($request->header('Accept'), "application/json") !== false) {
+            \Log::info("returning json");
+            return json_encode([
+                'image' => $course->cover_image,
+                'body' => $course->body,
+                'createdAt' => $course->created_at,
+                'username' => $course->user->name
+            ]);
+        }
         return view('courses.show') -> with('course', $course)
                                     -> with( 'assignments', $assignments);
-
     }
 
     /**

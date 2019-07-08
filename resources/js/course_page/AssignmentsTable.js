@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button';
 import FocusingBox from './FocusingBox';
 import { timeout } from 'q';
 
-class App extends React.Component {
+class AssignmentsTable extends React.Component {
     constructor() {
         super();
         this.state = {
@@ -283,4 +283,4 @@ class App extends React.Component {
     }
 }
 
-export default App;
+export default AssignmentsTable;
