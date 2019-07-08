@@ -11,7 +11,6 @@ class LoadTemplateModal extends React.Component {
 
     renderModalBody() {
         if (this.props.loadingTemplates) {
-            console.log("loading sign");
             return <Loading text="Loading templates..."/>
         } else {
             const displayTemplates = this.props.templates.map(template => {
