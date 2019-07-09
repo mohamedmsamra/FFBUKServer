@@ -139,7 +139,7 @@ class App extends React.Component {
         } else {
             const displayTemplates = this.state.templates.map(template => {
                 return (
-                    <a onClick={() => this.setState({selectedTemplateID: template.id})} onDoubleClick={() => {this.selectTemplate(template.id)}} className="list-group-item list-group-item-action" href={'#' + template.id} key={template.id} data-toggle="list" role="tab">
+                    <a onClick={() => this.setState({selectedTemplateID: template.id})} onDoubleClick={() => {this.selectTemplate(template.id)}} className="list-group-item list-group-item-action templatesListItem" href={'#' + template.id} key={template.id} data-toggle="list" role="tab">
                         {template.name}
                         <p className="float-right date"><span>{this.formatDate(new Date(template.created_at))}</span></p>
                     </a>
