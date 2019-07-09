@@ -131,7 +131,7 @@ class CoursesController extends Controller
             $user_id = auth()->user()->id;
 
             // Check if user folder exists and create it if not
-            $path = public_path('storage/user_'.$user_id);
+            $path = storage_path('app/public/user_'.$user_id);
             if(!file_exists($path)) {
                 // path does not exist
                 \File::makeDirectory($path);
@@ -276,12 +276,18 @@ class CoursesController extends Controller
             return redirect('/courses')->with('error','Unauthorised Page');
         }
 
-        if($course -> cover_image != 'noimage.jpg'){
-            //Delete Image
-            Storage::delete('public/cover_images/'.$course->cover_image);
-        }
-
+        // if($course -> cover_image != 'default'){
+        //     //Delete Image
+        //     $path = storage_path('app/public/'.$course->cover_image);
+        //     unlink($path);
+        //     // Storage::delete('public/cover_images/'.$course->cover_image);
+        // }
+        $title = $course -> title;
         $course -> delete();
-        return redirect('/courses')-> with('success', 'Course Removed!');
+
+        // return redirect('/dashboard');
+        // $this -> index();
+        // return json_encode($title);
+        return redirect()->route('courses');    
     }
 }

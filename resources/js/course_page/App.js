@@ -65,13 +65,30 @@ class App extends React.Component {
             .then(data => {
                 console.log(data);
             });
-    }              
+    }          
+    
+    handleDeleteCourse() {
+        fetch(course_id, {
+            method: 'delete',
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json, text-plain, */*",
+                "X-Requested-With": "XMLHttpRequest",
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content')
+            }
+        }).then(function(response) {
+            return response.json();
+        }).then((data) => {
+            // this.props.alert.success({text: "Removed course '" + data + "'"});
+            console.log(data);
+        });
+    }
  
     render() {
         return (
         <div>
-            <div id="reactImageUpload"></div>
-                {/* <form encType="multipart/form-data" action="" className="float-left">
+            <div id="courseActions">
+                <form encType="multipart/form-data" action="" className="float-left">
                     <input 
                         onChange={this.handleUploadImage.bind(this)}
                         name="cover_image"
@@ -82,15 +99,16 @@ class App extends React.Component {
                     <button 
                         type="button" 
                         id={"uploadCourseImg" + course_id}
-                        className="invisibleBtn float-left" 
+                        className="courseBtn uploadBtn float-left" 
                         onClick={() => {$("#course" + course_id).click()}} 
                         data-toggle="tooltip" 
                         data-placement="top" 
                         title="Change Course Image">
                         <i className="fas fa-image"></i> Change Course Image
                     </button>
-                </form> */}
-        
+                </form>
+                <button className="courseBtn deleteBtn float-left" onClick={this.handleDeleteCourse}><i className="fas fa-trash-alt"></i> Delete Course</button>
+            </div>
             <div className="clear"></div>
             {this.state.imageLoaded ?
                 <img 
