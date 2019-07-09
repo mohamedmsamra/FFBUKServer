@@ -13,7 +13,7 @@ class TemplateSharing extends Migration
      */
     public function up()
     {
-        Schema::create('permissions', function (Blueprint $table) {
+        Schema::create('course_permissions', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('course_id')->unsigned();
             $table->integer('user_id')->unsigned();
@@ -21,8 +21,19 @@ class TemplateSharing extends Migration
             $table->boolean('pending');
         });
 
-        Schema::table('permissions', function($table) {
+        Schema::table('course_permissions', function($table) {
             $table->foreign('course_id')->references('id')->on('courses')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+        });
+
+        Schema::create('template_permissions', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('course_permission_id')->unsigned();
+            $table->integer('user_id')->unsigned();
+        });
+
+        Schema::table('template_permissions', function($table) {
+            $table->foreign('course_permission_id')->references('id')->on('course_permissions')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
 
