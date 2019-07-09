@@ -39,3 +39,13 @@
     background-position: center;
 }
 
+#coursesPage {
+    .card {
+        .col-md-4, .col-sm-4 {
+            border-bottom-left-radius: 0.25rem;
+            border-top-left-radius: 0.25rem;
+            margin-left: -1px;
+        } 
+    }
+}
+

@@ -147,9 +147,16 @@ class App extends React.Component {
             });
             return (
                 this.state.templates.length == 0 ?
-                <div className="loadEmpty card-body">
-                    There are no templates for this assignment yet. 
+                <div>
+                    <div className="loadEmpty card-body">
+                        There are no templates for this assignment yet. 
+                    </div>
+                    {/* card Footer */}
+                    <div className="modal-footer">
+                        <button onClick={() => $("#createTemplateModal").modal('show')} type="button" className="btn btn-success">Create New</button>
+                    </div>
                 </div>
+                
                 :
                 <div>
                     {/* card Body */}

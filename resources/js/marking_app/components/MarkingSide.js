@@ -84,7 +84,6 @@ class MarkingSide extends React.Component {
             negativeComments: [],
             marking_scheme: ''
         });
-        console.log(postBody)
         // Submit the section to the server
         fetch("/api/sections/new-section", {
             method: 'post',
@@ -98,7 +97,7 @@ class MarkingSide extends React.Component {
         })
             .then(data => data.json())
             .then(data => {
-                console.log(data);
+                data.value = '';
                 this.addSection(data);
                 this.setState({submitting: false});
 
@@ -200,7 +199,6 @@ class MarkingSide extends React.Component {
         let section;
         for(let i = 0; i < this.state.template.sections.compulsory.length; i++) {
             section = this.state.template.sections.compulsory[i];
-            console.log("value of " + section.title + ' is ' + section.value);
             if(isEmpty(section.value)) {
                 this.props.alert.error({text: "Entering " + section.title + " is compulsory!"});
                 return;
