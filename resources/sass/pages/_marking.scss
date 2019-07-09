@@ -85,13 +85,14 @@
 .template {
     border: 1px solid #ddd;
     border-radius: 10px;
+    margin-bottom:1rem;
 
     .templateTitle {
         padding: 20px 20px 0px;
     }
 
     .templateBody {
-        padding: 20px;
+        padding: 20px 20px 0px 20px;
     }
 }
 
@@ -296,5 +297,28 @@
     }
     .col, .col-md-8, .col-sm-12 {
         padding:0;
+    }
+}
+
+// Save buttons
+.save {
+    padding: 20px;
+    border-top:1px solid #ddd;
+
+    .export {
+        margin-bottom: 10px;
+    
+        .btn-group {
+            width: 50%;
+            min-width: fit-content;
+            margin-bottom: 10px;
+            .btn {
+                border: 1px solid #eee;
+            }
+
+            .btn {
+                // border: 1px solid #ccc;
+            }
+        }
     }
 }

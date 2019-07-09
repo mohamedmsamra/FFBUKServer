@@ -37,6 +37,23 @@ class App extends React.Component {
             .then(data => this.setState({templates: data, loadingTemplates: false}));
     }
 
+    formatDate(date) {
+        var monthNames = [
+          "January", "February", "March",
+          "April", "May", "June", "July",
+          "August", "September", "October",
+          "November", "December"
+        ];
+      
+        var day = date.getDate();
+        var monthIndex = date.getMonth();
+        var year = date.getFullYear();
+        var hour = date.getHours();
+        var minute = date.getMinutes();
+      
+        return hour + ':' + minute + ' - ' + day + ' ' + monthNames[monthIndex] + ' ' + year;
+    }
+
     handlePdfsSelected(files) {
         const pdfsSelected = [];
         for (let i = 0; i < files.length; i++) {
@@ -109,7 +126,7 @@ class App extends React.Component {
                     template: this.templateFromDBFormat(data),
                     loading: false,
                     templateSelected: true
-                }, ()=> console.log(this.state));
+                });
             });
         // this.setState({templateSelected: true});
         this.setState({loading: true});
@@ -124,7 +141,7 @@ class App extends React.Component {
                 return (
                     <a onClick={() => this.setState({selectedTemplateID: template.id})} onDoubleClick={() => {this.selectTemplate(template.id)}} className="list-group-item list-group-item-action" href={'#' + template.id} key={template.id} data-toggle="list" role="tab">
                         {template.name}
-                        <p className="float-right date"><span>{template.created_at}</span></p>
+                        <p className="float-right date"><span>{this.formatDate(new Date(template.created_at))}</span></p>
                     </a>
                 )
             });

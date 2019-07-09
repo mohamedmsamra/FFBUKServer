@@ -12,14 +12,11 @@ import { timingSafeEqual } from 'crypto';
 class MarkingSide extends React.Component {
     constructor(props) {
         super(props);
-        // this.handleClick = this.handleClick.bind(this);
         this.deleteSection = this.deleteSection.bind(this);
         this.addSection = this.addSection.bind(this);
-        // this.handleCreatedNewTemplate = this.handleCreatedNewTemplate.bind(this);
         this.handleSectionTextChange = this.handleSectionTextChange.bind(this);
         this.handleCompulsoryTextChange = this.handleCompulsoryTextChange.bind(this);
         this.handleAppendComment = this.handleAppendComment.bind(this);
-        // this.handleSelectTemplate = this.handleSelectTemplate.bind(this);
         this.handleMarkingEnabledChange = this.handleMarkingEnabledChange.bind(this);
         this.handleMarkChange = this.handleMarkChange.bind(this);
         this.handleSubmitSection = this.handleSubmitSection.bind(this);
@@ -44,7 +41,7 @@ class MarkingSide extends React.Component {
     }
 
     deleteSection(id){
-        // let idToRemove = this.state.commentID;
+        
         fetch('/api/sections/' + id, {
             method: 'delete',
             headers: {
@@ -116,58 +113,10 @@ class MarkingSide extends React.Component {
         }, 1000);
     }
 
-    templateFromDBFormat(dbTemplate) {
-        // console.log('in temp format');
-        // console.log(dbTemplate);
-        return {
-            name: dbTemplate.name,
-            id: dbTemplate.id,
-            totalMark: 0,
-            sections: {
-                custom: dbTemplate.sections ? dbTemplate.sections.map(s => {
-                    s.value = '';
-                    s.mark = 0;
-                    s.negativeComments.map(c => {c.added = false; return c});
-                    s.positiveComments.map(c => {c.added = false; return c});
-                    return s;
-                }) : [],
-                compulsory: [
-                    {
-                        title: "3 Points Done Well",
-                        value: ""
-                    }, {
-                        title: "3 Points To Improve",
-                        value: ""
-                    }
-                ]
-            }
-        };
-    }
-
     handleFormChange(event) {
         const {name, value, type, checked} = event.target;
         type === "checkbox" ? this.setState({ [name]: checked }) : this.setState({ [name]: value });
     }
-
-    // handleSelectTemplate(templateID) {
-    //     fetch('/api/templates/' + templateID)
-    //         .then(data => data.json())
-    //         .then(data => {
-    //             this.setState( {
-    //                 template: this.templateFromDBFormat(data),
-    //                 loading: false
-    //             });
-    //         });
-
-    //     this.setState({loading: true});
-    //     $("#loadTemplateModal").removeClass("fade");
-    //     $("#loadTemplateModal").modal('hide');
-    //     $("#loadTemplateModal").addClass("fade");
-    // }
-
-    // handleCreatedNewTemplate(data) {
-    //     this.setState({template: this.templateFromDBFormat(data)});
-    // }
 
     handleSectionTextChange(id, value) {
         this.setState(prevState => {prevState.template.sections.custom.find(x => x.id == id).value = value; return prevState;});
@@ -207,7 +156,6 @@ class MarkingSide extends React.Component {
         } else {
             $($(markInput)[0]).tooltip('show');
         }
-        
     }
 
     handleCommentAdded(sectionID, commentID, type) {
@@ -377,7 +325,31 @@ class MarkingSide extends React.Component {
         const textWithMore = this.state.selectedExportType == 'pdf' ? 'Save and load next document' : 'Copy to clipboard and load next document';
         const textWithLast = this.state.selectedExportType == 'pdf' ? 'Save and finish' : 'Copy to clipboard and finish';
         if (this.props.pdfPointer >= 0) {
-            return <button type="button" className='btn btn-success' id="nextButton" onClick={this.handleSaveAndLoad}>{this.props.isLastPdf() ? textWithLast : textWithMore}</button>
+            return (<div>
+                        <p>Save as:</p>
+                        <div className="btn-group btn-group-toggle shadow-sm" data-toggle="buttons">
+                            <label className="btn btn-light active" onClick={() => this.handleSelectedExportType("pdf")}>
+                                <input
+                                    type="radio"
+                                    checked={this.state.selectedExportType === "pdf"}
+                                    id="selectPositive"
+                                    onChange={() => {}}
+                                /> PDF
+                            </label>
+                            <label className="btn btn-light" onClick={() => this.handleSelectedExportType("text")}>
+                                <input
+                                    type="radio"
+                                    checked={this.state.selectedExportType === "text"}
+                                    id="addNegative"
+                                    onChange={() => {}}
+                                /> Text
+                            </label>
+                        </div>
+                        <button type="button" className='btn btn-info btn-block shadow-sm' id="nextButton" onClick={this.handleSaveAndLoad}>{this.props.isLastPdf() ? textWithLast : textWithMore}</button>
+                    </div>
+                    )
+        } else {
+            return ("Load files you are marking in order to export your feedback")
         }
     }
 
@@ -387,12 +359,6 @@ class MarkingSide extends React.Component {
         return (
 
             <div className="col-6">
-                
-                {/* <div className="loadCreateBtns">
-                    <button type="button" className="btn btn-outline-primary" onClick={() => {this.loadTemplates(); $("#loadTemplateModal").modal('show');}}>Load Template</button>
-                    <button onClick={() => $("#createTemplateModal").modal('show')} type="button" className="btn btn-outline-success">Create New Template</button>
-                </div> */}
-                
                 <div>
                     {this.state.loading
                     ?
@@ -411,7 +377,6 @@ class MarkingSide extends React.Component {
                                     <p className="float-left">Enable Marking</p>
                                     <div className="material-switch float-right">
                                         <input id="enableMarking" name="someSwitchOption001" type="checkbox" className={this.state.enableMarking ? 'checked' : ''} onChange={this.handleMarkingEnabledChange}/>
-                                        {/* {console.log($("#enableMarking").val())} */}
                                         <label htmlFor="enableMarking" className="bg-primary"></label>
                                     </div>
                                 </div>
@@ -428,8 +393,7 @@ class MarkingSide extends React.Component {
                                 {/* Add new section button */}
                                 <button 
                                     type="button" 
-                                    className="mb-3 btn btn-lg btn-block btn-light shadow-sm" 
-                                    // onClick={() => $("#newSectionModal").modal('show')}
+                                    className="mb-3 btn btn-lg btn-block btn-light shadow-sm"
                                     onClick={this.handleSubmitSection}
                                     >
                                     + Add new section
@@ -441,40 +405,25 @@ class MarkingSide extends React.Component {
                                 <div className="sections">
                                     {this.renderSections()}
                                 </div>
+
+
+                                
                             </div>
 
                             {/* Buttons to export feedback */}
                             <div className="save">
-                                <button type="button" className='btn btn-danger' onClick={() => {if(confirm('All entered text will be deleted. Are you sure?')) this.clearSectionsContent()}} id="clearButton">Clear All</button>
-                                {this.renderNextPdfButton()}
-                                Save as:
-                                <div className="btn-group btn-group-toggle" data-toggle="buttons">
-                                    <label className="btn btn-secondary active" onClick={() => this.handleSelectedExportType("pdf")}>
-                                        <input
-                                            type="radio"
-                                            checked={this.state.selectedExportType === "pdf"}
-                                            id="selectPositive"
-                                            onChange={() => {}}
-                                        /> PDF
-                                    </label>
-                                    <label className="btn btn-secondary" onClick={() => this.handleSelectedExportType("text")}>
-                                        <input
-                                            type="radio"
-                                            checked={this.state.selectedExportType === "text"}
-                                            id="addNegative"
-                                            onChange={() => {}}
-                                        /> Text
-                                    </label>
+                                
+                                <div className="export text-center">
+                                    {this.renderNextPdfButton()}
                                 </div>
+                                <button type="button" className='btn btn-danger btn-block shadow-sm' onClick={() => {if(confirm('All entered text will be deleted. Are you sure?')) this.clearSectionsContent()}} id="clearButton">Clear All</button>
+
                             </div>
-                            {/* <NewSectionModal template_id={this.state.template.id} addSection={this.addSection} data={this.state} /> */}
+
+                    
                         </div>
                     }
                 </div>
-
-                {/* <LoadTemplateModal handleSelectTemplate={this.handleSelectTemplate} loadingTemplates={this.state.loadingTemplates} templates={this.state.templates} />
-                <CreateTemplateModal handleCreate={this.handleCreatedNewTemplate}/> */}
-
             </div>
         );
     }
