@@ -14,73 +14,88 @@ import Table from 'react-bootstrap/Table';
  * the td elements to be rendered in the table row.
  */
 
-function withTable(WrappedComponent, rowDataToComponents, headers) {
+function withTable(WrappedComponent, headers) {
     return class extends React.Component {
         constructor(props) {
             super(props);
             this.state = {
                 tableRows: []
             }
-            this.renderTable = this.renderTable.bind();
+            this.addTableRows = this.addTableRows.bind(this);
+            this.setTableRowsData = this.setTableRowsData.bind(this);
+            this.setTableRowData = this.setTableRowData.bind(this);
+            this.ReactiveTable = this.ReactiveTable.bind(this);
         }
 
-        setTableRows(tableRows) {
-            this.setState({tableRows: tableRows});
+        addTableRows(rows) {
+            this.setState(prevState => {
+                prevState.tableRows = prevState.tableRows.concat(rows.map(r => {
+                    return {
+                        key: r.key,
+                        isLoading: false,
+                        deleted: false,
+                        data: r.data
+                    };
+                }));
+                return prevState;
+            })
         }
 
-        renderTableRow(row) {
+        setTableRowsData(tableRows, next) {
+            if (typeof(tableRows) === 'function') {
+                const f = tableRows;
+                this.setState((prevState) => {
+                    f(prevState.tableRows);
+                    return prevState;
+                }, next);
+            } else {
+                this.setState({tableRows: tableRows}, next);
+            }
+        }
+
+        setTableRowData(key, f, next) {
+            this.setState(prevState => {
+                const row = prevState.tableRows.find(r => r.key == key);
+                f(row);
+                return prevState;
+            }, next);
+        }
+
+        ReactiveTable(props) {
+            const renderedRows = this.state.tableRows.map(row => {
+                return (
+                    !row.deleted &&
+                    <tr key={row.key} className={row.isLoading ? 'disabled' : ''}>
+                        <td className="loading"><img src="/svg/loading.svg" /></td>
+                        {props.renderRow(row)}
+                    </tr>
+                );
+            });
             return (
-                <tr key={row.key} className={row.isLoading ? 'disabled' : ''}>
-                    {rowDataToComponents(row.content)}
-                </tr>
-            );
-        }
-
-        renderTableRows(rows) {
-            return tableRows.map(tr => this.renderTableRow(tr));
-        }
-
-        renderTable(table) {
-            // const assignments = this.state.assignments.map(assignment => (
-            //     !assignment.deleted &&
-            //     <tr key={assignment.id} className={assignment.waitingForResponse ? "disabled" : ''}>
-                    
-            //     </tr>
-            // ));
-
-            // [
-            //     {key: 0, isLoading: false, content: {}},
-            //     {key: 0, isLoading: false, content: [0, 0, 0]},
-            //     {key: 0, isLoading: false, content: [0, 0, 0]},
-            //     {key: 0, isLoading: false, content: [0, 0, 0]},
-            // ]
-            // const headersElements = headers.map(c => <th scope="col">{c.content}</th>);
-            
-            // const rowsElements = data[0].content.map(c => (
-            //     <td>c</td>
-            // ));
-            
-            return (
-                <>
-                    <Table id="assignments-table">
-                        <thead>
-                            <tr>
-                                {headers.map(h => <th key={h} scope="col">{h}</th>)}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {renderTableRows()}
-                        </tbody>
-                    </Table>
-                    {/* <Button variant="primary" size="sm" onClick={this.handleCreateClick}>Create new assignment</Button> */}
-                </>
+                <Table id="assignments-table">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            {props.headers.map(h => <th key={h} scope="col">{h}</th>)}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {renderedRows}
+                    </tbody>
+                </Table>
             );
         }
 
         render() {
-            return <WrappedComponent
-                renderTable={this.renderTable}
-                {...this.props} />
+            return (
+                <WrappedComponent
+                    ReactiveTable={this.ReactiveTable}
+                    setTableRowsData={this.setTableRowsData}
+                    setTableRowData={this.setTableRowData}
+                    addTableRows={this.addTableRows}
+                    tableRows={this.state.tableRows}
+                    {...this.props} />
+            );
         }
     }
 }
