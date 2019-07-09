@@ -178,17 +178,21 @@ class CoursesController extends Controller
         //return this specific post which its id is in the link
         $course = Course::find($id);
         $assignments = Assignment::where('course_id',$course->id)->get();
-        if (strpos($request->header('Accept'), "application/json") !== false) {
-            \Log::info("returning json");
-            return json_encode([
-                'image' => $course->cover_image,
-                'body' => $course->body,
-                'createdAt' => $course->created_at,
-                'username' => $course->user->name
-            ]);
-        }
+            
         return view('courses.show') -> with('course', $course)
                                     -> with( 'assignments', $assignments);
+    }
+
+    public function showJSON(Request $request, $id)
+    {
+        $course = Course::find($id);
+
+        return json_encode([
+            'image' => $course->cover_image,
+            'body' => $course->body,
+            'createdAt' => $course->created_at,
+            'username' => $course->user->name
+        ]);
     }
 
     /**

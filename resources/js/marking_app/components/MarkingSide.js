@@ -15,11 +15,11 @@ class MarkingSide extends React.Component {
         // this.handleClick = this.handleClick.bind(this);
         this.deleteSection = this.deleteSection.bind(this);
         this.addSection = this.addSection.bind(this);
-        this.handleCreatedNewTemplate = this.handleCreatedNewTemplate.bind(this);
+        // this.handleCreatedNewTemplate = this.handleCreatedNewTemplate.bind(this);
         this.handleSectionTextChange = this.handleSectionTextChange.bind(this);
         this.handleCompulsoryTextChange = this.handleCompulsoryTextChange.bind(this);
         this.handleAppendComment = this.handleAppendComment.bind(this);
-        this.handleSelectTemplate = this.handleSelectTemplate.bind(this);
+        // this.handleSelectTemplate = this.handleSelectTemplate.bind(this);
         this.handleMarkingEnabledChange = this.handleMarkingEnabledChange.bind(this);
         this.handleMarkChange = this.handleMarkChange.bind(this);
         this.handleSubmitSection = this.handleSubmitSection.bind(this);
@@ -33,8 +33,8 @@ class MarkingSide extends React.Component {
         this.clearSectionsContent = this.clearSectionsContent.bind(this);
         this.state = {
             submitting: false,
-            loading: false,
-            template: null,
+            loading: this.props.loading,
+            template: this.props.selectedTemplate,
             content: (<h1>Nothing</h1>),
             enableMarking: false,
             selectedExportType: 'pdf',
@@ -149,25 +149,25 @@ class MarkingSide extends React.Component {
         type === "checkbox" ? this.setState({ [name]: checked }) : this.setState({ [name]: value });
     }
 
-    handleSelectTemplate(templateID) {
-        fetch('/api/templates/' + templateID)
-            .then(data => data.json())
-            .then(data => {
-                this.setState( {
-                    template: this.templateFromDBFormat(data),
-                    loading: false
-                });
-            });
+    // handleSelectTemplate(templateID) {
+    //     fetch('/api/templates/' + templateID)
+    //         .then(data => data.json())
+    //         .then(data => {
+    //             this.setState( {
+    //                 template: this.templateFromDBFormat(data),
+    //                 loading: false
+    //             });
+    //         });
 
-        this.setState({loading: true});
-        $("#loadTemplateModal").removeClass("fade");
-        $("#loadTemplateModal").modal('hide');
-        $("#loadTemplateModal").addClass("fade");
-    }
+    //     this.setState({loading: true});
+    //     $("#loadTemplateModal").removeClass("fade");
+    //     $("#loadTemplateModal").modal('hide');
+    //     $("#loadTemplateModal").addClass("fade");
+    // }
 
-    handleCreatedNewTemplate(data) {
-        this.setState({template: this.templateFromDBFormat(data)});
-    }
+    // handleCreatedNewTemplate(data) {
+    //     this.setState({template: this.templateFromDBFormat(data)});
+    // }
 
     handleSectionTextChange(id, value) {
         this.setState(prevState => {prevState.template.sections.custom.find(x => x.id == id).value = value; return prevState;});
@@ -385,18 +385,20 @@ class MarkingSide extends React.Component {
         const loadingNewSection = () => {this.state.submitting &&  <Loading text="Creating new section..." />};
 
         return (
+
             <div className="col-6">
-                <div className="loadCreateBtns">
+                
+                {/* <div className="loadCreateBtns">
                     <button type="button" className="btn btn-outline-primary" onClick={() => {this.loadTemplates(); $("#loadTemplateModal").modal('show');}}>Load Template</button>
                     <button onClick={() => $("#createTemplateModal").modal('show')} type="button" className="btn btn-outline-success">Create New Template</button>
-                </div>
+                </div> */}
                 
                 <div>
                     {this.state.loading
                     ?
                         <Loading text="Loading template..." />
                     :
-                    (this.state.template &&
+                    this.state.template &&
                         // Template
                         <div className="template shadow-sm">
                             {/* Template title */}
@@ -466,12 +468,12 @@ class MarkingSide extends React.Component {
                                 </div>
                             </div>
                             {/* <NewSectionModal template_id={this.state.template.id} addSection={this.addSection} data={this.state} /> */}
-                        </div>)
+                        </div>
                     }
                 </div>
 
-                <LoadTemplateModal handleSelectTemplate={this.handleSelectTemplate} loadingTemplates={this.state.loadingTemplates} templates={this.state.templates} />
-                <CreateTemplateModal handleCreate={this.handleCreatedNewTemplate}/>
+                {/* <LoadTemplateModal handleSelectTemplate={this.handleSelectTemplate} loadingTemplates={this.state.loadingTemplates} templates={this.state.templates} />
+                <CreateTemplateModal handleCreate={this.handleCreatedNewTemplate}/> */}
 
             </div>
         );

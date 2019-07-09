@@ -63,6 +63,7 @@ Route::get('/services', 'PagesController@services');
 Route::resource('courses', 'CoursesController');
 Route::post('/courses/{course}/imageUpload', 'CoursesController@imageUpload');
 Route::get('/courses/{course}/show-image', 'CoursesController@showImage');
+Route::get('/courses/{course}/json', 'CoursesController@showJSON');
 
 // will create all the routes associated with the assignment editing deleteing and so on
 Route::resource('assignments', 'AssignmentsController');

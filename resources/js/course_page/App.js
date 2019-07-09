@@ -36,15 +36,7 @@ class App extends React.Component {
       }
 
     loadCourse() {
-        fetch("/courses/" + course_id, {
-            method: 'get',
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json, text-plain, */*",
-                "X-Requested-With": "XMLHttpRequest",
-                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content')
-            }
-        })
+        fetch("/courses/" + course_id + "/json")
             .then(data => data.json())
             .then(data => {
                 console.log(data);       
