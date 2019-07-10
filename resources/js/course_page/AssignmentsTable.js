@@ -224,13 +224,15 @@ class AssignmentsTable extends React.Component {
                         handleEditText={target => this.handleEditText(data.id, target)}
                         assignment_id={data.id}
                         value={data.editName}
-                        onEnter={() => this.handleConfirmEdit(data.id)} />
+                        onEnter={() => this.handleConfirmEdit(data.id)}
+                        size="sm" />
                     <FocusingBox
                         hidden={!data.creating}
                         handleEditText={target => this.handleEditCreateName(data.id, target)}
                         assignment_id={data.id}
                         value={data.createName}
-                        onEnter={() => this.handleConfirmCreate(data.id)} />
+                        onEnter={() => this.handleConfirmCreate(data.id)}
+                        size="sm" />
                 </td>
                 <td>{this.renderButtons({isLoading, data})}</td>
             </>

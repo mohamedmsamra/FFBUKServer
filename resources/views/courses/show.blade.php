@@ -11,7 +11,7 @@
     <script>
         const assignments = <?php echo json_encode($assignments) ?>;
         const course_id = {{$course->id}};
-        console.log("{{$course->body}}");
+        const PERMISSIONS = <?php echo json_encode($permissions) ?>;
         // const body = "<?php echo $course->body ?>";
         const body = "";
     </script>

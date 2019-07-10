@@ -1,0 +1,25 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class CoursePermission extends Model
+{
+    //Table Name
+    protected $table = 'course_permissions';
+
+    // Primary Key field
+    public $primaryKey = 'id';
+
+    //Timestamps
+    public $timestamps = true;
+
+    public function course() {
+        return $this->belongsTo('App\Course');
+    }
+
+    public function user() {
+        return $this->belongsTo('App\User');
+    }
+}

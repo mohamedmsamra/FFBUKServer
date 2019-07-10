@@ -1,4 +1,5 @@
 import React from 'react';
+import PermissionsTable from './PermissionsTable';
 import AssignmentsTable from './AssignmentsTable';
 
 class App extends React.Component {
@@ -107,9 +108,12 @@ class App extends React.Component {
             <small> Added by <strong>{this.state.username}</strong> on {this.state.created_at}</small>
             <hr/>
 
-
-            <h2> List of Assignments</h2>
+            <h2>List of Assignments</h2>
             <AssignmentsTable />
+            <hr/>
+            <h2>Sharing permissions</h2>
+            <p>All assignments are visible with the people you share the course with. Templates can be shared individually on the template's page.</p>
+            <PermissionsTable />
         </div>
         );
     }

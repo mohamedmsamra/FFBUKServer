@@ -178,9 +178,11 @@ class CoursesController extends Controller
         //return this specific post which its id is in the link
         $course = Course::find($id);
         $assignments = Assignment::where('course_id',$course->id)->get();
+        $permissions = \App\Http\Controllers\Api\CoursesController::permissions($id);
             
         return view('courses.show') -> with('course', $course)
-                                    -> with( 'assignments', $assignments);
+                                    -> with( 'assignments', $assignments)
+                                    -> with('permissions', $permissions);
     }
 
     public function showJSON(Request $request, $id)

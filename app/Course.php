@@ -30,4 +30,8 @@ class Course extends Model
     public function assignments(){
         return $this->hasMany('App\Assignment');
     }
+
+    public function permissions() {
+        return $this->hasMany('App\Models\CoursePermission');
+    }
 }

@@ -18,6 +18,8 @@ class FocusingBox extends React.Component {
     }
 
     render() {
+        var { hidden, ref, value, handleEditText, onEnter, ...otherProps} = this.props;
+
         return (
             <Form.Control
                 type="text"
@@ -28,7 +30,8 @@ class FocusingBox extends React.Component {
                 onKeyDown={e => {
                     if (e.key === 'Enter')
                         this.props.onEnter();
-                }}/>
+                }}
+                {...otherProps}/>
         );
     }
 }
