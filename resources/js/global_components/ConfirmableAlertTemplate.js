@@ -12,7 +12,7 @@ const ConfirmableAlertTemplate = ({ style, options, message, close }) => (
             {message.text}
         </div>
         {(() => {if (!message.onConfirm || (message.autoClose === false)) setTimeout(close, 4000)})()}
-        <button className="float-right alert-btn" onClick={close}>x</button>
+        <button className="float-right alert-btn" onClick={() => {close(); if (message.onCancel) message.onCancel();}}>x</button>
         {message.onConfirm &&
             <div className="float-right alert-confirm-btns">
                 <Button onClick={() => {close(); message.onConfirm()}} variant="outline-success" size="sm">Confirm</Button>

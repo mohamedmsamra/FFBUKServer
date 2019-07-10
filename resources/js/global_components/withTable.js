@@ -23,6 +23,7 @@ function withTable(WrappedComponent, headers) {
             }
             this.addTableRows = this.addTableRows.bind(this);
             this.setTableRowsData = this.setTableRowsData.bind(this);
+            this.getTableRowData = this.getTableRowData.bind(this);
             this.setTableRowData = this.setTableRowData.bind(this);
             this.ReactiveTable = this.ReactiveTable.bind(this);
         }
@@ -51,6 +52,10 @@ function withTable(WrappedComponent, headers) {
             } else {
                 this.setState({tableRows: tableRows}, next);
             }
+        }
+
+        getTableRowData(key) {
+            return this.state.tableRows.find(r => r.key == key);
         }
 
         setTableRowData(key, f, next) {
@@ -91,6 +96,7 @@ function withTable(WrappedComponent, headers) {
                 <WrappedComponent
                     ReactiveTable={this.ReactiveTable}
                     setTableRowsData={this.setTableRowsData}
+                    getTableRowData={this.getTableRowData}
                     setTableRowData={this.setTableRowData}
                     addTableRows={this.addTableRows}
                     tableRows={this.state.tableRows}

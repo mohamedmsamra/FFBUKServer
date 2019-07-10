@@ -14,7 +14,7 @@
         const course_owner_id = {{$course->user_id}};
         const user_id = {{auth()->user()->id}};
         const PERMISSIONS = <?php echo json_encode($permissions) ?>;
-        // const body = "<?php echo $course->body ?>";
+        const HAS_COURSE_EDIT_PERMISSION = course_owner_id == user_id;
         const body = "";
     </script>
     <script src="/builds/js/course_page/index.js"></script>

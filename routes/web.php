@@ -85,6 +85,7 @@ Route::resource('/api/comments', 'Api\CommentsController');
 Route::resource('/api/assignments', 'Api\AssignmentsController');
 Route::post('/api/assignments/edit-name', 'Api\AssignmentsController@editName');
 Route::get('/api/courses/{course_id}/permissions', 'Api\CoursesController@getPermissions');
+Route::post('/api/courses/{course_id}/permissions/{user_id}', 'Api\CoursesController@updatePermission');
 
 Auth::routes();
 
