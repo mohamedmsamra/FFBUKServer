@@ -267,7 +267,7 @@ class CoursesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         //needed to delete the post
         $course = Course::find($id);
@@ -287,7 +287,10 @@ class CoursesController extends Controller
 
         // return redirect('/dashboard');
         // $this -> index();
+        // $request->session()->flash('alert-success', 'User was successful added!');
         // return json_encode($title);
+        Session::flash('success', 'This is a message!'); 
+
         return redirect()->route('courses');    
     }
 }

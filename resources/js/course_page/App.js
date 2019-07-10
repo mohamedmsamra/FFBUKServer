@@ -1,5 +1,6 @@
 import React from 'react';
 import AssignmentsTable from './AssignmentsTable';
+import { withAlert } from 'react-alert';
 
 class App extends React.Component {
     constructor(props) {
@@ -79,8 +80,9 @@ class App extends React.Component {
         }).then(function(response) {
             return response.json();
         }).then((data) => {
-            // this.props.alert.success({text: "Removed course '" + data + "'"});
-            console.log(data);
+            // console.log(data);
+            window.location.href = '/courses';
+            this.props.alert.success({text: "Removed course \n '" + data + "'"});
         });
     }
  
@@ -88,7 +90,7 @@ class App extends React.Component {
         return (
         <div>
             <div id="courseActions">
-                <form encType="multipart/form-data" action="" className="float-left">
+                {/* <form encType="multipart/form-data" action="" className="float-left">
                     <input 
                         onChange={this.handleUploadImage.bind(this)}
                         name="cover_image"
@@ -106,8 +108,16 @@ class App extends React.Component {
                         title="Change Course Image">
                         <i className="fas fa-image"></i> Change Course Image
                     </button>
-                </form>
-                <button className="courseBtn deleteBtn float-left" onClick={this.handleDeleteCourse}><i className="fas fa-trash-alt"></i> Delete Course</button>
+                </form> */}
+                <button 
+                    className="courseBtn deleteBtn float-left" 
+                    onClick={() => {this.props.alert.show({
+                        text: "Are you sure you want to delete this course?",
+                        onConfirm: () => this.handleDeleteCourse()
+                    })}}>
+                    <i className="fas fa-trash-alt"></i> 
+                    Delete Course
+                </button>
             </div>
             <div className="clear"></div>
             {this.state.imageLoaded ?
@@ -133,4 +143,4 @@ class App extends React.Component {
     }
 }
 
-export default App;
+export default withAlert()(App);
