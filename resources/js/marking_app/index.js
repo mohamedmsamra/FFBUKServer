@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { transitions, positions, Provider as AlertProvider } from 'react-alert';
-import ConfirmableAlertTemplate from './ConfirmableAlertTemplate';
+import ConfirmableAlertTemplate from '../global_components/ConfirmableAlertTemplate';
 import App from './App';
 
 const alertOptions = {

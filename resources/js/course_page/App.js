@@ -1,6 +1,7 @@
 import React from 'react';
 import PermissionsTable from './PermissionsTable';
 import AssignmentsTable from './AssignmentsTable';
+import { withAlert } from 'react-alert';
 
 class App extends React.Component {
     constructor(props) {
@@ -66,12 +67,30 @@ class App extends React.Component {
             .then(data => {
                 console.log(data);
             });
-    }              
+    }          
+    
+    handleDeleteCourse() {
+        fetch(course_id, {
+            method: 'delete',
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json, text-plain, */*",
+                "X-Requested-With": "XMLHttpRequest",
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content')
+            }
+        }).then(function(response) {
+            return response.json();
+        }).then((data) => {
+            // console.log(data);
+            window.location.href = '/courses';
+            this.props.alert.success({text: "Removed course \n '" + data + "'"});
+        });
+    }
  
     render() {
         return (
         <div>
-            <div id="reactImageUpload"></div>
+            <div id="courseActions">
                 {/* <form encType="multipart/form-data" action="" className="float-left">
                     <input 
                         onChange={this.handleUploadImage.bind(this)}
@@ -83,7 +102,7 @@ class App extends React.Component {
                     <button 
                         type="button" 
                         id={"uploadCourseImg" + course_id}
-                        className="invisibleBtn float-left" 
+                        className="courseBtn uploadBtn float-left" 
                         onClick={() => {$("#course" + course_id).click()}} 
                         data-toggle="tooltip" 
                         data-placement="top" 
@@ -91,7 +110,16 @@ class App extends React.Component {
                         <i className="fas fa-image"></i> Change Course Image
                     </button>
                 </form> */}
-        
+                <button 
+                    className="courseBtn deleteBtn float-left" 
+                    onClick={() => {this.props.alert.show({
+                        text: "Are you sure you want to delete this course?",
+                        onConfirm: () => this.handleDeleteCourse()
+                    })}}>
+                    <i className="fas fa-trash-alt"></i> 
+                    Delete Course
+                </button>
+            </div>
             <div className="clear"></div>
             {this.state.imageLoaded ?
                 <img 
@@ -119,4 +147,4 @@ class App extends React.Component {
     }
 }
 
-export default App;
+export default withAlert()(App);
