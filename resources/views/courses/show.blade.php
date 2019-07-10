@@ -11,6 +11,8 @@
     <script>
         const assignments = <?php echo json_encode($assignments) ?>;
         const course_id = {{$course->id}};
+        const PERMISSIONS = <?php echo json_encode($permissions) ?>;
+        // const body = "<?php echo $course->body ?>";
         const body = "";
     </script>
     <script src="/builds/js/course_page/index.js"></script>

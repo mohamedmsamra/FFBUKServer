@@ -9,4 +9,16 @@
     .invisibleBtn {
         padding-top: 20px;
     }
+
+    select.select-permission {
+        width: auto;
+    }
+
+    table td.user-pending {
+        color: grey;
+    }
+
+    table td .form-group {
+        margin-bottom: 0;
+    }
 }
