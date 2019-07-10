@@ -67,21 +67,22 @@ function withTable(WrappedComponent, headers) {
         }
 
         ReactiveTable(props) {
+            
             const renderedRows = this.state.tableRows.map(row => {
                 return (
                     !row.deleted &&
                     <tr key={row.key} className={row.isLoading ? 'disabled' : ''}>
-                        <td className="loading"><img src="/svg/loading.svg" /></td>
                         {props.renderRow(row)}
+                        <td className="loading"><img src="/svg/loading.svg" /></td>
                     </tr>
                 );
             });
             return (
-                <Table id="assignments-table">
+                <Table className="reactive-table">
                     <thead>
                         <tr>
-                            <th></th>
                             {props.headers.map(h => <th key={h} scope="col">{h}</th>)}
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>

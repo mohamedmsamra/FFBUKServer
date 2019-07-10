@@ -1,0 +1,45 @@
+.reactive-table {
+    width: 100%;
+
+    .loading img {
+        height: 20px;
+        width: 20px;
+        margin: 0;
+        opacity: 0;
+    }
+
+    .disabled .loading img {
+        opacity: 0.4;
+    }
+
+    tr td:not(:first-child) {
+        width: 1%;
+        white-space: nowrap;
+    }
+
+    tr td:last-child {
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+
+    tr {
+        transition: background-color .25s ease-in-out;
+    }
+
+    tr p {
+        transition: color .25s ease-in-out;
+        margin-bottom: 0;
+    }
+    
+    tr.disabled {
+        background-color: lightgrey; 
+    }
+
+    tr.disabled p {
+        color: grey;
+    }
+
+    button {
+        margin-right: 10px;
+    }
+}

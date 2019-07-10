@@ -207,8 +207,12 @@ class AssignmentsTable extends React.Component {
                     <a href={"/marking/" + data.id}>
                         <button type="button" className="btn btn-primary btn-sm" disabled={isLoading}>Start marking</button>
                     </a>
-                    <button type="button" className="btn btn-info btn-sm" disabled={isLoading} onClick={() => this.handleEditClick(data.id)}>Edit</button>
-                    <button type="button" className="btn btn-danger btn-sm" disabled={isLoading} onClick={() => this.handleDeleteClick(data.id)}>Delete</button>
+                    {HAS_COURSE_EDIT_PERMISSION && 
+                        <>
+                            <button type="button" className="btn btn-info btn-sm" disabled={isLoading} onClick={() => this.handleEditClick(data.id)}>Edit</button>
+                            <button type="button" className="btn btn-danger btn-sm" disabled={isLoading} onClick={() => this.handleDeleteClick(data.id)}>Delete</button>
+                        </>
+                    }
                 </>
             );
         }
@@ -249,7 +253,7 @@ class AssignmentsTable extends React.Component {
                 <this.props.ReactiveTable
                     headers={['Assignments', 'Actions']}
                     renderRow={this.renderRow} />
-                <Button variant="primary" size="sm" onClick={this.handleCreateClick}>Create new assignment</Button>
+                {HAS_COURSE_EDIT_PERMISSION && <Button variant="primary" size="sm" onClick={this.handleCreateClick}>Create new assignment</Button>}
             </>
         );
     }
