@@ -62,8 +62,10 @@ class CoursesController extends Controller
         $user_id = auth()->user()->id;
         $user = User::find($user_id);
         $courses = $user->courses()->orderBy('created_at', 'desc')->paginate(10);
+        $invitations = $user->course_permissions();
 
         return view('courses.index')->with('courses', $courses);
+                                    // ->with('invitations', $invitations);
     }
 
     /**

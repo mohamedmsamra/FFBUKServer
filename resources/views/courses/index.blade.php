@@ -4,6 +4,15 @@
     <div id="coursesPage">
         <h1>Courses</h1>
         <a href="/courses/create" class="btn btn-light btn-block btn-lg shadow-sm mb-4"> Add New Course </a>
+
+        @if(count($invitations) > 0)
+        @foreach ($invitations as $invitation)
+        @endforeach
+            <!-- add the links of pages into the end of the page-->
+            {{-- {{$courses->links()}} --}}
+        @else 
+            <p> No Invitations Found </p>
+        @endif
     
         @if(count($courses) > 0)
             @foreach ($courses as $course)
