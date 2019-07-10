@@ -19,7 +19,7 @@ class PermissionsTable extends React.Component {
             prevRow.data.level = value;
         }, () => {
             this.props.alert.show({
-                text: "Change permissions?",
+                text: "Change " + this.props.getTableRowData(key).data.user.name + "'s permissions to " + (value == 1? 'read/write' : 'read only') + "?",
                 onConfirm: () => {
                     fetch("/api/courses/" + course_id + "/permissions/" + this.props.getTableRowData(key).data.user.id, {
                         method: 'post',
@@ -42,7 +42,6 @@ class PermissionsTable extends React.Component {
                         console.log(error);
                         this.props.setTableRowData(key, prevRow => {
                             prevRow.level = prevRow.level ? 0 : 1;
-                            prevRow.isLoading = false;
                             prevRow.data.level = originalValue;
                         });
                     });
