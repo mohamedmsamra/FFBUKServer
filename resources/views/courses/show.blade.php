@@ -11,6 +11,8 @@
     <script>
         const assignments = <?php echo json_encode($assignments) ?>;
         const course_id = {{$course->id}};
+        const course_owner_id = {{$course->user_id}};
+        const user_id = {{auth()->user()->id}};
         const PERMISSIONS = <?php echo json_encode($permissions) ?>;
         // const body = "<?php echo $course->body ?>";
         const body = "";

@@ -66,6 +66,7 @@ Route::group( ['middleware' => 'auth' ], function()
     Route::post('/courses/{course}/imageUpload', 'CoursesController@imageUpload');
     Route::get('/courses/{course}/show-image', 'CoursesController@showImage');
     Route::get('/courses/{course}/json', 'CoursesController@showJSON');
+    Route::put('api/invites/{course}', 'Api\CoursesController@joinCourse');
 });
 
 

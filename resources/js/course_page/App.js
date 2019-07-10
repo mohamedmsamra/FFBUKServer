@@ -88,6 +88,7 @@ class App extends React.Component {
     }
  
     render() {
+        let permission = PERMISSIONS.find(x => x.user.id == user_id);
         return (
         <div>
             <div id="courseActions">
@@ -110,6 +111,11 @@ class App extends React.Component {
                         <i className="fas fa-image"></i> Change Course Image
                     </button>
                 </form> */}
+                <p>{console.log(PERMISSIONS)}</p>
+                <p>{console.log(user_id)}</p>
+                <p>{console.log(permission)}</p>
+
+                {course_owner_id !== user_id ? '' :
                 <button 
                     className="courseBtn deleteBtn float-left" 
                     onClick={() => {this.props.alert.show({
@@ -119,6 +125,7 @@ class App extends React.Component {
                     <i className="fas fa-trash-alt"></i> 
                     Delete Course
                 </button>
+                }
             </div>
             <div className="clear"></div>
             {this.state.imageLoaded ?
