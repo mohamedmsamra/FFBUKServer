@@ -62,8 +62,37 @@ class CoursesController extends Controller
         $user_id = auth()->user()->id;
         $user = User::find($user_id);
         $courses = $user->courses()->orderBy('created_at', 'desc')->paginate(10);
+        $invitations = $user->course_permissions()->orderBy('pending', 'DESC')->paginate(10);
+        $invitedCourses = [];
+        // $temp = new stdClass();
+        foreach ($invitations as $invite) {
+            $t2 = Course::find($invite->course_id);
+            // $owner = User::find($t2->user_id);
+            // $assignments = Assignment::where('course_id',$t2->id)->get();
+            $invite->course = Course::find($invite->course_id);
+            $invite->owner = User::find($t2->user_id);
+            $invite->assignments = Assignment::where('course_id',$t2->id)->get();
+            // $temp = (object) [
+            //     'id' => $invite->id,
+            //     'course_id' => $invite->course_id,
+            //     'user_id' => $invite->user_id,
+            //     'level' => $invite->level,
+            //     'pending' => $invite->pending,
+            //     'course' => Course::find($invite->course_id),
+            //     'owner' => User::find($t2->user_id),
+            //     'title' => $t2->title,
+            //     'body' => $t2->body,
+            //     'created_at' => $t2->created_at,
+            //     'owner_id' => $owner->id,
+            //     'owner_name' => $owner->name,
+            //     'assignments' => $assignments
+            // ];
+            // array_push($invitedCourses,$temp);
+        }
 
-        return view('courses.index')->with('courses', $courses);
+        return view('courses.index')->with('courses', $courses)
+                                    ->with('invitations', $invitations)
+                                    ->with('invitedCourses', $invitedCourses);
     }
 
     /**
