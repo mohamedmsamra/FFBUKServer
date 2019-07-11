@@ -2,54 +2,16 @@ import React from 'react';
 import PermissionsTable from './PermissionsTable';
 import AssignmentsTable from './AssignmentsTable';
 import { withAlert } from 'react-alert';
+import dateformat from 'dateformat';
 
 class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            cover_image: '',
-            imageLoaded: false,
-            body: '',
-            username: '',
-            created_at: ''
+            cover_image: COVER_IMAGE,
+            imageLoaded: true,
+            body: ''
         }
-        this.loadCourse = this.loadCourse.bind(this);
-    }
-
-    componentDidMount() {
-        this.loadCourse();
-    }
-
-    formatDate(date) {
-        var monthNames = [
-          "January", "February", "March",
-          "April", "May", "June", "July",
-          "August", "September", "October",
-          "November", "December"
-        ];
-      
-        var day = date.getDate();
-        var monthIndex = date.getMonth();
-        var year = date.getFullYear();
-        var hour = date.getHours();
-        var minute = date.getMinutes();
-      
-        return day + ' ' + monthNames[monthIndex] + ' ' + year + ' at ' + hour + ':' + minute;
-      }
-
-    loadCourse() {
-        fetch("/courses/" + course_id + "/json")
-            .then(data => data.json())
-            .then(data => {
-                console.log(data);       
-                this.setState({
-                    cover_image: data.image,
-                    imageLoaded: true,
-                    body: data.body,
-                    created_at: this.formatDate(new Date(data.createdAt.date)),
-                    username: data.username
-                });
-            });
     }
 
     handleUploadImage(e) {
@@ -140,7 +102,7 @@ class App extends React.Component {
             <div>
                 {<div dangerouslySetInnerHTML={{ __html: this.state.body }} />}
             </div>
-            <small> Added by <strong>{this.state.username}</strong> on {this.state.created_at}</small>
+            <small> Added by <strong>{CREATOR_NAME}</strong> on {dateformat(CREATED_AT, "dddd, mmmm dS, yyyy, h:MM:ss TT")}</small>
             <hr/>
 
             <h2>List of Assignments</h2>

@@ -22,10 +22,6 @@ class CoursesController extends Controller
      */
     public function __construct()
     {
-        //so doing this, we are prevening the guest to the website from seeing to anything
-        //related to posts except index and show, so guests now can not create post
-        //so creating a post became available only if you are a signed-in/authenicated user
-        $this->middleware('auth', ['except' => ['index', 'show']]);
     }
 
     /**
@@ -35,35 +31,11 @@ class CoursesController extends Controller
      */
     public function index()
     {
-        //this is the page that index retrieve
-        //http://ffbuk.test/posts
-        //return a view named index from posts folder
-
-        // a model function that retrieve all the data from post table without using SQL queries
-        // and that actual use Eloquent (object relational mapper) without any sql queries
-        //$posts= Post::all();
-
-
-        //we can control how we can return posts so ordered asc or desc by title
-        //$posts = Post::orderBy('title','desc')->get();
-
-        //we can also how many items we can return
-        //returns only one item from the whole list
-        //$posts = Post::orderBy('title','desc')-> take(1) ->get();
-
-        //or even we can do conditions on the retrival (built in Eliqounet)
-        //return only posts which has title== Post Two
-        //$posts = Post::where('title','Post Two')->get();
-
-        //we can also use normal sql
-        //$posts = DB::select('SELECT * FROM posts');
-
-        //put the posts into pages, each page takes 10 items for now per page
         $user_id = auth()->user()->id;
         $user = User::find($user_id);
         $courses = $user->courses()->orderBy('created_at', 'desc')->paginate(10);
         $invitations = $user->course_permissions()->orderBy('pending', 'DESC')->paginate(10);
-        $invitedCourses = [];
+
         // $temp = new stdClass();
         foreach ($invitations as $invite) {
             $t2 = Course::find($invite->course_id);
@@ -72,27 +44,30 @@ class CoursesController extends Controller
             $invite->course = Course::find($invite->course_id);
             $invite->owner = User::find($t2->user_id);
             $invite->assignments = Assignment::where('course_id',$t2->id)->get();
-            // $temp = (object) [
-            //     'id' => $invite->id,
-            //     'course_id' => $invite->course_id,
-            //     'user_id' => $invite->user_id,
-            //     'level' => $invite->level,
-            //     'pending' => $invite->pending,
-            //     'course' => Course::find($invite->course_id),
-            //     'owner' => User::find($t2->user_id),
-            //     'title' => $t2->title,
-            //     'body' => $t2->body,
-            //     'created_at' => $t2->created_at,
-            //     'owner_id' => $owner->id,
-            //     'owner_name' => $owner->name,
-            //     'assignments' => $assignments
-            // ];
-            // array_push($invitedCourses,$temp);
         }
 
         return view('courses.index')->with('courses', $courses)
-                                    ->with('invitations', $invitations)
-                                    ->with('invitedCourses', $invitedCourses);
+                                    ->with('invitations', $invitations);
+    }
+
+        /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Request $request, $id)
+    {
+        //it gets the id from the URL
+        //http://ffbuk.test/posts/1
+        //return this specific post which its id is in the link
+        $course = Course::find($id);
+        $assignments = Assignment::where('course_id',$course->id)->get();
+        $permissions = $this->permissions($id);
+            
+        return view('courses.show') -> with('course', $course)
+                                    -> with('assignments', $assignments)
+                                    -> with('permissions', $permissions);
     }
 
     /**
@@ -134,7 +109,7 @@ class CoursesController extends Controller
         $course ->cover_image = "default";
         $course ->save();
 
-        $this -> imageUpload($request, $course['id']);
+        $this -> apiImageUpload($request, $course['id']);
 
         // $returnCourse
 
@@ -143,90 +118,7 @@ class CoursesController extends Controller
         return redirect('/courses')-> with('success', 'Your Course has been added successfully!');
     }
 
-    public function imageUpload(Request $request, $id) 
-    {
-        $this -> validate($request,[
-            'cover_image' => 'image | mimes:jpeg,png,jpg,gif,svg | nullable | max:1999'
-        ]);
-
-        $course = Course::find($id);
-
-        //Handle File upload
-        //make sure an actual file was chosen
-        if($request -> hasFile('cover_image')){
-
-            $img = $request -> cover_image;
-
-            $user_id = auth()->user()->id;
-
-            // Check if user folder exists and create it if not
-            $path = storage_path('app/public/user_'.$user_id);
-            if(!file_exists($path)) {
-                // path does not exist
-                \File::makeDirectory($path);
-            }
-
-            $matches = glob($path.'/course_'.$course->id.'*');
-            foreach ($matches as $match) {
-                \Log::info($match);
-                unlink($match);
-            }
-
-            $imageName = 'course_'.$course->id.'_'.date("YmdHis").'.'.$img->getClientOriginalExtension();
-
-            // Save image to user folder
-            $img->move($path, $imageName);
-
-            $fileNameToStore = 'user_'.$user_id.'/'.$imageName;
-            
-        } else{
-            //so if the user has not chosen an image, this default image will show
-            $fileNameToStore= 'default';
-        }
-        $course -> cover_image = $fileNameToStore;
-        $course -> save();
-
-        return json_encode($fileNameToStore);
-    }
-
-    public function showImage($id) {
-        $course = Course::find($id);
-        return json_encode($course->cover_image);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Request $request, $id)
-    {
-        //it gets the id from the URL
-        //http://ffbuk.test/posts/1
-        //return this specific post which its id is in the link
-        $course = Course::find($id);
-        $assignments = Assignment::where('course_id',$course->id)->get();
-        $permissions = \App\Http\Controllers\Api\CoursesController::permissions($id);
-            
-        return view('courses.show') -> with('course', $course)
-                                    -> with( 'assignments', $assignments)
-                                    -> with('permissions', $permissions);
-    }
-
-    public function showJSON(Request $request, $id)
-    {
-        $course = Course::find($id);
-
-        return json_encode([
-            'image' => $course->cover_image,
-            'body' => $course->body,
-            'createdAt' => $course->created_at,
-            'username' => $course->user->name
-        ]);
-    }
-
-    /**
+        /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
@@ -325,11 +217,109 @@ class CoursesController extends Controller
         return redirect()->route('courses');    
     }
 
+    public function apiImageUpload(Request $request, $id) 
+    {
+        $this -> validate($request,[
+            'cover_image' => 'image | mimes:jpeg,png,jpg,gif,svg | nullable | max:1999'
+        ]);
+
+        $course = Course::find($id);
+
+        //Handle File upload
+        //make sure an actual file was chosen
+        if($request -> hasFile('cover_image')){
+
+            $img = $request -> cover_image;
+
+            $user_id = auth()->user()->id;
+
+            // Check if user folder exists and create it if not
+            $path = storage_path('app/public/user_'.$user_id);
+            if(!file_exists($path)) {
+                // path does not exist
+                \File::makeDirectory($path);
+            }
+
+            $matches = glob($path.'/course_'.$course->id.'*');
+            foreach ($matches as $match) {
+                \Log::info($match);
+                unlink($match);
+            }
+
+            $imageName = 'course_'.$course->id.'_'.date("YmdHis").'.'.$img->getClientOriginalExtension();
+
+            // Save image to user folder
+            $img->move($path, $imageName);
+
+            $fileNameToStore = 'user_'.$user_id.'/'.$imageName;
+            
+        } else{
+            //so if the user has not chosen an image, this default image will show
+            $fileNameToStore= 'default';
+        }
+        $course -> cover_image = $fileNameToStore;
+        $course -> save();
+
+        return json_encode($fileNameToStore);
+    }
+
+    public function apiShowImage($id) {
+        $course = Course::find($id);
+        return json_encode($course->cover_image);
+    }
+
+    public function apiShow(Request $request, $id)
+    {
+        $course = Course::find($id);
+
+        return json_encode([
+            'image' => $course->cover_image,
+            'body' => $course->body,
+            'createdAt' => $course->created_at,
+            'username' => $course->user->name
+        ]);
+    }
+
+    public function apiJoinCourse($id) {
+        $permission = CoursePermission::find($id);
+        if ($permission -> user_id == Auth::user()->id) {
+            $permission -> pending = 0;
+            $permission -> save();
+    
+            return back()->with('success', 'Joined Course');
+        }
+        return back()->with('error', "Don't have permission to do that");
+        // return $permission;
+    }
+
     public function apiGetPermissions($id) {
         return json_encode($this->permissions($id));
     }
 
-    public static function apiPermissions($id) {
+    public function apiUpdatePermission(Request $request, $course_id, $user_id) {
+        $this -> validate($request,[
+            'level' => 'required'
+        ]);
+        
+        if ($this->hasPermissionToUpdatePermissions($course_id, Auth::user()->id)) {
+            // First check if user in the course has read/write permissions
+            $permission = CoursePermission::where('course_id', $course_id)->where('user_id', $user_id)->first();
+            $permission->level = $request->input('level');
+            $permission->save();
+            return json_encode("done");
+        }
+        return json_encode(['error' => 'You don\'t have permission for that']);
+    }
+
+    private static function hasPermissionToUpdatePermissions($course_id, $user_id) {
+        // Check if the user is the owner
+        if (Course::where('id', $course_id)->where('user_id', $user_id)->first()) return true;
+        return false;
+
+        // Check if the user has read/write permissions ??
+    }
+
+    private static function permissions($id) {
         $course = Course::find($id);
 
         $permissions = $course->permissions;
@@ -346,40 +336,5 @@ class CoursesController extends Controller
         }
 
         return $return;
-    }
-
-    public function apiJoinCourse($id) {
-        $permission = CoursePermission::find($id);
-        if ($permission -> user_id == Auth::user()->id) {
-            $permission -> pending = 0;
-            $permission -> save();
-    
-            return back()->with('success', 'Joined Course');
-        }
-        return back()->with('error', "Don't have permission to do that");
-        // return $permission;
-    }
-
-    public function apiUpdatePermission(Request $request, $id, $user_id) {
-        $this -> validate($request,[
-            'level' => 'required'
-        ]);
-        
-        if ($this->hasPermissionToUpdatePermissions($id, Auth::user()->id)) {
-            // First check if user in the course has read/write permissions
-            $permission = CoursePermission::where('course_id', $id)->where('user_id', $user_id)->first();
-            $permission->level = $request->input('level');
-            $permission->save();
-            return json_encode("done");
-        }
-        return json_encode(['error' => 'You don\'t have permission for that']);
-    }
-
-    public static function hasPermissionToUpdatePermissions($course_id, $user_id) {
-        // Check if the user is the owner
-        if (Course::where('id', $course_id)->where('user_id', $user_id)->first()) return true;
-        return false;
-
-        // Check if the user has read/write permissions ??
     }
 }

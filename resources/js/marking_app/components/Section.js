@@ -68,7 +68,7 @@ class Section extends React.Component {
         // debugger;
         $.ajax({
             // Your server script to process the upload
-            url: '/api/sections/' + this.props.id + '/image-upload',
+            url: '/api/sections/' + this.props.id + '/upload-image',
             type: 'POST',
             headers: {
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content')
@@ -225,15 +225,10 @@ class Section extends React.Component {
 
     updateTitle() {
         // Submit the section to the server
-        fetch("/api/sections/" + this.props.id, {
-            method: 'put',
-            mode: 'cors',
+        fetch("/api/sections/" + this.props.id + "/edit-title", {
+            method: 'post',
             body: JSON.stringify({
-                title: this.state.editTitleText,
-                template_id: this.props.template_id,
-                positiveComments: this.state.posComments.map(c => c.text),
-                negativeComments: this.state.negComments.map(c => c.text),
-                marking_scheme: this.props.marking_scheme
+                title: this.state.editTitleText
             }),
             headers: {
                 "Content-Type": "application/json",

@@ -40,12 +40,10 @@ class CommentsController extends Controller
         return json_encode($text);
     }
 
-    public function apiUpdate(Request $request, $id)
+    public function apiEditText(Request $request, $id)
     {
         $this -> validate($request,[
-            'text' => 'required',
-            'type' => 'required',
-            'section_id' => 'required'
+            'text' => 'required'
         ]);
 
         //update this Post, find it by id

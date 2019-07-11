@@ -34,47 +34,6 @@ class SectionsController extends Controller
         return $section;
     }
 
-    // Used to create a section and the corresponding comments
-    public function apiPostNewSection(Request $request) {
-        $this -> validate($request,[
-            'title' => 'required',
-            'template_id' => 'required',
-            'positiveComments' => 'present|array',
-            'negativeComments' => 'present|array',
-            'marking_scheme' => 'string|nullable'
-        ]);
-
-        $section = new Section;
-        $section->title = $request->input('title');
-        $section->template_id = $request->input('template_id');
-        $section->marking_scheme = $request->input('marking_scheme');
-        $section->save();
-        
-        foreach ($request->positiveComments as $pc) {
-            $comment = new Comment;
-            $comment->text = $pc;
-            $comment->type = "positive";
-            $comment->section_id = $section['id'];
-            $comment->save();
-        }
-
-        foreach ($request->negativeComments as $nc) {
-            $comment = new Comment;
-            $comment->text = $nc;
-            $comment->type = "negative";
-            $comment->section_id = $section['id'];
-            $comment->save();
-        }
-
-        $returnSection = Section::find($section['id']);
-        $pos_comments = Comment::where('section_id', '=', $section['id'])->where('type', '=', 'positive')->get();
-        $neg_comments = Comment::where('section_id', '=', $section['id'])->where('type', '=', 'negative')->get();
-        $returnSection['positiveComments'] = $pos_comments;
-        $returnSection['negativeComments'] = $neg_comments;
-
-        return json_encode($returnSection);
-    }
-
     public function apiDestroy($id) {
         $section = Section::find($id);
         $title = $section->title;
@@ -82,20 +41,15 @@ class SectionsController extends Controller
         return json_encode($title);
     }
 
-    public function apiUpdate(Request $request, $id)
+    public function apiEditTitle(Request $request, $id)
     {
         $this -> validate($request,[
-            'title' => 'required',
-            'template_id' => 'required',
-            'positiveComments' => 'present|array',
-            'negativeComments' => 'present|array',
-            'marking_scheme' => 'string|nullable'
+            'title' => 'required'
         ]);
 
          //update this Post, find it by id
          $section = Section::find($id);
          $section -> title = $request->input('title'); 
-         $section -> marking_scheme = $request->input('marking_scheme'); 
          $section -> save();
  
          //direct the page back to the index
@@ -103,13 +57,7 @@ class SectionsController extends Controller
          return json_encode("Section Updated!");
     }
 
-    public function apiImageUpload($id)
-    {
-        $section =  Section::find($id);
-        return json_encode($section->marking_scheme);
-    }
-
-    public function apiImageUploadPost(Request $request, $id)
+    public function apiUploadImage(Request $request, $id)
     {
         $this -> validate($request,[
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg'

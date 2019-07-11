@@ -79,13 +79,10 @@ class MarkingSide extends React.Component {
         this.setState({submitting: true});
         const postBody = JSON.stringify({
             title: "Section Title",
-            template_id: this.state.template.id,
-            positiveComments: [],
-            negativeComments: [],
-            marking_scheme: ''
+            template_id: this.state.template.id
         });
         // Submit the section to the server
-        fetch("/api/sections/new-section", {
+        fetch("/api/sections", {
             method: 'post',
             body: postBody,
             headers: {

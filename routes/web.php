@@ -11,10 +11,6 @@
 |
 */
 
-Route::prefix('api')->group(function () {
-    Route::resource('sidebar', 'SidebarController');
-});
-
 Route::get('/', function () {
     return view('welcome');
 });
@@ -62,37 +58,38 @@ Route::get('/services', 'PagesController@services');
 // will create all the routes associated with the post editing deleteing and so on
 Route::group( ['middleware' => 'auth' ], function()
 {
+    // Assignments
+    // Route::resource('assignments', 'AssignmentsController');
+    Route::get('/api/assignments/{id}', 'AssignmentsController@apiShow');
+    Route::post('/api/assignments', 'AssignmentsController@apiStore');
+    Route::post('/api/assignments/{id}/edit-name', 'AssignmentsController@apiEditName');
+    Route::delete('/api/assignments/{id}', 'AssignmentsController@apiDestroy');
+
+    // Comments
+    Route::post('/api/comments', 'CommentsController@apiStore');
+    Route::get('/api/comments/{id}', 'CommentsController@apiShow');
+    Route::delete('/api/comments/{id}', 'CommentsController@apiDestroy');
+    Route::post('/api/comments/{id}/edit-text', 'CommentsController@apiEditText');
+
+    // Courses
     Route::resource('courses', 'CoursesController');
-    Route::post('/courses/{course}/imageUpload', 'CoursesController@imageUpload');
-    Route::get('/courses/{course}/show-image', 'CoursesController@showImage');
-    Route::get('/courses/{course}/json', 'CoursesController@showJSON');
-    Route::put('api/invites/{course}', 'Api\CoursesController@joinCourse');
+    Route::post('/api/courses/{course}/image-upload', 'CoursesController@apiImageUpload');
+    Route::get('/api/courses/{course}/show-image', 'CoursesController@apiShowImage');
+    Route::get('/api/courses/{course}', 'CoursesController@apiShow');
+    Route::post('/api/courses/{course}/join', 'CoursesController@apiJoinCourse');
+    Route::get('/api/courses/{course}/permissions', 'CoursesController@apiGetPermissions');
+    Route::get('/api/courses/{course_id}/permissions/{user_id}', 'CoursesController@apiUpdatePermission');
+    
+    // Sections
+    Route::post('/api/sections', 'SectionsController@apiStore');
+    Route::get('/api/sections/{id}', 'SectionsController@apiShow');
+    Route::delete('/api/sections/{id}', 'SectionsController@apiDestroy');
+    Route::post('/api/sections/{id}/edit-title', 'SectionsController@apiEditTitle');
+    Route::post('/api/sections/{id}/upload-image', 'SectionsController@apiUploadImage');
 });
 
 
-// will create all the routes associated with the assignment editing deleteing and so on
-Route::resource('assignments', 'AssignmentsController');
-Route::get('/courses/{course_id}/assignments/create', ['uses' => 'AssignmentsController@create']);
-
-// Create all routes associated with the template editing deleting and so on
-Route::resource('templates', 'TemplatesController');
-
-// Resources for the API
-Route::resource('/api/templates', 'Api\TemplatesController');
-Route::resource('/api/sections', 'Api\SectionsController');
-Route::post('api/sections/new-section', 'Api\SectionsController@postNewSection');
-Route::resource('/api/comments', 'Api\CommentsController');
-Route::resource('/api/assignments', 'Api\AssignmentsController');
-Route::post('/api/assignments/edit-name', 'Api\AssignmentsController@editName');
-Route::get('/api/courses/{course_id}/permissions', 'Api\CoursesController@getPermissions');
-Route::post('/api/courses/{course_id}/permissions/{user_id}', 'Api\CoursesController@updatePermission');
-
 Auth::routes();
-
-Route::get('/dashboard', 'DashboardController@index');
-
-Route::get('/api/sections/{section}/image-upload', 'Api\SectionsController@imageUpload');
-Route::post('/api/sections/{section}/image-upload', 'Api\SectionsController@imageUploadPost');
 
 // TODO: Remove
 Route::get('/apitest', function () {

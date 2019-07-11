@@ -30,6 +30,7 @@
     },
     "dependencies": {
         "@fortawesome/fontawesome-free": "^5.9.0",
+        "dateformat": "^3.0.3",
         "jspdf": "^1.5.3",
         "prop-types": "^15.7.2",
         "react": "^16.8.6",
