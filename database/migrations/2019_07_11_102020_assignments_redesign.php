@@ -40,11 +40,11 @@ class AssignmentsRedesign extends Migration
             $table->text('text');
             $table->string('type');
             $table->integer('section_id')->unsigned();
-            $table->integer('modification')->unsigned()->nullable();
+            $table->integer('private_to_user')->unsigned()->nullable();
             $table->timestamps();
 
             $table->foreign('section_id')->references('id')->on('sections')->onDelete('cascade');
-            $table->foreign('modification')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('private_to_user')->references('id')->on('users')->onDelete('cascade');
         });
 
         Schema::table('templates', function (Blueprint $table) {
