@@ -15,6 +15,11 @@ class CoursePermission extends Model
     //Timestamps
     public $timestamps = false;
 
+    protected $attributes = [
+        'level' => 0,
+        'pending' => true,
+    ];
+
     public function course() {
         return $this->belongsTo('App\Models\Course');
     }

@@ -77,6 +77,7 @@ Route::group( ['middleware' => 'auth' ], function()
     Route::get('/api/courses/{course}/show-image', 'CoursesController@apiShowImage');
     Route::get('/api/courses/{course}', 'CoursesController@apiShow');
     Route::post('/api/courses/{course}/join', 'CoursesController@apiJoinCourse');
+    Route::post('/api/courses/{course}/invite', 'CoursesController@apiInviteToCourse');
     Route::get('/api/courses/{course}/permissions', 'CoursesController@apiGetPermissions');
     Route::post('/api/courses/{course_id}/permissions/{user_id}', 'CoursesController@apiUpdatePermission');
     

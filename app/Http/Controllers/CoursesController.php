@@ -294,6 +294,40 @@ class CoursesController extends Controller
         // return $permission;
     }
 
+    // Add user to course
+    public function apiInviteToCourse(Request $request, $course_id) {
+        $this -> validate($request,[
+            'email' => 'required'
+        ]);
+
+        $user = User::where('email', $request->email)->first();
+        if (!$user) {
+            return json_encode(['success' => false, 'message' => 'This email cannot be found.']);   
+        }
+
+        $user_id = $user->id;
+        $course = Course::find($course_id);
+
+        if (!$course) {
+            return json_encode(['success' => false, 'message' => 'This course does not exist.']);   
+        }
+        
+        if ($user_id == $course->user_id) {
+            return json_encode(['success' => false, 'message' => 'You are the owner of this course.']);   
+        }
+
+        if (CoursePermission::where('course_id', $course_id)->where('user_id', $user_id)->first()) {
+            return json_encode(['success' => false, 'message' => 'This user is already invited to this course.']);   
+        }
+
+        $coursePermission = new CoursePermission();
+        $coursePermission -> course_id = $course_id;
+        $coursePermission -> user_id = $user_id;
+        $coursePermission -> save();
+        return json_encode(['success' => true, 'course_permission' => $coursePermission]);
+        
+    } 
+
     public function apiGetPermissions($id) {
         return json_encode($this->permissions($id));
     }
