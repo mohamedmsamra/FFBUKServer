@@ -16,10 +16,10 @@ class CoursePermission extends Model
     public $timestamps = false;
 
     public function course() {
-        return $this->belongsTo('App\Course');
+        return $this->belongsTo('App\Models\Course');
     }
 
     public function user() {
-        return $this->belongsTo('App\User');
+        return $this->belongsTo('App\Models\User');
     }
 }

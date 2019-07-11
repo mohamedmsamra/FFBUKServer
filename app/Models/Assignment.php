@@ -21,7 +21,7 @@ class Assignment extends Model
     protected $fillable = ['name', 'course_id'];
 
     public function course(){
-        return $this->belongsTo('App\Course');
+        return $this->belongsTo('App\Models\Course');
     }
 
     public function templates(){

@@ -5,9 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 //return the course Model so we can use it here
 use Illuminate\Support\Facades\Storage;
-use App\Course;
-use App\Assignment;
-use App\User;
+use App\Models\Course;
+use App\Models\Assignment;
+use App\Models\User;
 //if we want to use normal SQL we need to call DB
 use DB;
 

@@ -17,7 +17,7 @@ class Template extends Model
 
     // That means that each single post has a relationship with a user and belongs to a user
     public function assignment() {
-        return $this->belongsTo('App\Assignment');
+        return $this->belongsTo('App\Models\Assignment');
     }
 
     // Return the sections of the template

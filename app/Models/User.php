@@ -29,7 +29,7 @@ class User extends Authenticatable
     ];
 
     public function courses(){
-        return $this->hasMany('App\Course');
+        return $this->hasMany('App\Models\Course');
     }
 
     public function course_permissions() {

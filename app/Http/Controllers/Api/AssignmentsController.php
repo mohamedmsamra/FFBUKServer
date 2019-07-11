@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Assignment;
+use App\Models\Assignment;
 
 class AssignmentsController extends Controller {
     public function store(Request $request) {

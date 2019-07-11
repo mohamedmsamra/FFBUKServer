@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Assignment;
+use App\Models\Assignment;
 use Auth;
 
 class PagesController extends Controller
