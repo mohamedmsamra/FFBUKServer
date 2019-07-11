@@ -16,7 +16,7 @@
 	<body>
 		<header>
 			<div>
-			<a href="../dashboard">
+			<a href="../courses">
 				<p style="float: left;"><img src="{{ asset('stuff/icons8-exam-50.png') }}" height="150px" width="150px"></p>
 				<br><br><br>
 				<b><p style="font-size:150%;">Fast FeedBack UK (fFBUK)</p></b>

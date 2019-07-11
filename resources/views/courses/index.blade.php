@@ -34,8 +34,8 @@
                             {{Form::hidden('_method','PUT')}}
                             {{Form::submit('Join',['class' => 'btn btn-primary'])}}
                         {!!Form::close()!!} --}}
-                        <form method="POST" action="{{'api/invites/'.$ic->id}}" class="float-right">
-                                @method('PUT')
+                        <form method="POST" action="{{'api/courses/'.$ic->id.'/join'}}" class="float-right">
+                                @method('POST')
                                 @csrf
                                 <button type="submit" class="btn btn-primary">Join</button>
                             </form>

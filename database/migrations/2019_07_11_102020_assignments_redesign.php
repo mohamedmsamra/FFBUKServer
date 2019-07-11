@@ -56,7 +56,7 @@ class AssignmentsRedesign extends Migration
             $table->integer('course_id')->unsigned();
             $table->integer('user_id')->unsigned();
             $table->integer('level')->unsigned(); // 0 - Read, 1 - Read/Write
-            $table->boolean('pending');
+            $table->boolean('pending')->default('1');
 
             $table->foreign('course_id')->references('id')->on('courses')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

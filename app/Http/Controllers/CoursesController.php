@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\Course;
 use App\Models\Assignment;
 use App\Models\User;
+use App\Models\CoursePermission;
+use Auth;
 //if we want to use normal SQL we need to call DB
 use DB;
 
@@ -180,7 +182,7 @@ class CoursesController extends Controller
 
          //direct the page back to the index
          //set the success message to Post Created
-         return redirect('/dashboard')-> with('success', 'Course Updated!');
+         return redirect('/courses')-> with('success', 'Course Updated!');
 
     }
 
@@ -208,7 +210,7 @@ class CoursesController extends Controller
         $title = $course -> title;
         $course -> delete();
 
-        // return redirect('/dashboard');
+        // return redirect('/courses');
         // $this -> index();
         // $request->session()->flash('alert-success', 'User was successful added!');
         // return json_encode($title);

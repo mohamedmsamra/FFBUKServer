@@ -46,9 +46,9 @@ class AssignmentsTable extends React.Component {
     }
 
     handleConfirmEdit(id) {
-        fetch("/api/assignments/edit-name", {
+        fetch("/api/assignments/" + id + "/edit-name", {
             method: 'post',
-            body: JSON.stringify({id: id, name: this.props.tableRows.find(x => x.key == id).data.editName}),
+            body: JSON.stringify({name: this.props.tableRows.find(x => x.key == id).data.editName}),
             headers: {
                 "Content-Type": "application/json",
                 "Accept": "application/json, text-plain, */*",
