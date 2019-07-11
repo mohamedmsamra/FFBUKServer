@@ -16,7 +16,7 @@ class Section extends Model
     public $timestamps = true;
 
     public function assignment() {
-        return $this->belongsTo('App\Models\Template');
+        return $this->belongsTo('App\Models\Assignment');
     }
 
     // Return the comments of the section

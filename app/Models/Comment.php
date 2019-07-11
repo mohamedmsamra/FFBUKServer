@@ -15,8 +15,11 @@ class Comment extends Model
     //Timestamps
     public $timestamps = true;
 
-    public function assignment() {
+    public function section() {
         return $this->belongsTo('App\Models\Section');
     }
 
+    public function private_to_user() {
+        return $this->belongsTo('App\Models\User');
+    }
 }

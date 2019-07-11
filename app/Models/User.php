@@ -35,4 +35,8 @@ class User extends Authenticatable
     public function course_permissions() {
         return $this->hasMany('App\Models\CoursePermission');
     }
+
+    public function private_comments() {
+        return $this->hasMany('App\Models\Comment');
+    }
 }
