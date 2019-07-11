@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -9,7 +9,7 @@ use App\Models\Section;
 
 class CommentsController extends Controller
 {
-    public function store(Request $request) {
+    public function apiStore(Request $request) {
         $this -> validate($request,[
             'text' => 'required',
             'type' => 'required',
@@ -28,19 +28,19 @@ class CommentsController extends Controller
         return json_encode($returnComment);
     }
 
-    public function show($id) {
+    public function apiShow($id) {
         $comment =  Comment::find($id);
         return $comment;
     }
 
-    public function destroy($id) {
+    public function apiDestroy($id) {
         $comment = Comment::find($id);
         $text = $comment->text;
         $comment -> delete();
         return json_encode($text);
     }
 
-    public function update(Request $request, $id)
+    public function apiUpdate(Request $request, $id)
     {
         $this -> validate($request,[
             'text' => 'required',

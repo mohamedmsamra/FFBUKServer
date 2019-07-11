@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -9,7 +9,7 @@ use App\Models\Comment;
 
 class SectionsController extends Controller
 {
-    public function store(Request $request) {
+    public function apiStore(Request $request) {
         $this -> validate($request,[
             'title' => 'required',
             'template_id' => 'required'
@@ -24,7 +24,7 @@ class SectionsController extends Controller
         return json_encode("done");
     }
 
-    public function show($id) {
+    public function apiShow($id) {
         $section =  Section::find($id);
         // // Add comments
         // foreach ($templates as $template) {
@@ -35,7 +35,7 @@ class SectionsController extends Controller
     }
 
     // Used to create a section and the corresponding comments
-    public function postNewSection(Request $request) {
+    public function apiPostNewSection(Request $request) {
         $this -> validate($request,[
             'title' => 'required',
             'template_id' => 'required',
@@ -75,14 +75,14 @@ class SectionsController extends Controller
         return json_encode($returnSection);
     }
 
-    public function destroy($id) {
+    public function apiDestroy($id) {
         $section = Section::find($id);
         $title = $section->title;
         $section -> delete();
         return json_encode($title);
     }
 
-    public function update(Request $request, $id)
+    public function apiUpdate(Request $request, $id)
     {
         $this -> validate($request,[
             'title' => 'required',
@@ -103,13 +103,13 @@ class SectionsController extends Controller
          return json_encode("Section Updated!");
     }
 
-    public function imageUpload($id)
+    public function apiImageUpload($id)
     {
         $section =  Section::find($id);
         return json_encode($section->marking_scheme);
     }
 
-    public function imageUploadPost(Request $request, $id)
+    public function apiImageUploadPost(Request $request, $id)
     {
         $this -> validate($request,[
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg'
