@@ -32,8 +32,8 @@ class Comment extends React.Component {
     update() {
         // Submit the section to the server
         console.log(this.props.id);
-        fetch("/api/comments/" + this.props.id, {
-            method: 'put',
+        fetch("/api/comments/" + this.props.id + "/edit-text", {
+            method: 'post',
             mode: 'cors',
             body: JSON.stringify({
                 text: this.state.editingText,

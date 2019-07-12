@@ -2,9 +2,6 @@ import React from 'react';
 import jsPDF from 'jspdf';
 import { withAlert } from 'react-alert'
 import Section from './Section';
-import NewSectionModal from './modals/NewSectionModal';
-import LoadTemplateModal from './modals/LoadTemplateModal';
-import CreateTemplateModal from './modals/CreateTemplateModal';
 import Loading from './Loading';
 import { ToggleButtonGroup, ToggleButton } from 'react-bootstrap';
 import { timingSafeEqual } from 'crypto';
@@ -22,22 +19,63 @@ class MarkingSide extends React.Component {
         this.handleSubmitSection = this.handleSubmitSection.bind(this);
         this.handleCommentAdded = this.handleCommentAdded.bind(this);
         this.handleCommentChange = this.handleCommentChange.bind(this);
+        this.handleSectionTitleChange = this.handleSectionTitleChange.bind(this);
         this.updateComment = this.updateComment.bind(this);
         this.handleSaveAndLoad = this.handleSaveAndLoad.bind(this);
         this.generateHtmlOutput = this.generateHtmlOutput.bind(this);
         this.copyTextToClipboard = this.copyTextToClipboard.bind(this);
         this.generatePDF = this.generatePDF.bind(this);
         this.clearSectionsContent = this.clearSectionsContent.bind(this);
+        this.assignmentFromDBFormat = this.assignmentFromDBFormat.bind(this);
+        this.fetchAssignment = this.fetchAssignment.bind(this);
         this.state = {
             submitting: false,
             loading: this.props.loading,
-            template: this.props.selectedTemplate,
+            assignment: null,
             content: (<h1>Nothing</h1>),
             enableMarking: false,
-            selectedExportType: 'pdf',
-            loadingTemplates: false,
-            templates: []
+            selectedExportType: 'pdf'
         };
+    }
+
+    componentDidMount() {
+        this.fetchAssignment();
+        
+    }
+
+    fetchAssignment() {
+        fetch('/api/assignments/' + assignment_id)
+            .then(data => data.json())   
+            .then(data => {this.setState({assignment: this.assignmentFromDBFormat(data), loading: false})});
+    }
+
+    assignmentFromDBFormat(dbAssignment) {
+        return {
+            name: dbAssignment.name,
+            id: dbAssignment.id,
+            totalMark: 0,
+            permissionLevel: dbAssignment.permissionLevel,
+            sections: {
+                custom: dbAssignment.sections ? dbAssignment.sections.map(this.sectionFromDBFormat) : [],
+                compulsory: [
+                    {
+                        title: "3 Points Done Well",
+                        value: ""
+                    }, {
+                        title: "3 Points To Improve",
+                        value: ""
+                    }
+                ]
+            }
+        };
+    }
+
+    sectionFromDBFormat(s) {
+        s.value = '';
+        s.mark = 0;
+        s.negativeComments = s.negativeComments ? s.negativeComments.map(c => {c.added = false; return c}) : [];
+        s.positiveComments = s.positiveComments ? s.positiveComments.map(c => {c.added = false; return c}) : [];
+        return s;
     }
 
     deleteSection(id){
@@ -53,33 +91,23 @@ class MarkingSide extends React.Component {
         }).then(function(response) {
             return response.json();
         }).then((data) => {
-            $("#confirmationModal").removeClass("fade");
-            $("#confirmationModal").modal('hide');
-            $("#confirmationModal").addClass("fade");
             this.props.alert.success({text: "Removed section '" + data + "'"});
         });
         this.setState(prevState => {
-            prevState.template.sections.custom = prevState.template.sections.custom.filter(item => item.id !== id);
+            prevState.assignment.sections.custom = prevState.assignment.sections.custom.filter(item => item.id !== id);
             return prevState;
         });
     }
 
-    loadTemplates() {
-        this.setState({loadingTemplates: true});
-        fetch('/api/templates?assignment_id=' + assignment_id)
-            .then(data => data.json())   
-            .then(data => this.setState({templates: data, loadingTemplates: false}));
-    }
-
     addSection(section) {
-        this.setState(prevState => prevState.template.sections.custom.push(section));
+        this.setState(prevState => prevState.assignment.sections.custom.push(section));
     }
 
     handleSubmitSection() {
         this.setState({submitting: true});
         const postBody = JSON.stringify({
             title: "Section Title",
-            template_id: this.state.template.id
+            assignment_id: this.state.assignment.id
         });
         // Submit the section to the server
         fetch("/api/sections", {
@@ -94,12 +122,10 @@ class MarkingSide extends React.Component {
         })
             .then(data => data.json())
             .then(data => {
-                data.value = '';
-                this.addSection(data);
+                this.addSection(this.sectionFromDBFormat(data));
                 this.setState({submitting: false});
 
                 this.scrollToElement("#section" + data.id);
-                
             });
     }
 
@@ -115,16 +141,16 @@ class MarkingSide extends React.Component {
     }
 
     handleSectionTextChange(id, value) {
-        this.setState(prevState => {prevState.template.sections.custom.find(x => x.id == id).value = value; return prevState;});
+        this.setState(prevState => {prevState.assignment.sections.custom.find(x => x.id == id).value = value; return prevState;});
     }
 
     handleCompulsoryTextChange(id, value) {
-        this.setState(prevState => {prevState.template.sections.compulsory[id].value = value; return prevState;});
+        this.setState(prevState => {prevState.assignment.sections.compulsory[id].value = value; return prevState;});
     }
 
     handleAppendComment(id, comment) {
         this.setState(prevState => {
-            const section = prevState.template.sections.custom.find(x => x.id == id);
+            const section = prevState.assignment.sections.custom.find(x => x.id == id);
             // Check if the section is empty after inputting values
             if (section.value == "<p><br></p>") {
                 section.value = "<p>" + comment + "</p>";
@@ -145,8 +171,8 @@ class MarkingSide extends React.Component {
         if(mark == null || (0 <= mark && mark <= 100)) {
             $($(markInput)[0]).tooltip('hide');
             this.setState(prevState => {
-                prevState.template.sections.custom.find(x => x.id == sectionID).mark = mark;
-                prevState.template.totalMark = prevState.template.sections.custom.reduce((a, s) => (a + parseFloat(s.mark || 0)), 0);
+                prevState.assignment.sections.custom.find(x => x.id == sectionID).mark = mark;
+                prevState.assignment.totalMark = prevState.assignment.sections.custom.reduce((a, s) => (a + parseFloat(s.mark || 0)), 0);
                 return prevState;
             });
         } else {
@@ -163,6 +189,21 @@ class MarkingSide extends React.Component {
     }
 
     handleSaveAndLoad() {
+        // Check if compulsory fields are empty
+        const isEmpty = htmlString => {
+            const parser = new DOMParser();
+            const { textContent } = parser.parseFromString(htmlString, "text/html").documentElement;
+            return !textContent.trim();
+        }
+        let section;
+        for(let i = 0; i < this.state.assignment.sections.compulsory.length; i++) {
+            section = this.state.assignment.sections.compulsory[i];
+            if(isEmpty(section.value)) {
+                this.props.alert.error({text: "Entering " + section.title + " is compulsory!"});
+                return;
+            }
+        }
+        
         let name = this.props.pdfsSelected[this.props.pdfPointer].name;
         const methodToSave = this.state.selectedExportType == 'pdf' ? this.generatePDF : this.copyTextToClipboard;
         
@@ -177,9 +218,16 @@ class MarkingSide extends React.Component {
         this.setState({selectedExportType: type});
     }
 
+    handleSectionTitleChange(id, title) {
+        this.setState(prevState => {
+            prevState.assignment.sections.custom.find(section => section.id == id).title = title;
+            return prevState;
+        })
+    }
+
     updateComment(sectionID, commentID, type, f) {
         this.setState(prevState => {
-            let section = prevState.template.sections.custom.find(section => section.id == sectionID);
+            let section = prevState.assignment.sections.custom.find(section => section.id == sectionID);
             let comments = (type == 'positive') ? section.positiveComments : section.negativeComments;
             let comment = comments.find(c => c.id == commentID);
             comment = f(comment);
@@ -188,24 +236,11 @@ class MarkingSide extends React.Component {
     }
 
     generateHtmlOutput() {
-        const isEmpty = htmlString => {
-            const parser = new DOMParser();
-            const { textContent } = parser.parseFromString(htmlString, "text/html").documentElement;
-            return !textContent.trim();
-        }
-        let section;
-        for(let i = 0; i < this.state.template.sections.compulsory.length; i++) {
-            section = this.state.template.sections.compulsory[i];
-            if(isEmpty(section.value)) {
-                this.props.alert.error({text: "Entering " + section.title + " is compulsory!"});
-                return;
-            }
-        }
         let html = "";
         if (this.state.enableMarking) {
-            html += "<h3>Total mark: " + this.state.template.totalMark + "</h3>";
+            html += "<h3>Total mark: " + this.state.assignment.totalMark + "</h3>";
         }
-        const stateSections = this.state.template.sections;
+        const stateSections = this.state.assignment.sections;
         const outSections = stateSections.custom.concat(stateSections.compulsory);
 
         for (let i = 0; i < outSections.length; i++) {
@@ -264,21 +299,21 @@ class MarkingSide extends React.Component {
 
     clearSectionsContent() {
         this.setState(prevState => {
-            const sections = prevState.template.sections;
+            const sections = prevState.assignment.sections;
             sections.compulsory.forEach(s => s.value = "");
             sections.custom.forEach(s => s.value = "");
             sections.custom.forEach(custom => {
                 custom.positiveComments.forEach(c => c.added = false);
                 custom.negativeComments.forEach(c => c.added = false);
             });
-            // prevState = prevState.template.sections.custom.map(s => s.positiveComments.map(c => Object.assign(c, {added: false})));
-            // prevState = prevState.template.sections.custom.map(s => s.negativeComments.map(c => Object.assign(c, {added: false})));
+            // prevState = prevState.assignment.sections.custom.map(s => s.positiveComments.map(c => Object.assign(c, {added: false})));
+            // prevState = prevState.assignment.sections.custom.map(s => s.negativeComments.map(c => Object.assign(c, {added: false})));
             return prevState;
         })
     }
 
     renderSections() {
-        const sections = this.state.template.sections;
+        const sections = this.state.assignment.sections;
         const customSections = sections.custom.map(section => { return (
             <Section
                 handleDeleteClick={this.deleteSection}
@@ -287,6 +322,7 @@ class MarkingSide extends React.Component {
                 handleCommentAdded={this.handleCommentAdded}
                 handleCommentChange={this.handleCommentChange}
                 handleMarkChange={this.handleMarkChange}
+                handleSectionTitleChange={this.handleSectionTitleChange}
                 id={section.id}
                 mark={section.mark}
                 key={section.id}
@@ -294,7 +330,6 @@ class MarkingSide extends React.Component {
                 value={section.value}
                 posComments={section.positiveComments}
                 negComments={section.negativeComments}
-                template_id={this.state.template.id}
                 enableMarking={this.state.enableMarking}
                 marking_scheme={section.marking_scheme}
             />
@@ -350,20 +385,20 @@ class MarkingSide extends React.Component {
 
     render() {
         const loadingNewSection = () => {this.state.submitting &&  <Loading text="Creating new section..." />};
-
+        console.log(this.state.assignment);
         return (
 
             <div className="col-6">
                 <div>
                     {this.state.loading
                     ?
-                        <Loading text="Loading template..." />
+                        <Loading text="Loading assignment..." />
                     :
-                    this.state.template &&
-                        // Template
+                    this.state.assignment &&
+                        // assignment
                         <div className="template shadow-sm">
-                            {/* Template title */}
-                            <h2 className="templateTitle text-center">{this.state.template.name}</h2>
+                            {/* assignment title */}
+                            <h2 className="templateTitle text-center">{this.state.assignment.name}</h2>
                             <hr></hr>
 
                             <div className="templateBody">
@@ -380,7 +415,7 @@ class MarkingSide extends React.Component {
                                 {this.state.enableMarking &&
                                     <div className="totalMark">
                                         <p className="float-left">Total Mark</p>
-                                        <p className="float-right">{this.state.template.totalMark}</p>
+                                        <p className="float-right">{this.state.assignment.totalMark}</p>
                                     </div>  
                                 }
                                                    
@@ -396,7 +431,7 @@ class MarkingSide extends React.Component {
 
                                 {loadingNewSection()}
 
-                                {/* Template sections */}
+                                {/* assignment sections */}
                                 <div className="sections">
                                     {this.renderSections()}
                                 </div>

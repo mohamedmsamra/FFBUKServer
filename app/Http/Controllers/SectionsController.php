@@ -12,16 +12,16 @@ class SectionsController extends Controller
     public function apiStore(Request $request) {
         $this -> validate($request,[
             'title' => 'required',
-            'template_id' => 'required'
+            'assignment_id' => 'required'
         ]);
         
         //Create Section
         $section = new Section;
         $section->title = $request->input('title');
-        $section->template_id = $request->input('template_id');
+        $section->assignment_id = $request->input('assignment_id');
         $section->save();
         
-        return json_encode("done");
+        return json_encode($section);
     }
 
     public function apiShow($id) {

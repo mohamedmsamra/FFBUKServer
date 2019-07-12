@@ -10,7 +10,6 @@ class Section extends React.Component {
         super(props);
         // console.log(this.props);
         this.state = {
-            title: this.props.title,
             openComments: "",
             posComments: this.props.posComments,
             negComments: this.props.negComments,
@@ -125,7 +124,7 @@ class Section extends React.Component {
     }
 
     handleEditTitle(e) {
-        this.setState(prevState => Object.assign(prevState, {editTitle: !prevState.editTitle, editTitleText: prevState.title}));
+        this.setState(prevState => Object.assign(prevState, {editTitle: !prevState.editTitle, editTitleText: this.props.title}));
     }
 
     handleRemoveComment(idToRemove) {
@@ -240,7 +239,8 @@ class Section extends React.Component {
             console.log(data);
         });
 
-        this.setState({editTitle: false, title: this.state.editTitleText});
+        this.setState({editTitle: false});
+        this.props.handleSectionTitleChange(this.props.id, this.state.editTitleText);
     }
 
     renderAddCommentInput() {
@@ -335,7 +335,7 @@ class Section extends React.Component {
                                         <input value={this.props.mark} onChange={(e) => this.props.handleMarkChange(this.props.id, e.target)} type="number" className="form-control markInput"  data-toggle="tooltip" data-placement="top" title="Mark must be between 0 and 100"/>
                                     </div>)
                                 }
-                                <h4  className="float-left" onDoubleClick={this.handleEditTitle}>{this.state.title}</h4>
+                                <h4  className="float-left" onDoubleClick={this.handleEditTitle}>{this.props.title}</h4>
                                 {!this.props.compulsory && (
                                     <div className="float-left">
                                         <button 
