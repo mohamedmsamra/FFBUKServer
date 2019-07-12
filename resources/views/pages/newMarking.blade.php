@@ -46,6 +46,7 @@
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
     <script>
+        const USER_ID = {{auth()->user()->id}};
         const assignment_id = {{ $assignment['id'] }};
     </script>
     <script src="/builds/js/marking_app/index.js"></script>

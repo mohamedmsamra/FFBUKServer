@@ -19,7 +19,8 @@ class Section extends React.Component {
             editTitleText: this.props.title,
             schemeOpen: false,
             hasScheme: false,
-            markingScheme: this.props.marking_scheme
+            markingScheme: this.props.marking_scheme,
+            selectedPermissionCommentType: 'private'
         }
         this.openComments = this.openComments.bind(this);
         this.handleCommentClick = this.handleCommentClick.bind(this);
@@ -34,34 +35,12 @@ class Section extends React.Component {
         this.addComment = this.addComment.bind(this);
         this.handleUploadScheme = this.handleUploadScheme.bind(this);
         this.handleOpenScheme = this.handleOpenScheme.bind(this);
+        this.handlePermissionCommentType = this.handlePermissionCommentType.bind(this);
     }
 
-    // handleUploadScheme(e) {
-    //     var formData = new FormData();
-    //         formData.append("file",e.target.files[0]);
-    //         formData.append('name', 'some value user types');
-    //         formData.append('description', 'some value user types');
-    //         console.log(e.target.files[0]);
-
-    //         fetch("/api/sections/" + this.props.id + "/image-upload", {
-    //             method: 'post',
-    //             body: {image: e.target.files[0]},
-    //             headers: {
-    //                 "Content-Type": "multipart/form-data",
-    //                 "Accept": "application/json, text-plain, */*",
-    //                 "X-Requested-With": "XMLHttpRequest",
-    //                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content')
-    //             }
-    //         }).then(data => data.json())
-    //         .then(data => {
-    //             console.log('fetch finished with data: ' + data)
-    //             // if(JSON.stringify(data))
-    //             // this.setState({markingScheme: img})
-    //         });
-    //     // }
-    
-        
-    // }
+    handlePermissionCommentType(type) {
+        this.setState({selectedPermissionCommentType: type});
+    }
 
     handleUploadScheme(e) {
         // debugger;
@@ -181,15 +160,21 @@ class Section extends React.Component {
     handleAddComment(event) {
         if (this.state.newComment != "") {
             let cat = this.state.openComments;
+
+            let postBody = {
+                text: this.state.newComment,
+                type: cat,
+                section_id: this.props.id,
+            };
+
+            if (this.state.selectedPermissionCommentType === 'private') {
+                postBody.private_to_user = USER_ID;
+            }
             
             // Submit the section to the server
             fetch("/api/comments", {
                 method: 'post',
-                body: JSON.stringify({
-                    text: this.state.newComment,
-                    type: cat,
-                    section_id: this.props.id
-                }),
+                body: JSON.stringify(postBody),
                 headers: {
                     "Content-Type": "application/json",
                     "Accept": "application/json, text-plain, */*",
@@ -199,7 +184,7 @@ class Section extends React.Component {
             })
                 .then(data => data.json())
                 .then(data => {
-                    console.log(data);
+                    data.visibility = this.state.selectedPermissionCommentType;
                     this.addComment(data);
                     this.setState({newComment: ''});
                 });
@@ -236,7 +221,7 @@ class Section extends React.Component {
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content')
             }
         }).then(function(data) {
-            console.log(data);
+            // console.log(data);
         });
 
         this.setState({editTitle: false});
@@ -244,7 +229,28 @@ class Section extends React.Component {
     }
 
     renderAddCommentInput() {
-        return <form onSubmit={this.handleAddComment}>
+        return <form onSubmit={this.handleAddComment} className="addCommentForm text-center">
+            {(this.props.permissionLevel === 1) &&
+                <div className="btn-group btn-group-toggle shadow-sm text-center" data-toggle="buttons">
+                    <label className="btn btn-light active" onClick={() => this.handlePermissionCommentType("private")}>
+                        <input
+                            type="radio"
+                            checked={this.state.selectedPermissionCommentType === "private"}
+                            id="selectPrivate"
+                            onChange={() => {}}
+                        /> Private Comment
+                    </label>
+                    <label className="btn btn-light" onClick={() => this.handlePermissionCommentType("public")}>
+                        <input
+                            type="radio"
+                            checked={this.state.selectedPermissionCommentType === "public"}
+                            id="addPublic"
+                            onChange={() => {}}
+                        /> Public Comment
+                    </label>
+                </div>
+            }
+                    
                     <div className="input-group mb-3">
                         <input
                             value={this.state.newComment}
@@ -273,17 +279,20 @@ class Section extends React.Component {
         const category = this.state.openComments == "positive" ? this.state.posComments : this.state.negComments;
         const displayComments = category.map(comment => {
             return (
-                <li key={'comment' + comment.id} className={"list-group-item list-group-item-action sectionComment " + this.state.openComments}>
+                
+                <li key={'comment' + comment.id} className={(comment.visibility === 'public' ? 'publicComment' :'') + " list-group-item list-group-item-action sectionComment " + this.state.openComments}>
                     <Comment 
                         id={comment.id} 
                         text={comment.text} 
                         type={comment.type}
                         added={comment.added}
+                        visibility={comment.visibility}
                         section_id={comment.section_id} 
                         handleRemove={this.handleRemoveComment} 
                         handleClick={this.handleCommentClick}
                         handleCommentAdded={this.props.handleCommentAdded}
-                        handleCommentChange={this.props.handleCommentChange} />
+                        handleCommentChange={this.props.handleCommentChange} 
+                        permissionLevel={this.props.permissionLevel} />
                 </li>
                 
             )});
@@ -293,7 +302,7 @@ class Section extends React.Component {
             <div className="comments">
                 <div className="buttons">
                     <button type="button" className="btn btn-success" onClick={() => this.openComments("positive")}>Positive</button>
-                    <button type="button" className="btn btn-danger" onClick={() => this.openComments("negative")}>Negative</button>
+                    <button type="button" className="btn btn-warning" onClick={() => this.openComments("negative")}>Constructive</button>
                 </div>
                 
                 {this.state.openComments &&
@@ -338,6 +347,9 @@ class Section extends React.Component {
                                 <h4  className="float-left" onDoubleClick={this.handleEditTitle}>{this.props.title}</h4>
                                 {!this.props.compulsory && (
                                     <div className="float-left">
+
+                                        {this.props.permissionLevel == 1 &&
+                                        <>
                                         <button 
                                             type="button" 
                                             className="invisibleBtn float-left" 
@@ -366,6 +378,8 @@ class Section extends React.Component {
                                                 <i className="fas fa-upload"></i>
                                             </button>
                                         </form>
+                                        </>
+                                        }
                                         
                                         {(this.state.markingScheme != null) &&
                                             <button 
@@ -386,9 +400,11 @@ class Section extends React.Component {
                             
                         }
                     </div>
-                    {!this.props.compulsory && removeBtn}
+                    
+                    {/* Display the button to remove a section only if you have read/write permission and the section is not compulsory */}
+                    {(this.props.permissionLevel === 1 && !this.props.compulsory) && removeBtn}
                 </div>
-                {/* {console.log("scheme open is " + this.state.schemeOpen)} */}
+                
                 {(this.state.markingScheme != null) &&
                     <img src={"/storage/" + this.state.markingScheme} className={this.state.schemeOpen ? "markingSchemeImg" : "markingSchemeImg hideImg"} id={"toggle" + this.props.id}/>
                 } 

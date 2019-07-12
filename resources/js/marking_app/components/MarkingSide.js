@@ -73,8 +73,14 @@ class MarkingSide extends React.Component {
     sectionFromDBFormat(s) {
         s.value = '';
         s.mark = 0;
-        s.negativeComments = s.negativeComments ? s.negativeComments.map(c => {c.added = false; return c}) : [];
-        s.positiveComments = s.positiveComments ? s.positiveComments.map(c => {c.added = false; return c}) : [];
+
+        // Only add public comments and comments private to this user
+        s.negativeComments = s.negativeComments ? s.negativeComments.filter(c => (c.private_to_user === null) || USER_ID === c.private_to_user) : [];
+        s.positiveComments = s.positiveComments ? s.positiveComments.filter(c => (c.private_to_user === null) || USER_ID === c.private_to_user) : [];
+        
+        s.negativeComments = s.negativeComments ? s.negativeComments.map(c => {c.private_to_user === null ? c.visibility = 'public' : c.visibility = 'private'; c.added = false; return c}) : [];
+        s.positiveComments = s.positiveComments ? s.positiveComments.map(c => {c.private_to_user === null ? c.visibility = 'public' : c.visibility = 'private'; c.added = false; return c}) : [];
+  
         return s;
     }
 
@@ -203,7 +209,7 @@ class MarkingSide extends React.Component {
                 return;
             }
         }
-        
+
         let name = this.props.pdfsSelected[this.props.pdfPointer].name;
         const methodToSave = this.state.selectedExportType == 'pdf' ? this.generatePDF : this.copyTextToClipboard;
         
@@ -332,6 +338,7 @@ class MarkingSide extends React.Component {
                 negComments={section.negativeComments}
                 enableMarking={this.state.enableMarking}
                 marking_scheme={section.marking_scheme}
+                permissionLevel={this.state.assignment.permissionLevel}
             />
         )});
 
@@ -385,7 +392,6 @@ class MarkingSide extends React.Component {
 
     render() {
         const loadingNewSection = () => {this.state.submitting &&  <Loading text="Creating new section..." />};
-        console.log(this.state.assignment);
         return (
 
             <div className="col-6">
@@ -416,11 +422,14 @@ class MarkingSide extends React.Component {
                                     <div className="totalMark">
                                         <p className="float-left">Total Mark</p>
                                         <p className="float-right">{this.state.assignment.totalMark}</p>
+                                        <div className="clear"></div>
                                     </div>  
                                 }
                                                    
                             
                                 {/* Add new section button */}
+                                {this.state.assignment.permissionLevel == 1 &&
+                                
                                 <button 
                                     type="button" 
                                     className="mb-3 btn btn-lg btn-block btn-light shadow-sm"
@@ -428,6 +437,7 @@ class MarkingSide extends React.Component {
                                     >
                                     + Add new section
                                 </button>
+                                }
 
                                 {loadingNewSection()}
 

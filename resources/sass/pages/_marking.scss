@@ -49,6 +49,10 @@
     #pdf-name-display p.disp-num {
         color: grey;
     }
+
+    form {
+        min-width: fit-content;
+    }
 }
 
 // Marking Side
@@ -86,6 +90,7 @@
     border: 1px solid #ddd;
     border-radius: 10px;
     margin-bottom:1rem;
+    min-width:fit-content;
 
     .templateTitle {
         padding: 20px 20px 0px;
@@ -159,6 +164,7 @@
 	border-radius: 10px!important;
     margin-bottom: 30px;
     position: relative;
+    min-width: fit-content;
 
     .card-header > .close {
         position: absolute;
@@ -197,6 +203,10 @@
     width: 100%;
     display: flex;
 
+    .btn-warning {
+        color:white;
+    }
+
     button {
         flex: 1 0;
     }
@@ -218,7 +228,7 @@
 
 .clickableComment {
     /* background-color: red; */
-    width: calc(100% - 89px);
+    width: calc(100% - 92px);
     padding: .75rem 1.25rem;
 }
 
@@ -230,9 +240,19 @@
 
 .commentBtns {
     /* background-color: green; */
-    width: 89px;
+    width: 92px;
     /* width: 15%; */
     padding: .25rem 0.3rem;
+
+    .invisibleBtn {
+        padding: 0.4rem!important;
+    }
+}
+
+.lockedCommentBtn {
+    width:fit-content;
+    padding: 0.75rem 1rem;
+
 }
 
 .sectionComment {
@@ -328,4 +348,21 @@
     p {
         margin: 0;
     }
+}
+
+
+// Add Comment input form
+.addCommentForm {
+
+    .btn-group {
+        width: 50%;
+        min-width: fit-content;
+        margin-bottom: 10px;
+    }
+}
+
+
+.publicComment {
+    border: 1px solid #222;
+    border-color: #222;
 }

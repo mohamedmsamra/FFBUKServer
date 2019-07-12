@@ -31,7 +31,6 @@ class Comment extends React.Component {
 
     update() {
         // Submit the section to the server
-        console.log(this.props.id);
         fetch("/api/comments/" + this.props.id + "/edit-text", {
             method: 'post',
             mode: 'cors',
@@ -47,7 +46,6 @@ class Comment extends React.Component {
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content')
             }
         }).then(function(data) {
-            console.log(data);
         });
         this.setState({edit: false});
         this.props.handleCommentChange(this.props.section_id, this.props.id, this.props.type, this.state.editingText);
@@ -93,7 +91,10 @@ class Comment extends React.Component {
                         title="Click to Add">
                         {this.props.text}
                     </div>
+
                     <div className="float-right commentBtns">
+                    {(this.props.visibility === 'private' || this.props.permissionLevel === 1) &&
+                        <>
                         <button 
                             type="button" 
                             className="invisibleBtn"  
@@ -114,6 +115,16 @@ class Comment extends React.Component {
                             title="Delete Comment">
                             <i className="fas fa-times"></i>
                         </button>
+                        </>
+                        }
+                        <button 
+                            type="button" 
+                            className="invisibleBtn float-right text-muted" 
+                            data-placement="top"
+                            title={(this.props.visibility === 'public' ? "Public" : "Private") + " Comment"}>
+                            <i className={this.props.visibility === 'public' ? "fas fa-unlock" : "fas fa-lock"}></i>
+                        </button>
+                        
                     </div>
                 </div>);
     }

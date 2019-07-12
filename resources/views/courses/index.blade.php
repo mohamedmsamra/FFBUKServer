@@ -7,8 +7,6 @@
 
 
         @if(count($invitations) > 0)
-
-        <h1>Invited Courses</h1>
         @foreach ($invitations as $ic)
             @if($ic->pending == 1) 
             <div class="card shadow-sm mb-4 p-3">
@@ -76,8 +74,8 @@
         @endforeach
             <!-- add the links of pages into the end of the page-->
             {{-- {{$courses->links()}} --}}
-        @else 
-            <p> No Invitations Found </p>
+        {{-- @else 
+            <p> No Invitations Found </p> --}}
         @endif
     
         @if(count($courses) > 0)
@@ -113,7 +111,7 @@
             <!-- add the links of pages into the end of the page-->
             {{$courses->links()}}
         @else 
-            <p> No Courses Found </p>
+            <p> You haven't created any courses </p>
         @endif
     </div>
 @endsection

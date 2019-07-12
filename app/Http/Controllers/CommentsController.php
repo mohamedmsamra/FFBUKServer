@@ -13,7 +13,7 @@ class CommentsController extends Controller
         $this -> validate($request,[
             'text' => 'required',
             'type' => 'required',
-            'section_id' => 'required'
+            'section_id' => 'required',
         ]);
         
         //Create Section
@@ -21,6 +21,7 @@ class CommentsController extends Controller
         $comment->text = $request->input('text');
         $comment->type = $request->input('type');
         $comment->section_id = $request->input('section_id');
+        $comment->private_to_user = $request->input('private_to_user');
         $comment->save();
 
         $returnComment = Comment::find($comment['id']);
