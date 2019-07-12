@@ -324,9 +324,21 @@ class CoursesController extends Controller
         $coursePermission -> course_id = $course_id;
         $coursePermission -> user_id = $user_id;
         $coursePermission -> save();
+        unset($coursePermission['user_id']);
+        $coursePermission['user'] = ['id' => $user->id, 'name' => $user->name];
         return json_encode(['success' => true, 'course_permission' => $coursePermission]);
-        
     } 
+
+    public function apiRemoveFromCourse($id) {
+        // if ()
+        $coursePermission = CoursePermission::find($id);
+        if ($coursePermission->course()->first()->user_id == Auth::user()->id) {
+            $coursePermission -> delete();
+            return json_encode(['success' => true]);
+        } else {
+            return json_encode(['success' => false]);
+        }
+    }
 
     public function apiGetPermissions($id) {
         return json_encode($this->permissions($id));

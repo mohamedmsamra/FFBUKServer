@@ -10,6 +10,64 @@ class PermissionsTable extends React.Component {
     constructor(props) {
         super(props);
         this.renderRow = this.renderRow.bind(this);
+        this.handleInputChange = this.handleInputChange.bind(this);
+        this.handleInvite = this.handleInvite.bind(this);
+        this.handleRemovePermission = this.handleRemovePermission.bind(this);
+        this.state = {
+            emailInput: ''
+        }
+    }
+
+    handleInputChange(e) {
+        this.setState({emailInput: e.target.value});
+    } 
+
+    handleInvite() {
+        if (this.state.emailInput.trim() !== '')  {
+            fetch('/api/courses/' + course_id + '/invite', {
+                method: 'post',
+                body: JSON.stringify({
+                    email: this.state.emailInput
+                }),
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json, text-plain, */*",
+                    "X-Requested-With": "XMLHttpRequest",
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content')
+                }
+            })
+                .then(data => data.json())
+                .then(data => {
+                    if (data.success) {
+                        this.props.addTableRows([{key: data.course_permission.id, data: data.course_permission}]);
+                        this.setState({emailInput: ''});
+                        this.props.alert.success({text: data.course_permission.user.name + ' has been invited to this course'});
+                    } else {
+                        this.props.alert.error({text: data.message});
+                    }
+                });
+        }
+    }
+
+    handleRemovePermission(id) {
+        fetch('/api/course-permissions/' + id, {
+            method: 'delete',
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json, text-plain, */*",
+                "X-Requested-With": "XMLHttpRequest",
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content')
+            }
+        })
+            .then(data => data.json())
+            .then(data => {
+                console.log(data);
+                if (data.success) {
+                    this.props.setTableRowData(id, (prevRow) => {prevRow.deleted = true}, () => {
+                        this.props.alert.success({text: this.props.getTableRowData(id).data.user.name + ' has been removed from the course.'});
+                    });
+                }
+            });
     }
 
     handlePermissionChange(key, {value}) {
@@ -82,7 +140,17 @@ class PermissionsTable extends React.Component {
                         <p>{row.data.level == 1 ? 'Read/Write' : 'Read only'}</p>
                     }
                 </td>
-                {HAS_COURSE_EDIT_PERMISSION && <td><Button variant="danger" size="sm" disabled={row.isLoading}>Remove</Button></td>}
+                {HAS_COURSE_EDIT_PERMISSION && 
+                    <td>
+                        <Button 
+                            variant="danger" 
+                            size="sm" 
+                            disabled={row.isLoading}
+                            onClick={() => {this.handleRemovePermission(row.data.id)}}>
+                            Remove
+                        </Button>
+                    </td>
+                }
             </>
         );
     }
@@ -102,9 +170,15 @@ class PermissionsTable extends React.Component {
                         <FormControl
                             placeholder="Enter email address"
                             aria-label="Enter email address"
-                            aria-describedby="basic-addon2" />
+                            aria-describedby="basic-addon2" 
+                            value={this.state.emailInput}
+                            onChange={this.handleInputChange}/>
                         <InputGroup.Append>
-                            <Button variant="outline-secondary">Invite to course</Button>
+                            <Button 
+                                variant="outline-secondary"
+                                onClick={this.handleInvite}>
+                                Invite to course
+                            </Button>
                         </InputGroup.Append>
                     </InputGroup>
                 }
