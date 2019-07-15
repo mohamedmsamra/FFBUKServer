@@ -243,6 +243,7 @@
     width: 92px;
     /* width: 15%; */
     padding: .25rem 0.3rem;
+    text-align: right;
 
     .invisibleBtn {
         padding: 0.4rem!important;
@@ -268,13 +269,21 @@
 }
 
 .commentsList .sectionComment.positive {
-    background-color: #f4fff7;
+    background-color: #dff1e4;
     border-color: #aac1af;
+
+    &.publicComment {
+        background-color: #f4fff7;
+    }
 }
 
 .commentsList .sectionComment.negative {
-    background-color: #fff8f9;
-    border-color: #dcafb4;
+    background-color: #fff5c8;
+    border-color: #d4c8a5;
+
+    &.publicComment {
+        background-color: #fffbee;
+    }
 }
 
 // Marking Scheme Image
@@ -362,7 +371,3 @@
 }
 
 
-.publicComment {
-    border: 1px solid #222;
-    border-color: #222;
-}

@@ -93,6 +93,13 @@ class Comment extends React.Component {
                     </div>
 
                     <div className="float-right commentBtns">
+                    <button 
+                            type="button" 
+                            className="invisibleBtn text-muted" 
+                            data-placement="top"
+                            title={(this.props.visibility === 'public' ? "Public" : "Private") + " Comment"}>
+                           {this.props.visibility === 'public' && <i className={"fas fa-lock"}></i>}
+                    </button>
                     {(this.props.visibility === 'private' || this.props.permissionLevel === 1) &&
                         <>
                         <button 
@@ -117,14 +124,6 @@ class Comment extends React.Component {
                         </button>
                         </>
                         }
-                        <button 
-                            type="button" 
-                            className="invisibleBtn float-right text-muted" 
-                            data-placement="top"
-                            title={(this.props.visibility === 'public' ? "Public" : "Private") + " Comment"}>
-                            <i className={this.props.visibility === 'public' ? "fas fa-unlock" : "fas fa-lock"}></i>
-                        </button>
-                        
                     </div>
                 </div>);
     }

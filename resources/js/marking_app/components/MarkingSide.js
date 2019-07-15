@@ -75,8 +75,8 @@ class MarkingSide extends React.Component {
         s.mark = 0;
 
         // Only add public comments and comments private to this user
-        s.negativeComments = s.negativeComments ? s.negativeComments.filter(c => (c.private_to_user === null) || USER_ID === c.private_to_user) : [];
-        s.positiveComments = s.positiveComments ? s.positiveComments.filter(c => (c.private_to_user === null) || USER_ID === c.private_to_user) : [];
+        // s.negativeComments = s.negativeComments ? s.negativeComments.filter(c => (c.private_to_user === null) || USER_ID === c.private_to_user) : [];
+        // s.positiveComments = s.positiveComments ? s.positiveComments.filter(c => (c.private_to_user === null) || USER_ID === c.private_to_user) : [];
         
         s.negativeComments = s.negativeComments ? s.negativeComments.map(c => {c.private_to_user === null ? c.visibility = 'public' : c.visibility = 'private'; c.added = false; return c}) : [];
         s.positiveComments = s.positiveComments ? s.positiveComments.map(c => {c.private_to_user === null ? c.visibility = 'public' : c.visibility = 'private'; c.added = false; return c}) : [];

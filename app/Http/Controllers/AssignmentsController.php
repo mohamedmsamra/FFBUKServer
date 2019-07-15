@@ -51,10 +51,13 @@ class AssignmentsController extends Controller
         // Add sections
         $sections = Section::where('assignment_id', $assignment['id'])->get();
         foreach ($sections as $section) {
-            $pos_comments = Comment::where('section_id', $section['id'])->where('type', 'positive')->get();
-            $neg_comments = Comment::where('section_id', $section['id'])->where('type', 'negative')->get();
-            $section['positiveComments'] = $pos_comments;
-            $section['negativeComments'] = $neg_comments;
+            $publicComments = Comment::where('section_id', $section['id'])->where('private_to_user', null);
+            $privateComments = Comment::where('section_id', $section['id'])->where('private_to_user', Auth::user()->id);
+
+            $userComments = $publicComments->union($privateComments)->get();
+
+            $section['positiveComments'] = array_values(array_filter($userComments->toArray(), function ($c) {return $c['type'] == 'positive'; }));
+            $section['negativeComments'] = array_values(array_filter($userComments->toArray(), function ($c) {return $c['type'] == 'negative'; }));
         }
         
         $assignment['sections'] = $sections;
@@ -64,7 +67,6 @@ class AssignmentsController extends Controller
     }
     
     public function apiStore(Request $request) {
-        \Log::info($request);
         $this -> validate($request,[
             'title' => 'required',
             'course_id' => 'required'
