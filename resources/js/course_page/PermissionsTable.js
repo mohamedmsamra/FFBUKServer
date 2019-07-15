@@ -20,7 +20,7 @@ class PermissionsTable extends React.Component {
 
     handleInputChange(e) {
         this.setState({emailInput: e.target.value});
-    } 
+    }
 
     handleInvite() {
         if (this.state.emailInput.trim() !== '')  {
@@ -172,7 +172,8 @@ class PermissionsTable extends React.Component {
                             aria-label="Enter email address"
                             aria-describedby="basic-addon2" 
                             value={this.state.emailInput}
-                            onChange={this.handleInputChange}/>
+                            onChange={this.handleInputChange}
+                            onKeyPress={(e) => {e.charCode==13 && this.handleInvite()}}/>
                         <InputGroup.Append>
                             <Button 
                                 variant="outline-secondary"

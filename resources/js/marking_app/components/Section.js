@@ -277,7 +277,15 @@ class Section extends React.Component {
 
     render() {
         const category = this.state.openComments == "positive" ? this.state.posComments : this.state.negComments;
-        const displayComments = category.map(comment => {
+        console.log(category);
+        const displayComments = category
+        .sort((a, b) => {
+            if (a.private_to_user == null && b.private_to_user != null) return -1;
+            if (a.private_to_user != null && b.private_to_user == null) return 1;
+            console.log(a.text, a.text.length, b.text, b.text.length);
+            return a.id - b.id;
+        })
+        .map(comment => {
             return (
                 
                 <li key={'comment' + comment.id} className={(comment.visibility === 'public' ? 'publicComment' :'') + " list-group-item list-group-item-action sectionComment " + this.state.openComments}>
@@ -295,7 +303,8 @@ class Section extends React.Component {
                         permissionLevel={this.props.permissionLevel} />
                 </li>
                 
-            )});
+            )
+        });
 
         // The comments part of the section
         let commentsDiv = (
