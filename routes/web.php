@@ -81,6 +81,7 @@ Route::group( ['middleware' => 'auth' ], function()
     Route::get('/api/courses/{course}/permissions', 'CoursesController@apiGetPermissions');
     Route::post('/api/courses/{course_id}/permissions/{user_id}', 'CoursesController@apiUpdatePermission');
     Route::delete('/api/course-permissions/{id}', 'CoursesController@apiRemoveFromCourse');
+    Route::delete('/api/course-permissions/{id}/reject-invite', 'CoursesController@apiRejectCourseInvite');
     
     // Sections
     Route::post('/api/sections', 'SectionsController@apiStore');

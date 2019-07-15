@@ -3,7 +3,7 @@
 @section('content')
     <div id="coursesPage">
         <h1>Courses</h1>
-        <a href="/courses/create" class="btn btn-light btn-block btn-lg shadow-sm mb-4"> Add New Course </a>
+        <a href="/courses/create" class="btn btn-light btn-block btn-lg shadow-sm mb-4"> Create A New Course </a>
 
 
         @if(count($invitations) > 0)
@@ -27,7 +27,11 @@
                     </div>
                         
                     <div class="float-right p-3 inviteBtns">
-                        <button type="button" class="btn btn-danger mr-1">Reject</button>
+                        <form method="POST" action="{{'/api/course-permissions/'.$ic->id.'/reject-invite'}}" class="float-left mr-1 rejectInvite">
+                            @method('DELETE')
+                            @csrf
+                            <button type="submit" class="btn btn-danger">Reject</button>
+                        </form>
                         {{-- {!!Form::open(['action' => ['Api\CoursesController@joinCourse', $ic->id], 'method' => 'POST','class' => 'float-right'])!!}
                             {{Form::hidden('_method','PUT')}}
                             {{Form::submit('Join',['class' => 'btn btn-primary'])}}
@@ -114,4 +118,10 @@
             <p> You haven't created any courses </p>
         @endif
     </div>
+
+    <script>
+        $(".rejectInvite").on("submit", function(){
+            return confirm("Are you sure you want to reject this course invitation?");
+        });
+    </script>
 @endsection
