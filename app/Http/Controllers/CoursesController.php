@@ -60,13 +60,15 @@ class CoursesController extends Controller
      */
     public function show(Request $request, $id)
     {
+        if (!$this->canView($id)) abort(401);
+
         //it gets the id from the URL
         //http://ffbuk.test/posts/1
         //return this specific post which its id is in the link
         $course = Course::find($id);
         $assignments = Assignment::where('course_id',$course->id)->get();
         $permissions = $this->permissions($id);
-            
+
         return view('courses.show') -> with('course', $course)
                                     -> with('assignments', $assignments)
                                     -> with('permissions', $permissions);
@@ -384,5 +386,22 @@ class CoursesController extends Controller
         }
 
         return $return;
+    }
+
+    private static function canView($id) {
+        $isOwner = Course::where('id', $id)->where('user_id', Auth::user()->id);
+        $hasReadRights = CoursePermission::where('course_id', $id)
+                                         ->where('user_id', Auth::user()->id)
+                                         ->where('pending', false);
+        return ($isOwner->first() || $hasReadRights->first());
+    }
+
+    private static function canEdit($id) {
+        $isOwner = Course::where('id', $id)->where('user_id', Auth::user()->id);
+        $hasEditRights = CoursePermission::where('course_id', $id)
+                                         ->where('user_id', Auth::user()->id)
+                                         ->where('level', 1)
+                                         ->where('pending', false);
+        return ($isOwner->first() || $hasEditRights->first());
     }
 }
