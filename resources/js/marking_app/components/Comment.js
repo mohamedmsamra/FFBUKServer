@@ -93,36 +93,36 @@ class Comment extends React.Component {
                     </div>
 
                     <div className="float-right commentBtns">
-                    <button 
+                        <button 
                             type="button" 
                             className="invisibleBtn text-muted" 
                             data-placement="top"
                             title={(this.props.visibility === 'public' ? "Public" : "Private") + " Comment"}>
-                           {this.props.visibility === 'public' && <i className={"fas fa-lock"}></i>}
-                    </button>
-                    {(this.props.visibility === 'private' || this.props.permissionLevel === 1) &&
-                        <>
-                        <button 
-                            type="button" 
-                            className="invisibleBtn"  
-                            onClick={this.handleEditChange}
-                            data-toggle="tooltip" 
-                            data-placement="top" 
-                            title="Edit Comment">
-                            <i className="fas fa-edit"></i>
+                            {this.props.visibility === 'public' && <i className={"fas " + (this.props.permissionLevel == 1 ? 'fa-lock-open' : 'fa-lock')}></i>}
                         </button>
-                        <button 
-                            type="button" 
-                            className="invisibleBtn" 
-                            onClick={() => this.props.alert.show({
-                                text: "Are you sure you want to remove this comment?",
-                                onConfirm: () => this.props.handleRemove(this.props.id)
-                            })}
-                            data-placement="top" 
-                            title="Delete Comment">
-                            <i className="fas fa-times"></i>
-                        </button>
-                        </>
+                        {(this.props.visibility === 'private' || this.props.permissionLevel === 1) &&
+                            <>
+                                <button 
+                                    type="button" 
+                                    className="invisibleBtn"  
+                                    onClick={this.handleEditChange}
+                                    data-toggle="tooltip" 
+                                    data-placement="top" 
+                                    title="Edit Comment">
+                                    <i className="fas fa-edit"></i>
+                                </button>
+                                <button 
+                                    type="button" 
+                                    className="invisibleBtn" 
+                                    onClick={() => this.props.alert.show({
+                                        text: "Are you sure you want to remove this comment?",
+                                        onConfirm: () => this.props.handleRemove(this.props.id)
+                                    })}
+                                    data-placement="top" 
+                                    title="Delete Comment">
+                                    <i className="fas fa-times"></i>
+                                </button>
+                            </>
                         }
                     </div>
                 </div>);
