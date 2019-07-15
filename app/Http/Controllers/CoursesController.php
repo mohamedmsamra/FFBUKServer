@@ -98,16 +98,20 @@ class CoursesController extends Controller
 
         $this -> validate($request,[
             'title' => 'required',
-            'body' => 'required',
+            // 'body' => 'nullable',
             //adding some validation to the image to upload, it has to be an image, optional to include or not, not required
             //and finally has a max size of 1999mb
-            'cover_image' => 'image | mimes:jpeg,png,jpg,gif,svg | nullable | max:1999'
+            'cover_image' => 'image | mimes:jpeg,png,jpg,gif,svg | nullable | max:2999'
         ]);
 
         //Create Post
         $course = new Course;
         $course ->title = $request->input('title');
-        $course ->body = $request->input('body');
+        if ($request->input('body') == null) {
+            $course ->body = "";
+        } else {
+            $course ->body = $request->input('body');
+        }
         //the user_id is not coming from the form, we read it from auth(), which will read the id of current signed_in user
         $course ->user_id = auth()->user()->id;
         $course ->cover_image = "default";

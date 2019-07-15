@@ -28,3 +28,23 @@
 .inviteBtns .btn {
     width:100px;
 }
+
+
+
+#react-root .card .card-body p {
+    margin-bottom: 0.1rem;
+    margin-top: 0.1rem;
+}
+
+#react-create-course {
+
+    .ql-toolbar.ql-snow {
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+    }
+
+    .ql-container.ql-snow {
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+    }
+}

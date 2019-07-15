@@ -2,28 +2,32 @@
     errors created  when validation fails
     and also check for sessions values, session success, session error -->
 
-{{-- @if(count($errors) > 0)
+@if(count($errors) > 0)
     @foreach($errors->all() as $error)
-        <div class="alert alert-danger">
-            {{$error}}
-        </div>
+        <div class="alert alert-danger alert-block">
+            <button type="button" class="close" data-dismiss="alert">×</button>	
+            <strong>{{$error}}</strong>
+        </div> 
     @endforeach
 @endif    
 
 @if(session('success'))
-    <div class="alert alert-success">
-        {{session('success')}}
-    </div>    
+    <div class="alert alert-info alert-block">
+        <button type="button" class="close" data-dismiss="alert">×</button>	
+        <strong>{{session('success')}}</strong>
+    </div>  
 @endif
 
+
 @if(session('error'))
-    <div class="alert alert-danger">
-        {{session('error')}}
-    </div>    
-@endif --}}
+    <div class="alert alert-danger alert-block">
+        <button type="button" class="close" data-dismiss="alert">×</button>	
+        <strong>{{session('error')}}</strong>
+    </div> 
+@endif
 
 
-@if ($message = Session::get('success'))
+{{-- @if ($message = Session::get('success'))
 <div class="alert alert-success alert-block">
 	<button type="button" class="close" data-dismiss="alert">×</button>	
         <strong>{{ $message }}</strong>
@@ -52,12 +56,12 @@
 	<button type="button" class="close" data-dismiss="alert">×</button>	
 	<strong>{{ $message }}</strong>
 </div>
-@endif
+@endif --}}
 
 
-@if ($errors->any())
+{{-- @if ($errors->any())
 <div class="alert alert-danger">
 	<button type="button" class="close" data-dismiss="alert">×</button>	
 	Please check the form below for errors
 </div>
-@endif
+@endif --}}

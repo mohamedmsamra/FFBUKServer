@@ -1,9 +1,9 @@
 .course-page {
     .course-img {
-        width: auto;
-        height: auto;
-        max-width: 50vw;
-        max-height: 50vh;
+        width: 100%;
+        height: 25vh;
+        object-fit: cover;
+        object-position: center;
     }
 
     .invisibleBtn {
