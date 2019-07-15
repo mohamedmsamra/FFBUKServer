@@ -340,6 +340,17 @@ class CoursesController extends Controller
         }
     }
 
+    public function apiRejectCourseInvite($id) {
+        $coursePermission = CoursePermission::find($id);
+        if ($coursePermission->pending == true && $coursePermission->user_id == Auth::user()->id) {
+            $name = Course::find($coursePermission->course_id)->title;
+            $coursePermission -> delete();
+            return back()->with('warning', 'Rejected invitation to '.$name);
+        } else {
+            return back()->with('error', 'Failed to reject course invitation');
+        }
+    }
+
     public function apiGetPermissions($id) {
         return json_encode($this->permissions($id));
     }
