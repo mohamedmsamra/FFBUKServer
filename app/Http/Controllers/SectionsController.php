@@ -14,6 +14,8 @@ class SectionsController extends Controller
             'title' => 'required',
             'assignment_id' => 'required'
         ]);
+
+        if (!AssignmentsController::canEdit($request->assignment_id)) abort(401);
         
         //Create Section
         $section = new Section;
@@ -35,6 +37,8 @@ class SectionsController extends Controller
     }
 
     public function apiDestroy($id) {
+        if (!$this->canEdit($id)) abort(401);
+
         $section = Section::find($id);
         $title = $section->title;
         $section -> delete();
@@ -43,6 +47,8 @@ class SectionsController extends Controller
 
     public function apiEditTitle(Request $request, $id)
     {
+        if (!$this->canEdit($id)) abort(401);
+
         $this -> validate($request,[
             'title' => 'required'
         ]);
@@ -59,6 +65,8 @@ class SectionsController extends Controller
 
     public function apiUploadImage(Request $request, $id)
     {
+        if (!$this->canEdit($id)) abort(401);
+        
         $this -> validate($request,[
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg'
         ]);
@@ -96,5 +104,17 @@ class SectionsController extends Controller
         $section -> save();
 
         return json_encode($toDB);
+    }
+
+    public static function canEdit($id) {
+        $assignment = Section::find($id)->assignment()->first();
+
+        return $assignment && AssignmentsController::canEdit($assignment->id);
+    }
+
+    public static function canView($id) {
+        $assignment = Section::find($id)->assignment()->first();
+
+        return $assignment && AssignmentsController::canView($assignment->id);
     }
 }

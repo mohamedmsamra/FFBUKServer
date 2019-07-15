@@ -37,6 +37,7 @@ class AssignmentsController extends Controller
     // }
 
     public function apiShow($id) {
+        if (!$this->canView($id)) abort(401);
         $assignment = Assignment::find($id);
         
         $course = $assignment->course()->first();
@@ -71,6 +72,7 @@ class AssignmentsController extends Controller
             'title' => 'required',
             'course_id' => 'required'
         ]);
+        if (!CoursesController::canEdit($request->course_id)) abort(401);
         //Create Assignment
         $assignment = new Assignment;
         $assignment->name = $request->input('title');
@@ -81,6 +83,7 @@ class AssignmentsController extends Controller
     }
 
     public function apiEditName(Request $request, $id) {
+        if (!$this->canManage($id)) abort(401);
         $this -> validate($request,[
             'name' => 'required'
         ]);
@@ -91,8 +94,40 @@ class AssignmentsController extends Controller
     }
 
     public function apiDestroy($id) {
+        if (!$this->canManage($id)) abort(401);
         $assignment = Assignment::find($id);
         $assignment -> delete();
         return json_encode(['ok' => true]);
+    }
+
+    // Owner of the course
+    // e.g. to create and remove assigments
+    public static function canManage($assignment_id) {
+        $course = Assignment::find($assignment_id)->course()->first();
+        return $course->user_id == Auth::user()->id;
+    }
+
+    // Read/write permissions in course
+    // e.g. manage the assign by adding/removing sections
+    public static function canEdit($assignment_id) {
+        $course = Assignment::find($assignment_id)->course()->first();
+
+        $hasEditRights = CoursePermission::where('course_id', $course->id)
+                                         ->where('user_id', Auth::user()->id)
+                                         ->where('level', 1)
+                                         ->where('pending', false);
+
+        return $hasEditRights->first() || AssignmentsController::canManage($assignment_id);
+    }
+
+    // Read permission only
+    public static function canView($assignment_id) {
+        $course = Assignment::find($assignment_id)->course()->first();
+
+        $hasReadRights = CoursePermission::where('course_id', $course->id)
+                                         ->where('user_id', Auth::user()->id)
+                                         ->where('pending', false);
+
+        return $hasReadRights->first() || AssignmentsController::canManage($assignment_id);
     }
 }

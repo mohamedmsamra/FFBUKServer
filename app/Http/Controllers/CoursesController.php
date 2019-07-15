@@ -60,13 +60,15 @@ class CoursesController extends Controller
      */
     public function show(Request $request, $id)
     {
+        if (!$this->canView($id)) abort(401);
+
         //it gets the id from the URL
         //http://ffbuk.test/posts/1
         //return this specific post which its id is in the link
         $course = Course::find($id);
         $assignments = Assignment::where('course_id',$course->id)->get();
         $permissions = $this->permissions($id);
-            
+
         return view('courses.show') -> with('course', $course)
                                     -> with('assignments', $assignments)
                                     -> with('permissions', $permissions);
@@ -132,7 +134,7 @@ class CoursesController extends Controller
      */
     public function edit($id)
     {
-
+        if (!$this->canEdit($id)) abort(401);
         $course=  Course::find($id);
         //check if the correct user wants to edit his/her own post
         if(auth()->user()->id !==$course->user_id){
@@ -153,6 +155,7 @@ class CoursesController extends Controller
      */
     public function update(Request $request, $id)
     {
+        if (!$this->canEdit($id)) abort(401);
         //to update we still need the validation
         $this -> validate($request,[
             'title' => 'required',
@@ -198,6 +201,7 @@ class CoursesController extends Controller
      */
     public function destroy(Request $request, $id)
     {
+        if (!$this->canEdit($id)) abort(401);
         //needed to delete the post
         $course = Course::find($id);
         if(auth()->user()->id !==$course->user_id){
@@ -225,6 +229,7 @@ class CoursesController extends Controller
 
     public function apiImageUpload(Request $request, $id) 
     {
+        if (!$this->canEdit($id)) abort(401);
         $this -> validate($request,[
             'cover_image' => 'image | mimes:jpeg,png,jpg,gif,svg | nullable | max:1999'
         ]);
@@ -270,12 +275,14 @@ class CoursesController extends Controller
     }
 
     public function apiShowImage($id) {
+        if (!$this->canView($id)) abort(401);
         $course = Course::find($id);
         return json_encode($course->cover_image);
     }
 
     public function apiShow(Request $request, $id)
     {
+        if (!$this->canView($id)) abort(401);
         $course = Course::find($id);
 
         return json_encode([
@@ -300,6 +307,7 @@ class CoursesController extends Controller
 
     // Add user to course
     public function apiInviteToCourse(Request $request, $course_id) {
+        if (!$this->canEdit($course_id)) abort(401);
         $this -> validate($request,[
             'email' => 'required'
         ]);
@@ -334,6 +342,7 @@ class CoursesController extends Controller
     } 
 
     public function apiRemoveFromCourse($id) {
+        if (!$this->canEdit($id)) abort(401);
         // if ()
         $coursePermission = CoursePermission::find($id);
         if ($coursePermission->course()->first()->user_id == Auth::user()->id) {
@@ -356,10 +365,12 @@ class CoursesController extends Controller
     }
 
     public function apiGetPermissions($id) {
+        if (!$this->canView($id)) abort(401);
         return json_encode($this->permissions($id));
     }
 
     public function apiUpdatePermission(Request $request, $course_id, $user_id) {
+        if (!$this->canEdit($course_id)) abort(401);
         $this -> validate($request,[
             'level' => 'required'
         ]);
@@ -399,5 +410,22 @@ class CoursesController extends Controller
         }
 
         return $return;
+    }
+    
+    public static function canEdit($id) {
+        $isOwner = Course::where('id', $id)->where('user_id', Auth::user()->id);
+        // $hasEditRights = CoursePermission::where('course_id', $id)
+        //                                  ->where('user_id', Auth::user()->id)
+        //                                  ->where('level', 1)
+        //                                  ->where('pending', false);
+        return $isOwner->first();
+    }
+
+    private static function canView($id) {
+        $isOwner = Course::where('id', $id)->where('user_id', Auth::user()->id);
+        $hasReadRights = CoursePermission::where('course_id', $id)
+                                         ->where('user_id', Auth::user()->id)
+                                         ->where('pending', false);
+        return ($isOwner->first() || $hasReadRights->first());
     }
 }

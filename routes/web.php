@@ -48,7 +48,6 @@ Route::get('/about', function () {
 Route::get('/', 'PagesController@index');
 Route::get('/home', 'PagesController@home');
 Route::get('/about', 'PagesController@about');
-Route::get('/marking/{assignment_id}', 'PagesController@marking');
 Route::get('/faqs', 'PagesController@faqs');
 Route::get('/survey1', 'PagesController@survey1');
 Route::get('/survey2', 'PagesController@survey2');
@@ -64,6 +63,7 @@ Route::group( ['middleware' => 'auth' ], function()
     Route::post('/api/assignments', 'AssignmentsController@apiStore');
     Route::post('/api/assignments/{id}/edit-name', 'AssignmentsController@apiEditName');
     Route::delete('/api/assignments/{id}', 'AssignmentsController@apiDestroy');
+    Route::get('/marking/{assignment_id}', 'PagesController@marking');
 
     // Comments
     Route::post('/api/comments', 'CommentsController@apiStore');
