@@ -3,6 +3,7 @@ import Button from 'react-bootstrap/Button';
 import FocusingBox from './FocusingBox';
 import withTable from '../global_components/withTable';
 import { timeout } from 'q';
+import { withAlert } from 'react-alert';
 
 class AssignmentsTable extends React.Component {
     constructor(props) {
@@ -100,30 +101,39 @@ class AssignmentsTable extends React.Component {
         this.props.setTableRowData(id, prevRow => {
             prevRow.isLoading = true;
         });
-
-        fetch("/api/assignments/" + id, {
-            method: 'delete',
-            body: JSON.stringify({}),
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json, text-plain, */*",
-                "X-Requested-With": "XMLHttpRequest",
-                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content')
-            }
-        })
-        .then(data => {if (!data.ok) throw new Error('Error'); return data;})
-        .then(data => data.json())
-        .then(data => {
-            this.props.setTableRowData(id, prevRow => {
-                prevRow.deleted = true;
+            this.props.alert.show({
+                text: "Are you sure you want to delete this assignment?",
+                onConfirm: () => {
+                    fetch("/api/assignments/" + id, {
+                        method: 'delete',
+                        body: JSON.stringify({}),
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Accept": "application/json, text-plain, */*",
+                            "X-Requested-With": "XMLHttpRequest",
+                            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content')
+                        }
+                    })
+                    .then(data => {if (!data.ok) throw new Error('Error'); return data;})
+                    .then(data => data.json())
+                    .then(data => {
+                        this.props.setTableRowData(id, prevRow => {
+                            prevRow.deleted = true;
+                        });
+                    })
+                    .catch(error => {
+                        console.log(error);
+                        this.props.setTableRowData(id, prevRow => {
+                            prevRow.isLoading = false;
+                        });
+                    });
+                },
+                onCancel: () => {
+                    this.props.setTableRowData(id, prevRow => {
+                        prevRow.isLoading = false;
+                    });
+                }
             });
-        })
-        .catch(error => {
-            console.log(error);
-            this.props.setTableRowData(id, prevRow => {
-                prevRow.isLoading = false;
-            });
-        });
     }
 
     handleCreateClick() {
@@ -210,7 +220,10 @@ class AssignmentsTable extends React.Component {
                     {HAS_COURSE_EDIT_PERMISSION && 
                         <>
                             <button type="button" className="btn btn-info btn-sm" disabled={isLoading} onClick={() => this.handleEditClick(data.id)}>Edit</button>
-                            <button type="button" className="btn btn-danger btn-sm" disabled={isLoading} onClick={() => this.handleDeleteClick(data.id)}>Delete</button>
+                            <button type="button" className="btn btn-danger btn-sm" disabled={isLoading} 
+                                onClick={() => {this.handleDeleteClick(data.id)}}>
+                                Delete
+                            </button>
                         </>
                     }
                 </>
@@ -244,6 +257,7 @@ class AssignmentsTable extends React.Component {
     }
 
     componentDidMount() {
+        // this.props.alert.show({text: 'test'})
         this.props.addTableRows(assignments.map(a => {return {key: a.id, data: this.mapDBAssignmentToLocal(a)}}));
     }
 
@@ -259,4 +273,5 @@ class AssignmentsTable extends React.Component {
     }
 }
 
-export default withTable(AssignmentsTable);
+export default withTable(withAlert()(AssignmentsTable));
+// export default withTable(AssignmentsTable);

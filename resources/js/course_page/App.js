@@ -131,8 +131,14 @@ class App extends React.Component {
                 
                 <hr/>
 
-                <h2>List of Assignments</h2>
-                <AssignmentsTable />
+                {/* <div className="card shadow-sm">
+                    <div className="card-header"> */}
+                        <h2>List of Assignments</h2>
+                        <AssignmentsTable />
+                    {/* </div> */}
+                    
+                {/* </div> */}
+                
                 <hr/>
                 <h2>Sharing permissions</h2>
                 <small>People you invite to the course can see all existing assignments</small>
