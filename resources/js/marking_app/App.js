@@ -15,6 +15,8 @@ class App extends React.Component {
         }
         this.handlePdfsSelected = this.handlePdfsSelected.bind(this);
         this.handleNextPdf = this.handleNextPdf.bind(this);
+        this.finishEarly = this.finishEarly.bind(this);
+        this.setPdfMark = this.setPdfMark.bind(this);
         this.isLastPdf = this.isLastPdf.bind(this);
     }
 
@@ -49,14 +51,13 @@ class App extends React.Component {
     handlePdfsSelected(files) {
         const pdfsSelected = [];
         for (let i = 0; i < files.length; i++) {
-            pdfsSelected[i] = {name: files[i].name, url: URL.createObjectURL(files[i])};
+            pdfsSelected[i] = {name: files[i].name, url: URL.createObjectURL(files[i]), mark: -1};
         }
         this.setState({pdfsSelected: pdfsSelected, pdfPointer: 0});
     }
 
     handleNextPdf() {
         this.setState(prevState => {
-            console.log(this.isLastPdf());
             if (this.isLastPdf()) {
                 prevState.pdfPointer = -1;
                 prevState.pdfsSelected = [];
@@ -64,6 +65,22 @@ class App extends React.Component {
                 prevState.pdfPointer++;
             }
             return prevState;
+        });
+    }
+
+    setPdfMark(mark, next) {
+        this.setState(prevState => {
+            prevState.pdfsSelected[prevState.pdfPointer].mark = mark;
+        }, next);
+    }
+
+    finishEarly() {
+        return new Promise(next => {
+            // Discard the rest of the PDFs
+            this.setState(prevState => {
+                prevState.pdfsSelected.length = prevState.pdfPointer + 1;
+                return prevState;
+            }, next);
         });
     }
 
@@ -83,9 +100,12 @@ class App extends React.Component {
                 <MarkingSide
                     pdfsSelected={this.state.pdfsSelected}
                     pdfPointer={this.state.pdfPointer}
+                    finishEarly={this.finishEarly}
+                    setPdfMark={this.setPdfMark}
                     handleNextPdf={this.handleNextPdf}
                     isLastPdf={this.isLastPdf} 
-                    loading={this.state.loading}/>
+                    loading={this.state.loading}
+                    formatDate={this.formatDate} />
             </div>
         )
     }

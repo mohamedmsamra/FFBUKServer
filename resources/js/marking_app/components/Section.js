@@ -413,7 +413,9 @@ class Section extends React.Component {
                 </div>
                 
                 {(this.state.markingScheme != null) &&
-                    <img src={"/storage/" + this.state.markingScheme} className={this.state.schemeOpen ? "markingSchemeImg" : "markingSchemeImg hideImg"} id={"toggle" + this.props.id}/>
+                    <div className={this.state.schemeOpen ? "markingSchemeImg" : "markingSchemeImg hidden"}>
+                        <img src={"/storage/" + this.state.markingScheme}/>
+                    </div>
                 } 
                 <div className="card-body">
                     <div className="form-group">
