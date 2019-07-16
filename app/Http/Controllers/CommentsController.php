@@ -53,22 +53,25 @@ class CommentsController extends Controller
 
     public function apiEditText(Request $request, $id)
     {
-        if (!$this->canView($id)) abort(401);
+        if (!$this->canEdit($id)) abort(401);
+
         $this -> validate($request,[
             'text' => 'required'
         ]);
 
         //update this Post, find it by id
         $comment = Comment::find($id);
-        $comment -> text = $request->input('text');
 
-        $comment -> save();
+        $comment->text = $request->input('text');
+        $comment->save();
 
         //direct the page back to the index
         //set the success message to Post Created
         return json_encode("Comment Updated!");
     }
 
+    // User has permission to edit this comment
+    // ie either private to this user, or public and user has edit rights
     public static function canEdit($id) {
         $isCommentPrivateToUser = Comment::where('id', $id)->whereNotNull('private_to_user')->first();
 
