@@ -22,6 +22,7 @@ class MarkingSide extends React.Component {
         this.handleSectionTitleChange = this.handleSectionTitleChange.bind(this);
         this.updateComment = this.updateComment.bind(this);
         this.handleSaveAndLoad = this.handleSaveAndLoad.bind(this);
+        this.handleFinishEarly = this.handleFinishEarly.bind(this);
         this.generateHtmlOutput = this.generateHtmlOutput.bind(this);
         this.copyTextToClipboard = this.copyTextToClipboard.bind(this);
         this.generatePDF = this.generatePDF.bind(this);
@@ -40,7 +41,6 @@ class MarkingSide extends React.Component {
 
     componentDidMount() {
         this.fetchAssignment();
-        
     }
 
     fetchAssignment() {
@@ -214,9 +214,24 @@ class MarkingSide extends React.Component {
         const methodToSave = this.state.selectedExportType == 'pdf' ? this.generatePDF : this.copyTextToClipboard;
         
         methodToSave(name).then(() => {
+            if (this.state.enableMarking) this.props.setPdfMark(this.state.assignment.totalMark);
             this.clearSectionsContent();
+            if (this.props.isLastPdf()) {
+                // Generate PDF with marks
+                // No PDF will be generated if no assignments are marked
+                this.generateMarksPDF(this.props.pdfsSelected.map(pdf => ({name: pdf.name, mark: pdf.mark})));
+            }
             this.props.handleNextPdf();
             // if (this.props.isLastPdf) alert.success({text: "Session complete!", isConfirm: false});
+        });
+    }
+
+    handleFinishEarly() {
+        this.props.alert.show({
+            text: "Discard upcoming PDFs from session?",
+            onConfirm: () => {
+                this.props.finishEarly();
+            }
         });
     }
 
@@ -243,9 +258,6 @@ class MarkingSide extends React.Component {
 
     generateHtmlOutput() {
         let html = "";
-        if (this.state.enableMarking) {
-            html += "<h3>Total mark: " + this.state.assignment.totalMark + "</h3>";
-        }
         const stateSections = this.state.assignment.sections;
         const outSections = stateSections.custom.concat(stateSections.compulsory);
 
@@ -303,15 +315,42 @@ class MarkingSide extends React.Component {
         });
     }
 
+    generateMarksPDF(marks) {
+        return new Promise(next => {
+            const rows = marks.reduce((a, m) => a + (m.mark >= 0 ? "<tr><td>" + m.name + "</td><td>" + m.mark + "</td></tr>" : ''), '');
+            if (rows.length > 0) {
+                this.props.alert.info({
+                    text: "Export marks of marked PDF? If cancelled, marks will be lost.",
+                    onConfirm: () => {
+                        const html = [
+                            `<h3>Marks for ${this.state.assignment.name}</h3>`,
+                            `<p>Generated at ${this.props.formatDate(new Date())}</p>`,
+                            `<p>Marked by ${USER_NAME}</p>`,
+                            `<table style='font-size: 11px'><tr><th>Name</th><th>Marks</th></tr>${rows}</table>`,
+                        ].reduce((a, c) => a + c, '');
+                        console.log(rows);
+                        var doc = new jsPDF();
+                        doc.fromHTML(html, 15, 15, {
+                            'width': 170,
+                        });
+                        doc.save('marks.pdf');
+                        if (next) next();
+                    }
+                });
+            }
+        });
+    }
+
     clearSectionsContent() {
         this.setState(prevState => {
             const sections = prevState.assignment.sections;
             sections.compulsory.forEach(s => s.value = "");
-            sections.custom.forEach(s => s.value = "");
+            sections.custom.forEach(s => {s.value = ""; s.mark = 0;});
             sections.custom.forEach(custom => {
                 custom.positiveComments.forEach(c => c.added = false);
                 custom.negativeComments.forEach(c => c.added = false);
             });
+            prevState.assignment.totalMark = 0;
             // prevState = prevState.assignment.sections.custom.map(s => s.positiveComments.map(c => Object.assign(c, {added: false})));
             // prevState = prevState.assignment.sections.custom.map(s => s.negativeComments.map(c => Object.assign(c, {added: false})));
             return prevState;
@@ -383,6 +422,9 @@ class MarkingSide extends React.Component {
                             </label>
                         </div>
                         <button type="button" className='btn btn-info btn-block shadow-sm' id="nextButton" onClick={this.handleSaveAndLoad}>{this.props.isLastPdf() ? textWithLast : textWithMore}</button>
+                        {!this.props.isLastPdf() && 
+                            <button type="button" className='btn btn-secondary btn-block shadow-sm' id="nextButton" onClick={this.handleFinishEarly}>Discard other upcoming PDFs</button>
+                        }
                     </div>
                     )
         } else {
@@ -445,9 +487,6 @@ class MarkingSide extends React.Component {
                                 <div className="sections">
                                     {this.renderSections()}
                                 </div>
-
-
-                                
                             </div>
 
                             {/* Buttons to export feedback */}
@@ -457,10 +496,7 @@ class MarkingSide extends React.Component {
                                     {this.renderNextPdfButton()}
                                 </div>
                                 <button type="button" className='btn btn-danger btn-block shadow-sm' onClick={() => {if(confirm('All entered text will be deleted. Are you sure?')) this.clearSectionsContent()}} id="clearButton">Clear All</button>
-
                             </div>
-
-                    
                         </div>
                     }
                 </div>
