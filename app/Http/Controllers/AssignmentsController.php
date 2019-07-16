@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\User;
+use App\Models\Course;
 use App\Models\Assignment;
 use App\Models\CoursePermission;
 use App\Models\Section;
@@ -98,6 +100,63 @@ class AssignmentsController extends Controller
         $assignment = Assignment::find($id);
         $assignment -> delete();
         return json_encode(['ok' => true]);
+    }
+
+    public function apiCloneAssignment(Request $request, $id) {
+        $this -> validate($request,[
+            'course_id' => 'required'
+        ]);
+
+        $assignment = Assignment::find($id);
+        $newAssignment = $assignment->replicate();
+        $newAssignment->course_id = $request->course_id;
+        $newAssignment->save();
+
+        $sections = Section::where('assignment_id', $id)->get();
+        foreach ($sections as $section) {
+            $newSection = $section->replicate();
+            $newSection->assignment_id = $newAssignment->id;
+            $newSection->save();
+
+            $publicComments = Comment::where('section_id', $section['id'])->where('private_to_user', null);
+            $privateComments = Comment::where('section_id', $section['id'])->where('private_to_user', Auth::user()->id);
+
+            $userComments = $publicComments->union($privateComments)->get();
+            foreach ($userComments as $comment) {
+                $newComment = $comment->replicate();
+                $newComment->section_id = $newSection->id;
+                $newComment->save();
+            }
+        }
+        
+        return json_encode($newAssignment);
+    }
+
+    public function apiGetAllAssignments() {
+        $createdCourses = Course::where('user_id', Auth::user()->id)->pluck('id');
+        
+        $invitedCourses = CoursePermission::where('user_id', Auth::user()->id)->pluck('course_id');
+        // $userCourses = array_merge($createdCourses,$invitedCourses);
+        $userCourses = $createdCourses->merge($invitedCourses);
+        $courses = [];
+        $course = (object)[];
+        foreach($userCourses as $id) {
+            $assignments = Assignment::where('course_id', $id)->get();
+            if(count($assignments) > 0) {
+                $course = Course::where('id',$id)->first();
+                $course->assignments = $assignments;
+                $course->owner = User::where('id',$course->user_id)->first()->name;
+                unset($course->body);
+                unset($course->created_at);
+                unset($course->updated_at);
+                unset($course->user_id);
+                unset($course->cover_image);
+                
+                array_push($courses, $course);
+            }
+        }
+    
+        return json_encode($courses);
     }
 
     // Owner of the course

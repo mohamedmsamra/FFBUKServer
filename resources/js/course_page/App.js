@@ -92,9 +92,9 @@ class App extends React.Component {
                             <i className="fas fa-image"></i> Change Course Image
                         </button>
                     </form> */}
-                    <p>{console.log(PERMISSIONS)}</p>
+                    {/* <p>{console.log(PERMISSIONS)}</p>
                     <p>{console.log(user_id)}</p>
-                    <p>{console.log(permission)}</p>
+                    <p>{console.log(permission)}</p> */}
 
                     {course_owner_id !== user_id ? '' :
                     <>
