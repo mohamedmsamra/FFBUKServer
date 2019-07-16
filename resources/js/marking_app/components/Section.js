@@ -277,12 +277,10 @@ class Section extends React.Component {
 
     render() {
         const category = this.state.openComments == "positive" ? this.state.posComments : this.state.negComments;
-        console.log(category);
         const displayComments = category
         .sort((a, b) => {
             if (a.private_to_user == null && b.private_to_user != null) return -1;
             if (a.private_to_user != null && b.private_to_user == null) return 1;
-            console.log(a.text, a.text.length, b.text, b.text.length);
             return a.id - b.id;
         })
         .map(comment => {
