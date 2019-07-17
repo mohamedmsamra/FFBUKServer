@@ -3,7 +3,7 @@ import Comment from './Comment.js';
 import ConfirmationModal from './modals/ConfirmationModal';
 import TextEditor from './TextEditor';
 import { withAlert } from 'react-alert';
-import FocusingInput from './FocusingInput.js';
+import FocusingInput from '../../global_components/FocusingInput.js';
 
 class Section extends React.Component {
     constructor(props) {
@@ -195,7 +195,7 @@ class Section extends React.Component {
     renderTitleEditView() {
         return <div className="input-group">
                     <FocusingInput
-                        className="form-control form-control-lg"
+                        size="lg"
                         value={this.state.editTitleText}
                         onEnterKey={this.updateTitle}
                         onEscapeKey={this.handleEditTitle}

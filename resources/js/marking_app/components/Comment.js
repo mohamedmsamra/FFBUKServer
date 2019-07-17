@@ -1,6 +1,6 @@
 import React from 'react';
 import { withAlert } from 'react-alert';
-import FocusingInput from './FocusingInput';
+import FocusingInput from '../../global_components/FocusingInput';
 
 class Comment extends React.Component {
     constructor(props) {
@@ -54,8 +54,7 @@ class Comment extends React.Component {
     renderEditCommentView() {
         return (
             <div className="input-group editView">
-                <FocusingInput 
-                    className="form-control"
+                <FocusingInput
                     value={this.state.editingText}
                     onChange={this.handleFormChange}
                     name="editingText"
