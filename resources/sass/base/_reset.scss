@@ -28,3 +28,26 @@ q {
 table {
 border-collapse: collapse;
 border-spacing: 0; }
+
+
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+    transition: width 2s;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1; 
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #8a8a8a66; 
+    border-radius: 2px;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #8a8a8a; 
+  }
