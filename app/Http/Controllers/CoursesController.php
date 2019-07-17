@@ -342,11 +342,10 @@ class CoursesController extends Controller
     } 
 
     public function apiRemoveFromCourse($id) {
-        if (!$this->canEdit($id)) abort(401);
-        // if ()
         $coursePermission = CoursePermission::find($id);
+        if (!$this->canEdit($coursePermission->course_id)) abort(401);
         if ($coursePermission->course()->first()->user_id == Auth::user()->id) {
-            $coursePermission -> delete();
+            $coursePermission->delete();
             return json_encode(['success' => true]);
         } else {
             return json_encode(['success' => false]);
@@ -412,13 +411,14 @@ class CoursesController extends Controller
         return $return;
     }
     
-    public static function canEdit($id) {
+    public static function canManage($id) {
         $isOwner = Course::where('id', $id)->where('user_id', Auth::user()->id);
-        // $hasEditRights = CoursePermission::where('course_id', $id)
-        //                                  ->where('user_id', Auth::user()->id)
-        //                                  ->where('level', 1)
-        //                                  ->where('pending', false);
         return $isOwner->first();
+    }
+
+    public static function canEdit($id) {
+        // Only the manager (owner) can edit course details
+        return CoursesController::canManage($id);
     }
 
     private static function canView($id) {
