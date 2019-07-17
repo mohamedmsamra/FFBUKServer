@@ -21,7 +21,16 @@ class App extends React.Component {
     }
 
     handleUploadCover(e) {
-        this.setState({cover_image: e.target.value.split('\\').pop().split('/').pop()})
+        if(e.target.files[0] != undefined && e.target.files[0].size > 2097152) {
+            this.props.alert.error({text: "Image too large! Please pick one smaller than 2mb"});
+            $('#uploadCoverImage').removeClass('goodHighlight');
+            $('#uploadCoverImage').addClass('badHighlight');
+        } else {
+            this.setState({cover_image: e.target.value.split('\\').pop().split('/').pop()});
+            $('#uploadCoverImage').removeClass('badHighlight');
+            $('#uploadCoverImage').addClass('goodHighlight');
+        }
+        
     }
 
     handleDescriptionChange(val) {
@@ -64,15 +73,18 @@ class App extends React.Component {
                     </div>
                 </div>
 
-                <input type="hidden" value={this.state.description} name="body" id="body"/>
+                
                 <div className="form-group">
-                        <TextEditor 
-                            value={this.state.description}
-                            handleSectionTextChange={(val) => this.handleDescriptionChange(val)}
-                            value={this.state.description}
-                        />
-                    </div>
+                    <label htmlFor="body">Course Description</label>
+                    <input type="hidden" value={this.state.description} name="body" id="body"/>
+                    <TextEditor 
+                        value={this.state.description}
+                        handleSectionTextChange={(val) => this.handleDescriptionChange(val)}
+                        value={this.state.description}
+                    />
+                </div>
 
+                <div className="form-group">
                     <input 
                         onChange={this.handleUploadCover}
                         name="cover_image"
@@ -90,6 +102,14 @@ class App extends React.Component {
                         title="Upload Cover Image">
                             {this.state.cover_image ? this.state.cover_image : 'Choose Cover Image'}
                     </button>
+                    <div className="valid-feedback">
+                        Looks good!
+                    </div>
+                    <div className="invalid-feedback">
+                        Please input a title
+                    </div>
+                </div>
+
                 <button className="btn btn-primary shadow-sm" type="submit">Create Course</button>
             </form>
 

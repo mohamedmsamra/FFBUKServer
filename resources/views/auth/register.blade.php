@@ -40,28 +40,14 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="school" class="col-md-4 col-form-label text-md-right">{{ __('School') }}</label>
+                            <label for="school_department" class="col-md-4 col-form-label text-md-right">{{ __('School/Department') }}</label>
 
                             <div class="col-md-6">
-                                <input id="school" type="text" class="form-control{{ $errors->has('school') ? ' is-invalid' : '' }}" name="school" value="{{ old('school') }}" required autofocus>
+                                <input id="school_department" type="text" class="form-control{{ $errors->has('school_department') ? ' is-invalid' : '' }}" name="school_department" value="{{ old('school_department') }}" required autofocus>
 
-                                @if ($errors->has('school'))
+                                @if ($errors->has('school_department'))
                                     <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('school') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="department" class="col-md-4 col-form-label text-md-right">{{ __('Department') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="department" type="text" class="form-control{{ $errors->has('department') ? ' is-invalid' : '' }}" name="department" value="{{ old('department') }}" required autofocus>
-
-                                @if ($errors->has('department'))
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('department') }}</strong>
+                                        <strong>{{ $errors->first('school_department') }}</strong>
                                     </span>
                                 @endif
                             </div>
