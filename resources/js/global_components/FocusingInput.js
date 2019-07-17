@@ -1,4 +1,5 @@
 import React from 'react';
+import Form from 'react-bootstrap/Form';
 
 /* An input that becomes focused the first time it's rendered.
  * It is can also be passed a function to be executed when
@@ -15,20 +16,23 @@ class FocusingInput extends React.Component {
     }
 
     render() {
+        var { className, value, onChange, name, onEnterKey, onEnterKey, ...otherProps} = this.props;
+        
         return (
-            <input type="text" 
-                className={this.props.className}
-                value={this.props.value}
-                onChange={this.props.onChange}
-                name={this.props.name}
+            <Form.Control
+                className={className}
+                value={value}
+                onChange={onChange}
+                name={name}
                 ref={this.ref}
                 onKeyDown={e => {
                     if (e.key === 'Enter') {
-                        if (this.props.onEnterKey) this.props.onEnterKey();
+                        if (onEnterKey) this.props.onEnterKey();
                     } else if (e.key === 'Escape') {
-                        if (this.props.onEscapeKey) this.props.onEscapeKey();
+                        if (onEscapeKey) this.props.onEscapeKey();
                     }
-                }}/>
+                }}
+                {...otherProps} />
         );
     }
 }

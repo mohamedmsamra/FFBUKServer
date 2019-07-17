@@ -1,8 +1,7 @@
 import React from 'react';
 import Button from 'react-bootstrap/Button';
-import FocusingBox from './FocusingBox';
+import FocusingInput from '../global_components/FocusingInput';
 import withTable from '../global_components/withTable';
-import { timeout } from 'q';
 import { withAlert } from 'react-alert';
 
 class AssignmentsTable extends React.Component {
@@ -14,6 +13,7 @@ class AssignmentsTable extends React.Component {
         this.idCounter = -1;
         this.handleCreateClick = this.handleCreateClick.bind(this);
         this.renderRow = this.renderRow.bind(this);
+        this.renderContent = this.renderContent.bind(this);
     }
 
     mapDBAssignmentToLocal(assignment) {
@@ -100,7 +100,7 @@ class AssignmentsTable extends React.Component {
     handleDeleteClick(id) {
         this.props.setTableRowData(id, prevRow => {
             prevRow.isLoading = true;
-        });
+        }, () => {
             this.props.alert.show({
                 text: "Are you sure you want to delete this assignment?",
                 onConfirm: () => {
@@ -134,15 +134,16 @@ class AssignmentsTable extends React.Component {
                     });
                 }
             });
+        });
     }
 
     handleCreateClick() {
         this.props.addTableRows([{key: this.idCounter, data: {id: this.idCounter--, creating: true, createName: ""}}]);
     }
 
-    handleEditCreateName(id, val) {
+    handleEditCreateName(id, value) {
         this.props.setTableRowData(id, (prevRow) => {
-            prevRow.data.createName = val;
+            prevRow.data.createName = value;
         });
     }
 
@@ -231,26 +232,34 @@ class AssignmentsTable extends React.Component {
         }
     }
 
+    renderContent(data) {
+        if (data.editing) {
+            return (
+                <FocusingInput
+                    value={data.editName}
+                    onChange={e => this.handleEditText(data.id, e.target.value)}
+                    onEnterKey={() => this.handleConfirmEdit(data.id)}
+                    onEscapeKey={() => this.handleCancelEdit(data.id)}
+                    size="sm" />
+            );
+        } else if (data.creating) {
+            return ( 
+                <FocusingInput
+                    value={data.createName}
+                    onChange={e => this.handleEditCreateName(data.id, e.target.value)}
+                    onEnterKey={() => this.handleConfirmCreate(data.id)}
+                    onEscapeKey={() => this.handleConfirmEdit(data.id)}
+                    size="sm" />
+            );
+        } else {
+            return <p>{data.name}</p>;
+        }
+    }
+
     renderRow({isLoading, data}) {
         return (
             <>
-                <td>
-                    <p hidden={data.editing || data.creating}>{data.name}</p>
-                    <FocusingBox
-                        hidden={!data.editing}
-                        handleEditText={target => this.handleEditText(data.id, target)}
-                        assignment_id={data.id}
-                        value={data.editName}
-                        onEnter={() => this.handleConfirmEdit(data.id)}
-                        size="sm" />
-                    <FocusingBox
-                        hidden={!data.creating}
-                        handleEditText={target => this.handleEditCreateName(data.id, target)}
-                        assignment_id={data.id}
-                        value={data.createName}
-                        onEnter={() => this.handleConfirmCreate(data.id)}
-                        size="sm" />
-                </td>
+                <td>{this.renderContent(data)}</td>
                 <td>{this.renderButtons({isLoading, data})}</td>
             </>
         );
