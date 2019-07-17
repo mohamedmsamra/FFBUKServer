@@ -3,17 +3,27 @@ import Button from 'react-bootstrap/Button';
 import FocusingInput from '../global_components/FocusingInput';
 import withTable from '../global_components/withTable';
 import { withAlert } from 'react-alert';
+import CloneAssignmentsModal from './CloneAssignmentsModal';
 
 class AssignmentsTable extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            // assignments: assignments.map(a => this.mapDBAssignmentToLocal(a))
+            coursesWithAssignments: []
         }
         this.idCounter = -1;
         this.handleCreateClick = this.handleCreateClick.bind(this);
+        this.handleCloneClick = this.handleCloneClick.bind(this);
         this.renderRow = this.renderRow.bind(this);
         this.renderContent = this.renderContent.bind(this);
+        this.fetchAssignments = this.fetchAssignments.bind(this);
+        this.handleSelectCloningAssignment = this.handleSelectCloningAssignment.bind(this);
+    }
+
+    fetchAssignments() {
+        fetch("../api/assignments")
+        .then(data => data.json())
+        .then(data => {this.setState({coursesWithAssignments: data})});
     }
 
     mapDBAssignmentToLocal(assignment) {
@@ -141,9 +151,46 @@ class AssignmentsTable extends React.Component {
         this.props.addTableRows([{key: this.idCounter, data: {id: this.idCounter--, creating: true, createName: ""}}]);
     }
 
-    handleEditCreateName(id, value) {
+    handleCloneClick() {
+        this.fetchAssignments();
+        $("#cloneAssignmentsModal").modal('show');
+    }
+
+    resetModal() {
+        $("#cloneAssignmentsModal").removeClass("fade");
+        $("#cloneAssignmentsModal").modal('hide');
+        $("#cloneAssignmentsModal").addClass("fade");
+        $(".cloneModalAssignmentInstance").removeClass('active');
+        $(".collapse").removeClass('show');
+    }
+
+    handleSelectCloningAssignment(id) {
+        fetch('../api/assignments/' + id + '/clone', {
+            method: 'post',
+            body: JSON.stringify({
+                course_id: course_id
+            }),
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json, text-plain, */*",
+                "X-Requested-With": "XMLHttpRequest",
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content')
+            }
+        })
+        .then(function(response) {
+            return response.json();
+        }).then((data) => {
+            this.props.addTableRows([{key: data.id, data: this.mapDBAssignmentToLocal(data)}]);
+            // this.props.alert.success({text: "Cloned assignment \n '" + data.name + "'"});
+        }).then( () => {
+            
+            this.resetModal();
+        });
+    }
+
+    handleEditCreateName(id, val) {
         this.props.setTableRowData(id, (prevRow) => {
-            prevRow.data.createName = value;
+            prevRow.data.createName = val;
         });
     }
 
@@ -276,7 +323,13 @@ class AssignmentsTable extends React.Component {
                 <this.props.ReactiveTable
                     headers={['Assignments', 'Actions']}
                     renderRow={this.renderRow} />
-                {HAS_COURSE_EDIT_PERMISSION && <Button variant="primary" size="sm" onClick={this.handleCreateClick}>Create new assignment</Button>}
+                {HAS_COURSE_EDIT_PERMISSION && 
+                <>
+                    <Button className="mr-1" variant="primary" size="sm" onClick={this.handleCreateClick}>Create new assignment</Button>
+                    <Button variant="info" size="sm" onClick={this.handleCloneClick}>Clone Existing Assignment</Button>
+                </>
+                }
+                <CloneAssignmentsModal coursesWithAssignments={this.state.coursesWithAssignments} handleSelectAssignment={this.handleSelectCloningAssignment} resetModal={this.resetModal}/>
             </>
         );
     }

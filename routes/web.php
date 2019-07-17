@@ -60,8 +60,10 @@ Route::group( ['middleware' => 'auth' ], function()
     // Assignments
     // Route::resource('assignments', 'AssignmentsController');
     Route::get('/api/assignments/{id}', 'AssignmentsController@apiShow');
+    Route::get('/api/assignments', 'AssignmentsController@apiGetAllAssignments');
     Route::post('/api/assignments', 'AssignmentsController@apiStore');
     Route::post('/api/assignments/{id}/edit-name', 'AssignmentsController@apiEditName');
+    Route::post('/api/assignments/{id}/clone', 'AssignmentsController@apiCloneAssignment');
     Route::delete('/api/assignments/{id}', 'AssignmentsController@apiDestroy');
     Route::get('/marking/{assignment_id}', 'PagesController@marking');
 
