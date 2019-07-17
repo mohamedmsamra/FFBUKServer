@@ -43,4 +43,8 @@ class User extends Authenticatable
     public function marking_sessions() {
         return $this->hasMany('App\Models\MarkingSession');
     }
+
+    public function comment_uses() {
+        return $this->hasMany('App\Models\CommentUse');
+    }
 }
