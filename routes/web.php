@@ -91,6 +91,9 @@ Route::group( ['middleware' => 'auth' ], function()
     Route::delete('/api/sections/{id}', 'SectionsController@apiDestroy');
     Route::post('/api/sections/{id}/edit-title', 'SectionsController@apiEditTitle');
     Route::post('/api/sections/{id}/upload-image', 'SectionsController@apiUploadImage');
+
+    // Analytics
+    Route::post('/api/marking-sessions', 'AnalyticsController@apiStoreSession');
 });
 
 

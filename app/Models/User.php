@@ -39,4 +39,8 @@ class User extends Authenticatable
     public function private_comments() {
         return $this->hasMany('App\Models\Comment');
     }
+
+    public function marking_sessions() {
+        return $this->hasMany('App\Models\MarkingSession');
+    }
 }

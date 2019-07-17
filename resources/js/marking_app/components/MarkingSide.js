@@ -29,6 +29,7 @@ class MarkingSide extends React.Component {
         this.clearSectionsContent = this.clearSectionsContent.bind(this);
         this.assignmentFromDBFormat = this.assignmentFromDBFormat.bind(this);
         this.fetchAssignment = this.fetchAssignment.bind(this);
+        this.handleSaveSession = this.handleSaveSession.bind(this);
         this.state = {
             submitting: false,
             loading: this.props.loading,
@@ -40,6 +41,7 @@ class MarkingSide extends React.Component {
     }
 
     componentDidMount() {
+        this.setState({start: Date.now()});
         this.fetchAssignment();
     }
 
@@ -194,27 +196,67 @@ class MarkingSide extends React.Component {
         this.updateComment(sectionID, commentID, type, c => {c.text = text; c.added = false; return c});
     }
 
+    handleSaveSession(words, seconds) {
+        fetch('/api/marking-sessions', {
+			method: 'post',
+			body: JSON.stringify({
+				assignment_id: this.state.assignment.id,
+				words: words,
+				time: seconds
+			}),
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json, text-plain, */*",
+                "X-Requested-With": "XMLHttpRequest",
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content')
+            }
+        })
+        .then(data => data.json())
+        .then(data => {
+            console.log(data); 
+        });
+    }
+
     handleSaveAndLoad() {
+        let wordCount = 0;
         // Check if compulsory fields are empty
         const isEmpty = htmlString => {
             const parser = new DOMParser();
             const { textContent } = parser.parseFromString(htmlString, "text/html").documentElement;
-            return !textContent.trim();
+            return textContent.trim();
         }
         let section;
+        let strippedText;
         for(let i = 0; i < this.state.assignment.sections.compulsory.length; i++) {
             section = this.state.assignment.sections.compulsory[i];
-            if(isEmpty(section.value)) {
+            strippedText = isEmpty(section.value);
+            if(!strippedText) {
                 this.props.alert.error({text: "Entering " + section.title + " is compulsory!"});
                 return;
+            } else {
+                wordCount += this.countWords(strippedText);
+            }
+        }
+
+        for(let i = 0; i < this.state.assignment.sections.custom.length; i++) {
+            section = this.state.assignment.sections.custom[i];
+            strippedText = isEmpty(section.value);
+            if(!strippedText) {
+                console.log(section.title + " is empty")
+            } else {
+                wordCount += this.countWords(strippedText);
             }
         }
 
         let name = this.props.pdfsSelected[this.props.pdfPointer].name;
         const methodToSave = this.state.selectedExportType == 'pdf' ? this.generatePDF : this.copyTextToClipboard;
+
+        let time = (Date.now() -this.state.start ) / 1000;
         
+        this.handleSaveSession(wordCount, time);
         methodToSave(name).then(() => {
             if (this.state.enableMarking) this.props.setPdfMark(this.state.assignment.totalMark);
+            
             this.clearSectionsContent();
             if (this.props.isLastPdf()) {
                 // Generate PDF with marks
@@ -222,6 +264,7 @@ class MarkingSide extends React.Component {
                 this.generateMarksPDF(this.props.pdfsSelected.map(pdf => ({name: pdf.name, mark: pdf.mark})));
             }
             this.props.handleNextPdf();
+            this.setState({start: Date.now()});
             // if (this.props.isLastPdf) alert.success({text: "Session complete!", isConfirm: false});
         });
     }
@@ -269,6 +312,17 @@ class MarkingSide extends React.Component {
         }
 
         return html;
+    }
+
+    countWords(str) {
+        //exclude  start and end white-space
+        str = str.replace(/(^\s*)|(\s*$)/gi,"");
+        //convert 2 or more spaces to 1  
+        str = str.replace(/[ ]{2,}/gi," ");
+        // exclude newline with a start spacing  
+        str = str.replace(/\n /,"\n");
+
+        return str.split(' ').length;
     }
 
     copyTextToClipboard() {
