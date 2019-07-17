@@ -32,6 +32,19 @@ class AnalyticsController extends Controller
         return json_encode($session);
     }
 
+    // One session info
+    public function apiShowSession($id) {
+        $session = MarkingSession::find($id);
+        return json_encode($session);
+    }
+
+    // Average number of words for individual user and assignment
+    public function getAverageWordsForAll($id) {
+        $assignment = Assignment::find($id);
+    }
+
+    
+
     public function apiStoreCommentUse(Request $request) {
         $this -> validate($request,[
             'comment_id' => 'required'
@@ -61,4 +74,10 @@ class AnalyticsController extends Controller
 
         return json_encode($commentUse);
     }
+
+    public function apiShowCommentUse($id) {
+        $commentUse = CommentUse::find($id);
+        return json_encode($commentUse);
+    }
+    
 }
