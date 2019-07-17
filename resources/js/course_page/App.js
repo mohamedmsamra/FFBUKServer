@@ -141,7 +141,6 @@ class App extends React.Component {
                 
                 <hr/>
                 <h2>Sharing permissions</h2>
-                <small>People you invite to the course can see all existing assignments</small>
                 <PermissionsTable />
                 </div>
         </div>

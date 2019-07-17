@@ -457,18 +457,8 @@ class MarkingSide extends React.Component {
                                         <input id="enableMarking" name="someSwitchOption001" type="checkbox" className={this.state.enableMarking ? 'checked' : ''} onChange={this.handleMarkingEnabledChange}/>
                                         <label htmlFor="enableMarking" className="bg-primary"></label>
                                     </div>
-                                </div>
+                                </div> 
 
-                                {/* Total Mark Display */}
-                                {this.state.enableMarking &&
-                                    <div className="totalMark">
-                                        <p className="float-left">Total Mark</p>
-                                        <p className="float-right">{this.state.assignment.totalMark}</p>
-                                        <div className="clear"></div>
-                                    </div>  
-                                }
-                                                   
-                            
                                 {/* Add new section button */}
                                 {this.state.assignment.permissionLevel == 1 &&
                                 
@@ -487,6 +477,15 @@ class MarkingSide extends React.Component {
                                 <div className="sections">
                                     {this.renderSections()}
                                 </div>
+
+                                {/* Total Mark Display */}
+                                {this.state.enableMarking &&
+                                    <div className="totalMark">
+                                        <p className="float-left">Total Mark</p>
+                                        <p className="float-right">{this.state.assignment.totalMark}</p>
+                                        <div className="clear"></div>
+                                    </div>  
+                                }
                             </div>
 
                             {/* Buttons to export feedback */}
