@@ -20,14 +20,16 @@ class Statistics extends React.Component {
                             chartID="avgWordsGraph"
                             title="Average words"
                             unit="words"
-                            points={this.props.assignment.guests_average_words}
+                            total_average={this.props.total_average_words}
+                            points={this.props.assignment.guests_average_words.concat(this.props.assignment.personal_average_words)}
                             formatAverage={(n) => Math.round(n) + " words"}
                             tooltipCallback={(tooltipItem, data) => tooltipItem.xLabel + " words" + (tooltipItem.datasetIndex == 1 ? ' (Average)' : '')} />
                         <AverageLine
                             chartID="avgTimeGraph"
                             title="Average time"
                             unit="seconds"
-                            points={this.props.assignment.guests_average_times.map(t => t / 60)}
+                            total_average={5}
+                            points={this.props.assignment.guests_average_times.concat(this.props.assignment.personal_average_time)(t => t / 60)}
                             formatAverage={(n) => {
                                 const mins = Math.floor(n);
                                 const secs = Math.round((n - mins) * 60);

@@ -2,5 +2,6 @@
     "/builds/js/course_page/index.js": "/builds/js/course_page/index.js",
     "/builds/js/create_course_form/index.js": "/builds/js/create_course_form/index.js",
     "/builds/js/marking_app/index.js": "/builds/js/marking_app/index.js",
-    "/builds/css/app.css": "/builds/css/app.css"
+    "/builds/css/app.css": "/builds/css/app.css",
+    "/builds/js/statistics_page/index.js": "/builds/js/statistics_page/index.js"
 }

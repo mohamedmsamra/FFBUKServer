@@ -86,7 +86,7 @@ class AnalyticsController extends Controller
         $isOwner = Course::find($course_id)->user()->first()->id == $user_id;
         $isInvited = CoursePermission::where('course_id', $course_id)->where('user_id', $user_id)->first() != null;
 
-        // If the authenticted user is netiher the owner of the course nor invited to the course, don't return analytics
+        // If the authenticted user is neither the owner of the course nor invited to the course, don't return analytics
         if (! ($isOwner || $isInvited)) {
             return json_encode(["message" => "no access"]);
         }
@@ -97,6 +97,7 @@ class AnalyticsController extends Controller
         $averages = $this->getAverageWordsAndTime($user_id, $assignment_id);
         $analytics->personal_average_words = $averages->average_words;
         $analytics->personal_average_time = $averages->average_time;
+        $analytics->name = $assignment->name;
 
         // List of comments by popularity for all users of the assignment
         $commentsList = (object)[];
@@ -110,7 +111,6 @@ class AnalyticsController extends Controller
             $comment->count = $this->getTotalCommentCount($comment->id);
             
             // Unset unnecessary properties
-            unset($comment->id);
             unset($comment->section_id);
             unset($comment->section->assignment_id);
             unset($comment->section->created_at);

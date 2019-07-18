@@ -26,7 +26,7 @@
             </div>
         </div>
             <script>
-                const assignment_id = <?php echo json_encode($assignment->id) ?>;
+                var ASSIGNMENT_ID = <?php echo json_encode($assignment->id) ?>;
             </script>
             <script src="/builds/js/statistics_page/index.js"></script>
         <!-- Scripts -->
