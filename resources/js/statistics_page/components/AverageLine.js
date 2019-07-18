@@ -2,6 +2,10 @@ import React from 'react';
 import Chart from 'chart.js';
 
 class AverageLine extends React.Component {
+    constructor(props) {
+        super(props);
+        this.height = 80;
+    }
     componentDidMount() {
         var chart = document.getElementById(this.props.chartID);
         var ctx = chart.getContext('2d');
@@ -36,9 +40,6 @@ class AverageLine extends React.Component {
                 ]
             },
             options: {
-                legend: {
-                    display: false
-                },
                 scales: {
                     yAxes: [{
                         display: false,
@@ -65,14 +66,14 @@ class AverageLine extends React.Component {
                 maintainAspectRatio: false
             }
         });
-        scatterChart.canvas.parentNode.style.height = '50px';
+        scatterChart.canvas.parentNode.style.height = this.height + 'px';
     }
 
     render() {
         return (
             <div className="statistics-block">
                 <h4>{this.props.title + ': ' + this.props.formatAverage(this.props.total_average)}</h4>
-                <div className="chart-container" style={{height: 50}}>
+                <div className="chart-container" style={{height: this.height}}>
                     <canvas id={this.props.chartID}></canvas>
                 </div>
             </div>
