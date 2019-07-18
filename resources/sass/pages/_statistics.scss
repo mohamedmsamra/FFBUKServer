@@ -1,0 +1,17 @@
+#statistics-page {
+    .sectionComment {
+        .comment-count {
+            font-weight: bold;
+        }
+
+        .section-name {
+            color: grey;
+            float: right;
+        }
+
+        &.privateComment {
+            font-style: italic;
+            color: grey;
+        }
+    }
+}

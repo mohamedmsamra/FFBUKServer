@@ -14,5 +14,6 @@ const mix = require('laravel-mix');
 // mix.react('resources/js/app.js', 'public/js')
 mix.react('./resources/js/marking_app/index.js', './public/builds/js/marking_app/')
    .react('./resources/js/course_page/index.js', './public/builds/js/course_page/')
+   .react('./resources/js/statistics_page/index.js', './public/builds/js/statistics_page/')
    .react('./resources/js/create_course_form/index.js', './public/builds/js/create_course_form/')
    .sass('resources/sass/app.scss', 'public/builds/css');

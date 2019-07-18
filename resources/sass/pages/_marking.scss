@@ -256,9 +256,11 @@
 
 }
 
-.sectionComment {
-    padding: 0!important;
+#marking-react-root .sectionComment {
+    padding: 0;
+}
 
+.sectionComment {
     .editView {
         padding: 0.315rem 0.5rem;
 

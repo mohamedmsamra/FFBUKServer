@@ -59,13 +59,14 @@ Route::group( ['middleware' => 'auth' ], function()
 {
     // Assignments
     // Route::resource('assignments', 'AssignmentsController');
+    Route::get('/assignments/{assignment_id}/mark', 'AssignmentsController@getMarking');
+    Route::get('/assignments/{assignment_id}/statistics', 'AssignmentsController@getStatistics');
     Route::get('/api/assignments/{id}', 'AssignmentsController@apiShow');
     Route::get('/api/assignments', 'AssignmentsController@apiGetAllAssignments');
     Route::post('/api/assignments', 'AssignmentsController@apiStore');
     Route::post('/api/assignments/{id}/edit-name', 'AssignmentsController@apiEditName');
     Route::post('/api/assignments/{id}/clone', 'AssignmentsController@apiCloneAssignment');
     Route::delete('/api/assignments/{id}', 'AssignmentsController@apiDestroy');
-    Route::get('/marking/{assignment_id}', 'PagesController@marking');
 
     // Comments
     Route::post('/api/comments', 'CommentsController@apiStore');

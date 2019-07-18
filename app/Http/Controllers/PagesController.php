@@ -27,16 +27,6 @@ class PagesController extends Controller
         $title = 'Courses';
         return view('pages.courses')-> with('title', $title);
     }
-    public function marking($assignment_id){
-        $title = 'Marking';
-        // Find assignment
-        $assignment = Assignment::where('id', '=', $assignment_id)->first();
-        if ($assignment === null) {
-            abort(404);
-        } else {
-            return view('pages.newMarking', ['title' => $title, 'assignment' => $assignment]);
-        }
-    }
     public function faqs(){
         $title = 'Frequently Asked Questions';
         return view('pages.faqs')-> with('title', $title);

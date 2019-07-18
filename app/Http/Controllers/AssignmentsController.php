@@ -159,6 +159,23 @@ class AssignmentsController extends Controller
         return json_encode($courses);
     }
 
+    public function getMarking($assignment_id){
+        $title = 'Marking';
+        // Find assignment
+        $assignment = Assignment::where('id', '=', $assignment_id)->first();
+        if ($assignment === null) {
+            abort(404);
+        } else {
+            return view('pages.newMarking', ['title' => $title, 'assignment' => $assignment]);
+        }
+    }
+
+    public function getStatistics($id) {
+        $assignment = Assignment::find($id);
+
+        return view('assignments.statistics')->with('assignment', $assignment);
+    }
+
     // Owner of the course
     // e.g. to create and remove assigments
     public static function canManage($assignment_id) {

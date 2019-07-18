@@ -262,7 +262,7 @@ class AssignmentsTable extends React.Component {
         } else {
             return (
                 <>
-                    <a href={"/marking/" + data.id}>
+                    <a href={`/assignments/${data.id}/mark`}>
                         <button type="button" className="btn btn-primary btn-sm" disabled={isLoading}>Start marking</button>
                     </a>
                     {HAS_COURSE_EDIT_PERMISSION && 

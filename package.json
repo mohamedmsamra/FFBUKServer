@@ -21,7 +21,7 @@
         "cross-env": "^5.1",
         "jquery": "^3.4.1",
         "laravel-mix": "^4.0.16",
-        "lodash": "^4.17.5",
+        "lodash": "^4.17.14",
         "popper.js": "^1.15.0",
         "resolve-url-loader": "^2.3.1",
         "sass": "^1.15.2",
@@ -30,6 +30,7 @@
     },
     "dependencies": {
         "@fortawesome/fontawesome-free": "^5.9.0",
+        "chart.js": "^2.8.0",
         "dateformat": "^3.0.3",
         "jspdf": "^1.5.3",
         "prop-types": "^15.7.2",
