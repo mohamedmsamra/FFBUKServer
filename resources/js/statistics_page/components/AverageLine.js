@@ -7,52 +7,71 @@ class AverageLine extends React.Component {
     }
 
     componentDidMount() {
-        var ctx = document.getElementById(this.props.chartID).getContext('2d');
+        var chart = document.getElementById(this.props.chartID);
+        var ctx = chart.getContext('2d');
         var scatterChart = new Chart(ctx, {
             type: 'scatter',
             data: {
                 datasets: [
                     {
                         label: 'User average',
-                        data: this.props.points.map(p => ({x: p, y: 0}))
+                        backgroundColor: 'rgba(0,0,0,0.5)',
+                        borderColor: 'rgba(0,0,0,0.6)',
+                        data: this.props.points.map(p => ({x: p, y: 0})),
+                        pointRadius: 7,
+                        pointHoverRadius: 7,
                     },
                     {
                         label: 'Overall average',
-                        backgroundColor: 'red',
-                        data: [{x: this.calculateAverage(), y: 0}]
+                        backgroundColor: 'rgba(255,0,0,0.6)',
+                        borderColor: 'rgba(255,0,0,0.8)',
+                        data: [{x: this.calculateAverage(), y: 0}],
+                        pointRadius: 9,
+                        pointHoverRadius: 9,
                     }
                 ]
             },
             options: {
+                legend: {
+                    display: false
+                },
+                scales: {
+                    yAxes: [{
+                        display: false,
+                        ticks: {
+                            display: false,
+                            min: 0,
+                            max: 0.1
+                        },
+                        gridLines: {
+                            display: false
+                        }
+                    }],
+                    xAxes: [{
+                        gridLines: {
+                            display: false
+                        }
+                    }],
+                },
                 tooltips: {
                     callbacks: {
-                        label: function(tooltipItem, data) {
-                            return tooltipItem.xLabel + ' ' + this.props.unit;
-                        }
+                        label: this.props.tooltipCallback
                     }
-                }
+                },
+                maintainAspectRatio: false
             }
-            // options: {
-            //     scales: {
-            //         xAxes: [{
-            //             type: 'linear',
-            //             position: 'bottom'
-            //         }]
-            //     }
-            // }
         });
-        // var myBarChart = new Chart(ctx, {
-        //     type: 'bar',
-        //     data: [{x:'2016-12-25', y:20}, {x:'2016-12-26', y:10}]
-        // });
+        scatterChart.canvas.parentNode.style.height = '50px';
     }
 
     render() {
         return (
-            <>
-                <h3>{this.props.title + ': ' + this.calculateAverage()}</h3>
-                <canvas id={this.props.chartID}></canvas>
-            </>
+            <div className="statistics-block">
+                <h3>{this.props.title + ': ' + this.props.formatAverage(this.calculateAverage())}</h3>
+                <div className="chart-container" style={{height: 50}}>
+                    <canvas id={this.props.chartID}></canvas>
+                </div>
+            </div>
         );
     }
 }

@@ -13,7 +13,7 @@ class App extends React.Component {
         this.setState({
             assignment: {
                 name: 'Assignment 1',
-                guests_average_words: [500, 1500, 200, 158],
+                guests_average_words: [500, 1500, 200, 158, 1000],
                 guests_average_times: [1200, 500, 145, 1000],
                 comments: [
                     {
