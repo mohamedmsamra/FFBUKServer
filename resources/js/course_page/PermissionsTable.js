@@ -185,11 +185,11 @@ class PermissionsTable extends React.Component {
         return (
             <>
                 {HAS_COURSE_EDIT_PERMISSION && 
-                    <>
-                        <small>People you invite to the course can see all existing assignments</small>
+                    <div className="mb-3 ml-1">
+                        <small><i className="fas fa-asterisk fa-sm text-muted"></i> People you invite to the course can see all existing assignments</small>
                         <br />
-                        <small>People you give read/write permission to can modify all existing assignments</small>
-                    </>
+                        <small><i className="fas fa-asterisk fa-sm text-muted"></i> People you give read/write permission to can modify all existing assignments</small>
+                    </div>
                 }
                 <this.props.ReactiveTable
                     headers={['User', 'Permissions'].concat(HAS_COURSE_EDIT_PERMISSION ? ['Actions'] : [])}
