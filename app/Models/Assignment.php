@@ -26,5 +26,9 @@ class Assignment extends Model
     public function sections() {
         return $this->hasMany('App\Models\Section');
     }
+
+    public function marking_sessions() {
+        return $this->hasMany('App\Models\MarkingSession');
+    }
 }
 

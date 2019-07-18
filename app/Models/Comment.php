@@ -22,4 +22,8 @@ class Comment extends Model
     public function private_to_user() {
         return $this->belongsTo('App\Models\User');
     }
+
+    public function comment_uses() {
+        return $this->hasMany('App\Models\CommentUse');
+    }
 }

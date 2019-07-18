@@ -95,16 +95,26 @@ class CoursesController extends Controller
     {
         //here we do our form validation first before returnging that the storage was successful
         // so the form does not submit until the title and the body are there
-
-        $this -> validate($request,[
+        if($request -> hasFile('cover_image')) {
+            \Log::info($request->cover_image->getSize());
+        }
+        $rules = [
             'title' => 'required',
-            // 'body' => 'nullable',
             //adding some validation to the image to upload, it has to be an image, optional to include or not, not required
             //and finally has a max size of 1999mb
-            'cover_image' => 'image | mimes:jpeg,png,jpg,gif,svg | nullable | max:2999'
-        ]);
+            'cover_image' => 'image | mimes:jpeg,png,jpg,gif,svg | nullable | max:2048'
+        ];
+    
+        $customMessages = [
+            'require' => 'The :attribute field is required',
+            'image' => 'The :attribute field must be an image.',
+            'max' => ':attribute no bigger than 3mb'
+        ];
+    
+        $this->validate($request, $rules, $customMessages);
 
         //Create Post
+        
         $course = new Course;
         $course ->title = $request->input('title');
         if ($request->input('body') == null) {
@@ -230,9 +240,16 @@ class CoursesController extends Controller
     public function apiImageUpload(Request $request, $id) 
     {
         if (!$this->canEdit($id)) abort(401);
-        $this -> validate($request,[
-            'cover_image' => 'image | mimes:jpeg,png,jpg,gif,svg | nullable | max:1999'
-        ]);
+        $rules = [
+            'cover_image' => 'image | mimes:jpeg,png,jpg,gif,svg | nullable | max:2048'
+        ];
+    
+        $customMessages = [
+            'image' => 'The :attribute field must be an image.',
+            'max' => ':attribute no bigger than 3mb'
+        ];
+    
+        $this->validate($request, $rules, $customMessages);
 
         $course = Course::find($id);
 
