@@ -134,7 +134,7 @@ class App extends React.Component {
                 <AssignmentsTable />
                 
                 <hr className="styled-hr"/>
-                <h2>Sharing permissions</h2>
+                <h2 className="mb-0">Sharing permissions</h2>
                 <PermissionsTable />
                 </div>
         </div>
