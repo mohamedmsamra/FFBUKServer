@@ -35,7 +35,7 @@ class BalanceOfComments extends React.Component {
     render() {
         return (
             <div className="statistics-block">
-                <h3>Balance of Comments</h3>
+                <h4>Balance of Comments</h4>
                 <canvas id="balanceOfCommentsChart"></canvas>
             </div>
         );

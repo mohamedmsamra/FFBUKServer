@@ -18,6 +18,7 @@ class App extends React.Component {
     render() {
         return (
             <div className='container'>
+                 <a href={`/courses/${COURSE_ID}`}>Back to {COURSE_NAME}</a>
                 {!this.state.assignment ?
                     <p>Loading...</p>
                 :

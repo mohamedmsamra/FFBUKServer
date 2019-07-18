@@ -24,6 +24,14 @@ class AverageLine extends React.Component {
                         data: [{x: this.props.total_average, y: 0}],
                         pointRadius: 9,
                         pointHoverRadius: 9,
+                    },
+                    {
+                        label: 'Your average',
+                        backgroundColor: 'rgba(0,0,255,0.6)',
+                        borderColor: 'rgba(0,0,255,0.8)',
+                        data: [{x: this.props.personal_average, y: 0}],
+                        pointRadius: 7,
+                        pointHoverRadius: 7,
                     }
                 ]
             },
@@ -63,7 +71,7 @@ class AverageLine extends React.Component {
     render() {
         return (
             <div className="statistics-block">
-                <h3>{this.props.title + ': ' + this.props.formatAverage(this.props.total_average)}</h3>
+                <h4>{this.props.title + ': ' + this.props.formatAverage(this.props.total_average)}</h4>
                 <div className="chart-container" style={{height: 50}}>
                     <canvas id={this.props.chartID}></canvas>
                 </div>

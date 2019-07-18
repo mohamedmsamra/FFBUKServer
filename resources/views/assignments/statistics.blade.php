@@ -25,10 +25,13 @@
                 <main class="py-4"><div id="react-root"></div></main>
             </div>
         </div>
-            <script>
-                var ASSIGNMENT_ID = <?php echo json_encode($assignment->id) ?>;
-            </script>
-            <script src="/builds/js/statistics_page/index.js"></script>
+        <script>
+            var ASSIGNMENT_ID = <?php echo json_encode($assignment->id) ?>;
+            var COURSE_NAME = <?php echo json_encode($course->title) ?>;
+            var COURSE_ID = <?php echo json_encode($course->id) ?>;
+            var IS_OWNER = <?php echo $is_owner ? 'true' : 'false' ?>;
+        </script>
+        <script src="/builds/js/statistics_page/index.js"></script>
         <!-- Scripts -->
         <script src="{{ asset('js/app.js') }}"></script>
     </body>
