@@ -131,12 +131,13 @@ class App extends React.Component {
                 
                 <hr/>
 
-                {/* <div className="card shadow-sm">
-                    <div className="card-header"> */}
-                        <h2>List of Assignments</h2>
-                        <AssignmentsTable />
+                <h2>List of Assignments</h2>
+                {/* <div className="card shadow-sm"> */}
+                    {/* <div className="card-header"> */}
+                        
+                        
                     {/* </div> */}
-                    
+                    <AssignmentsTable />
                 {/* </div> */}
                 
                 <hr/>

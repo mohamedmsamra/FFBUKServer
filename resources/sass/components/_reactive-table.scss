@@ -43,3 +43,20 @@
         margin-right: 10px;
     }
 }
+
+.table {
+    // border: 1px solid #eee;
+    // border-radius: 10px;
+    thead th {
+        border-bottom: none;
+    }
+    th {
+        border-top: none;
+    }
+
+
+}
+
+// table tr:last-child td:first-child {
+//     border-radius: 10px;
+// }
