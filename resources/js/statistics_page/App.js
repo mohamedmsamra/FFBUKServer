@@ -13,7 +13,7 @@ class App extends React.Component {
     componentDidMount() {
         fetch(`/api/assignments/${ASSIGNMENT_ID}/analytics`)
         .then(data => data.json())
-        .then(data => {console.log(data); this.setState({assignment: data})});
+        .then(data => {this.setState({assignment: data})});
     }
 
     render() {
