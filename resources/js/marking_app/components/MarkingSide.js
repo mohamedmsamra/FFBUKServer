@@ -2,7 +2,7 @@ import React from 'react';
 import jsPDF from 'jspdf';
 import { withAlert } from 'react-alert'
 import Section from './Section';
-import Loading from './Loading';
+import Loading from '../../global_components/Loading';
 import { ToggleButtonGroup, ToggleButton } from 'react-bootstrap';
 import { timingSafeEqual } from 'crypto';
 

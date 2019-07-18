@@ -9,6 +9,12 @@ class Statistics extends React.Component {
     }
 
     renderCharts() {
+        const formatAverageTime = (n) => {
+            const mins = Math.floor(n);
+            const secs = Math.round((n - mins) * 60);
+            return `${mins}m ${secs}s`
+        };
+
         if (IS_OWNER) {
             return (
                 <div className="col-sm">
@@ -25,7 +31,7 @@ class Statistics extends React.Component {
                         tooltipCallback={(tooltipItem, data) => tooltipItem.xLabel + " words" + (tooltipItem.datasetIndex == 1 ? ' (Average)' : '') + (tooltipItem.datasetIndex == 2 ? ' (You)' : '')} />
                     <AverageLine
                         chartID="avgTimeGraph"
-                        title="Average time per assignment"
+                        title="Average time"
                         unit="seconds"
                         total_average={this.props.assignment.total_average_times / 60}
                         personal_average={this.props.assignment.personal_average_time / 60}
@@ -38,26 +44,33 @@ class Statistics extends React.Component {
                             const isYou = (tooltipItem.datasetIndex == 2 ? ' (You)' : '');
                             return `${mins} mins ${secs} secs${isAverage}${isYou}`;
                         }} />
-                    <BalanceOfComments comments={this.props.assignment.comments} />
+                    <BalanceOfComments
+                        id="chartBalanceCommentsOverall"
+                        positive={this.props.assignment.comments.filter(c => c.type == 'positive').reduce((a, b) => a + b.count, 0)}
+                        negative={this.props.assignment.comments.filter(c => c.type == 'negative').reduce((a, b) => a + b.count, 0)} />
                     <h2>Personal statistics</h2>
+                    <BalanceOfComments
+                        id="chartBalanceCommentsPersonal"
+                        positive={this.props.assignment.balance_positive_comments}
+                        negative={this.props.assignment.balance_negative_comments} />
                 </div>
             );
         } else {
             return (
                 <div className="col-sm">
-
+                    <h2>Personal statistics</h2>
+                    <h4>Average words: {Math.round(this.props.assignment.personal_average_words)} words</h4>
+                    <h4>Average time: {formatAverageTime(this.props.assignment.personal_average_time)}</h4>
+                    <BalanceOfComments
+                        id="chartBalanceCommentsPersonal"
+                        positive={this.props.assignment.balance_positive_comments}
+                        negative={this.props.assignment.balance_negative_comments} />
                 </div>
             );
         }
     }
 
     render() {
-        const formatAverageTime = (n) => {
-            const mins = Math.floor(n);
-            const secs = Math.round((n - mins) * 60);
-            return `${mins}m ${secs}s`
-        };
-
         return (
            <div>
                <div className="row">
