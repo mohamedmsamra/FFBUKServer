@@ -24,16 +24,20 @@ class BalanceOfComments extends React.Component {
             },
 
             // Configuration options go here
-            options: {}
+            options: {
+                animation: {
+                    duration: 3000
+                }
+            }
         });
     }
 
     render() {
         return (
-            <>
+            <div className="statistics-block">
                 <h3>Balance of Comments</h3>
                 <canvas id="balanceOfCommentsChart"></canvas>
-            </>
+            </div>
         );
     }
 }
