@@ -129,18 +129,11 @@ class App extends React.Component {
                         </div>
                 </div>
                 
-                <hr/>
-
+                <hr className="styled-hr"/>
                 <h2>List of Assignments</h2>
-                {/* <div className="card shadow-sm"> */}
-                    {/* <div className="card-header"> */}
-                        
-                        
-                    {/* </div> */}
-                    <AssignmentsTable />
-                {/* </div> */}
+                <AssignmentsTable />
                 
-                <hr/>
+                <hr className="styled-hr"/>
                 <h2>Sharing permissions</h2>
                 <PermissionsTable />
                 </div>

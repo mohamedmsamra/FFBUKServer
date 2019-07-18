@@ -45,18 +45,15 @@
 }
 
 .table {
-    // border: 1px solid #eee;
-    // border-radius: 10px;
-    thead th {
-        border-bottom: none;
-    }
+    margin-bottom: 0;
+    
     th {
         border-top: none;
+        background-color: rgba(0, 0, 0, 0.015)
     }
 
+    tr p {
+        padding-top: 0.25rem;
+    }
 
 }
-
-// table tr:last-child td:first-child {
-//     border-radius: 10px;
-// }
