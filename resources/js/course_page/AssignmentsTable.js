@@ -327,10 +327,10 @@ class AssignmentsTable extends React.Component {
                     headers={['Assignments', 'Actions']}
                     renderRow={this.renderRow} />
                 {HAS_COURSE_EDIT_PERMISSION && 
-                <>
-                    <Button className="mr-1" variant="primary" size="sm" onClick={this.handleCreateClick}>Create new assignment</Button>
-                    <Button variant="info" size="sm" onClick={this.handleCloneClick}>Clone Existing Assignment</Button>
-                </>
+                <div className="text-center newAssignmentBtns">
+                    <Button className="mr-1" variant="primary" size="sm" onClick={this.handleCreateClick}><i className="fas fa-plus"></i>  Create Assignment</Button>
+                    <Button variant="info" size="sm" onClick={this.handleCloneClick}><i className="fas fa-clone"></i>  Duplicate Assignment</Button>
+                </div>
                 }
                 <CloneAssignmentsModal coursesWithAssignments={this.state.coursesWithAssignments} handleSelectAssignment={this.handleSelectCloningAssignment} resetModal={this.resetModal}/>
             </>

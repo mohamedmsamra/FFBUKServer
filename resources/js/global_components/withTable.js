@@ -78,20 +78,18 @@ function withTable(WrappedComponent, headers) {
                 );
             });
             return (
-                <div className="card">
-
-                
-                <Table className="reactive-table">
-                    <thead>
-                        <tr>
-                            {props.headers.map(h => <th key={h} scope="col">{h}</th>)}
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {renderedRows}
-                    </tbody>
-                </Table>
+                <div className="card shadow-sm mb-3">
+                    <Table className="reactive-table">
+                        <thead>
+                            <tr>
+                                {props.headers.map(h => <th key={h} scope="col">{h}</th>)}
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {renderedRows}
+                        </tbody>
+                    </Table>
                 </div>
             );
         }

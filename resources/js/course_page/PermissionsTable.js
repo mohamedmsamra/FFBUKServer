@@ -139,7 +139,11 @@ class PermissionsTable extends React.Component {
     renderRow(row) {
         return (
             <>
-                <td className={row.data.pending ? 'user-pending' : ''} >{row.data.user.name + (row.data.pending ? ' (Pending)' : '')}</td>
+                <td className={row.data.pending ? 'user-pending' : ''} >
+                    <p>
+                        {row.data.user.name + (row.data.pending ? ' (Pending)' : '')}
+                    </p>
+                </td>
                 <td>
                     {HAS_COURSE_EDIT_PERMISSION ?
                         <Form.Group controlId="exampleForm.ControlSelect1">
@@ -192,6 +196,9 @@ class PermissionsTable extends React.Component {
                     renderRow={this.renderRow} />
                 {HAS_COURSE_EDIT_PERMISSION && 
                     <InputGroup size="sm" className="mb-3">
+                        <InputGroup.Prepend>
+                        <InputGroup.Text id="basic-addon1"><i className="fas fa-plus"></i></InputGroup.Text>
+                        </InputGroup.Prepend>
                         <FormControl
                             placeholder="Enter email address"
                             aria-label="Enter email address"
@@ -202,7 +209,7 @@ class PermissionsTable extends React.Component {
                             onKeyPress={(e) => {e.charCode==13 && this.handleInvite()}}/>
                         <InputGroup.Append>
                             <Button 
-                                variant="outline-secondary"
+                                variant="outline-primary"
                                 onClick={this.handleInvite}
                                 disabled={this.state.awaitingInvitationResponse} >
                                 Invite to course

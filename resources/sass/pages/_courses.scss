@@ -16,12 +16,13 @@
 #courseActions {
     .courseBtn {
         border: none;
-        background-color: #fafafa;
+        background-color: rgba(0, 0, 0, 0.015);
         padding: 10px 20px;
     }
 
     .deleteBtn {
         border-left: 1px solid #eee;
+        
     }
 }
 
