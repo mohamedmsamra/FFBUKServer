@@ -172,8 +172,14 @@ class AssignmentsController extends Controller
 
     public function getStatistics($id) {
         $assignment = Assignment::find($id);
+        $course = $assignment->course()->first();
+        $is_owner = $course->user_id == Auth::user()->id;
 
-        return view('assignments.statistics')->with('assignment', $assignment);
+        return view('assignments.statistics', [
+            'course' => $course,
+            'assignment' => $assignment,
+            'is_owner' => $is_owner
+        ]);
     }
 
     // Owner of the course

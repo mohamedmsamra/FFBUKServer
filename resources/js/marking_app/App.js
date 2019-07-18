@@ -1,7 +1,7 @@
 import React from 'react';
 import PDFSide from './components/PDFSide';
 import MarkingSide from './components/MarkingSide';
-import Loading from './components/Loading';
+import Loading from '../global_components/Loading';
 import CreateTemplateModal from './components/modals/CreateTemplateModal';
 
 class App extends React.Component {

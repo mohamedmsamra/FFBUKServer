@@ -75,8 +75,8 @@ class CommentsList extends React.Component {
         }
 
         const commentsList = [this.props.comments]
-        .map(this.state.listOptions.orderBySection ? recursiveSortBySection : cs => cs)
         .map(this.state.listOptions.orderByType ? recursiveSortByType : cs => cs)
+        .map(this.state.listOptions.orderBySection ? recursiveSortBySection : cs => cs)
         .map(recursiveSortByCount)
         .map(traverse)[0]
         .filter(this.state.listOptions.showPrivate ? () => true : c => c.private == false)
@@ -84,7 +84,7 @@ class CommentsList extends React.Component {
             <ListGroup.Item key={comment.id} className={`sectionComment ${comment.type} ${comment.private ? 'privateComment' : 'publicComment'}`}>
                 <span className="comment-count">{`(${comment.count}) `}</span>
                 {comment.text}
-                <span className="section-name">{comment.section.name}</span>
+                <span className="section-name">{comment.section.title}</span>
             </ListGroup.Item>
         ));
         

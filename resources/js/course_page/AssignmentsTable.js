@@ -265,6 +265,9 @@ class AssignmentsTable extends React.Component {
                     <a href={`/assignments/${data.id}/mark`}>
                         <button type="button" className="btn btn-primary btn-sm" disabled={isLoading}>Start marking</button>
                     </a>
+                    <a href={`/assignments/${data.id}/statistics`}>
+                        <button type="button" className="btn btn-secondary btn-sm" disabled={isLoading}>View analytics</button>
+                    </a>
                     {HAS_COURSE_EDIT_PERMISSION && 
                         <>
                             <button type="button" className="btn btn-info btn-sm" disabled={isLoading} onClick={() => this.handleEditClick(data.id)}>Edit</button>
