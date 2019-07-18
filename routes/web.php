@@ -98,6 +98,7 @@ Route::group( ['middleware' => 'auth' ], function()
     Route::post('/api/comment-uses', 'AnalyticsController@apiStoreCommentUse');
     Route::post('/api/comment-uses/update', 'AnalyticsController@apiUpdateCommentUse');
     Route::get('/api/comment-uses/{id}', 'AnalyticsController@apiShowCommentUse');
+    Route::get('/api/assignments/{id}/analytics', 'AnalyticsController@apiShowAnalytics');
 });
 
 
