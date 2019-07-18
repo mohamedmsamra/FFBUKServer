@@ -142,6 +142,7 @@ class AnalyticsController extends Controller
             $analytics->guests_average_times = $guests_times;
             // the overall
             $analytics->total_average_words = round(($analytics->personal_average_words + array_sum(json_decode(json_encode($guests_words), true))) / (count($guests_words) + 1));
+            $analytics->total_average_times = round(($analytics->personal_average_time + array_sum(json_decode(json_encode($guests_times), true))) / (count($guests_times) + 1));
 
         // Analytics specific to the assignment guests
         } else if ($isInvited) {

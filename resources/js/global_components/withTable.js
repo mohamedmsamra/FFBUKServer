@@ -78,6 +78,9 @@ function withTable(WrappedComponent, headers) {
                 );
             });
             return (
+                <div className="card">
+
+                
                 <Table className="reactive-table">
                     <thead>
                         <tr>
@@ -89,6 +92,7 @@ function withTable(WrappedComponent, headers) {
                         {renderedRows}
                     </tbody>
                 </Table>
+                </div>
             );
         }
 
