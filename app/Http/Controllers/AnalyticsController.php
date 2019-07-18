@@ -151,6 +151,22 @@ class AnalyticsController extends Controller
 
             $analytics->all_sessions_words = $sessions_words;
             $analytics->all_sessions_times = $sessions_times;
+
+            // Personal balance of positive and negative comments
+            $personalUses = CommentUse::where('user_id', $user_id)->get();
+            $pos = 0;
+            $neg = 0;
+
+            foreach ($personalUses as $use) {
+                $comm = Comment::find($use->comment_id);
+                if (in_array($comm->section_id, json_decode(json_encode($sections), true))) {
+                    $comm->type == "positive" ? $pos += $use->count : $neg += $use->count;
+                }
+            }
+
+            $analytics->balance_negative_comments = $pos;
+            $analytics->balance_positive_comments = $neg;
+            
         }
 
         return json_encode($analytics);        
