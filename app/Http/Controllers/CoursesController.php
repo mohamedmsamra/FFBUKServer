@@ -96,7 +96,6 @@ class CoursesController extends Controller
         //here we do our form validation first before returnging that the storage was successful
         // so the form does not submit until the title and the body are there
         if($request -> hasFile('cover_image')) {
-            \Log::info($request->cover_image->getSize());
         }
         $rules = [
             'title' => 'required',
@@ -270,7 +269,6 @@ class CoursesController extends Controller
 
             $matches = glob($path.'/course_'.$course->id.'*');
             foreach ($matches as $match) {
-                \Log::info($match);
                 unlink($match);
             }
 

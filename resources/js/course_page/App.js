@@ -15,20 +15,31 @@ class App extends React.Component {
     }
 
     handleUploadImage(e) {
-        fetch(course_id + '/imageUpload', {
-            method: 'post',
-            body: new FormData($(e.target).parent()[0]),
-            headers: {
-                "Content-Type": "multipart/form-data",
-                "Accept": "application/json, text-plain, */*",
-                "X-Requested-With": "XMLHttpRequest",
-                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content')
+        if(e.target.files[0] != undefined && e.target.files[0].size > 2097152) {
+            this.props.alert.error({text: "Image too large! Please pick one smaller than 2mb"});
+        } else {
+            console.log(e.target.files[0]);
+            var data = new FormData();
+            data.append('cover_image', e.target.files[0]);
+            
+            const options = {
+                method: 'post',
+                body: data,                
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                    "Accept": "application/json, text-plain, */*",
+                    "X-Requested-With": "XMLHttpRequest",
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content')
+                }
             }
-        })
-            .then(data => data.json())
-            .then(data => {
-                // console.log(data);
+            delete options.headers['Content-Type'];
+            fetch("../api/courses/" + course_id + "/image-upload", options)
+            .then(function(response) {
+                return response.json();
+            }).then((data) => {
+                this.setState({cover_image: data});
             });
+        }
     }          
     
     handleDeleteCourse() {
@@ -72,8 +83,12 @@ class App extends React.Component {
                 
                 <h1 className="mt-3">{ COURSE_TITLE }</h1>
                 <a href="/courses" className="btn btn-link"> Go Back </a>
+                {console.log(COVER_IMAGE)}
+                
                 <div id="courseActions">
-                    {/* <form encType="multipart/form-data" action="" className="float-left">
+                    {course_owner_id !== user_id ? '' :
+                    <form encType="multipart/form-data" action="" className="float-left">
+                        <input type="hidden" name="_token" value={$('meta[name="csrf-token"]').attr('content')} />
                         <input 
                             onChange={this.handleUploadImage.bind(this)}
                             name="cover_image"
@@ -91,7 +106,8 @@ class App extends React.Component {
                             title="Change Course Image">
                             <i className="fas fa-image"></i> Change Course Image
                         </button>
-                    </form> */}
+                    </form>
+                    }
                     {/* <p>{console.log(PERMISSIONS)}</p>
                     <p>{console.log(user_id)}</p>
                     <p>{console.log(permission)}</p> */}
