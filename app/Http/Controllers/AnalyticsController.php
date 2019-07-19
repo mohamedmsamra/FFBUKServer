@@ -20,11 +20,17 @@ class AnalyticsController extends Controller
         $this -> validate($request,[
             'assignment_id' => 'required',
             'words' => 'required',
-            'time' => 'required'
+            'time' => 'required',
+            'comments' => 'required'
         ]);
 
         $user_id = Auth::user()->id;
         
+        // Update comment uses
+        foreach ($request->comments as $comment_id) {
+            $this->apiUpdateCommentUse($comment_id);
+        }
+
         //Create Session
         $session = new MarkingSession;
         $session->assignment_id = $request->input('assignment_id');
@@ -42,29 +48,25 @@ class AnalyticsController extends Controller
         return json_encode($session);
     }    
 
-    public function apiStoreCommentUse(Request $request) {
-        $this -> validate($request,[
-            'comment_id' => 'required'
-        ]);
-
+    private function apiStoreCommentUse($comment_id) {
         $user_id = Auth::user()->id;
         
         //Create Session
         $commentUse = new CommentUse;
-        $commentUse->comment_id = $request->input('comment_id');
+        $commentUse->comment_id = $comment_id;
         $commentUse->user_id = $user_id;
         $commentUse->save();
 
         return json_encode($commentUse);
     }
 
-    public function apiUpdateCommentUse(Request $request) {
+    private function apiUpdateCommentUse($id) {
         $user_id = Auth::user()->id;
-        $commentUse = CommentUse::where('comment_id', $request->comment_id)->where('user_id', $user_id)->first();
+        $commentUse = CommentUse::where('comment_id', $id)->where('user_id', $user_id)->first();
         
         if (is_null($commentUse)) {
-            $this->apiStoreCommentUse($request);
-            $commentUse = CommentUse::where('comment_id', $request->comment_id)->where('user_id', $user_id)->first();
+            $this->apiStoreCommentUse($id);
+            $commentUse = CommentUse::where('comment_id', $id)->where('user_id', $user_id)->first();
         } 
         $commentUse->count = $commentUse->count + 1;
         $commentUse->save();
@@ -134,8 +136,8 @@ class AnalyticsController extends Controller
             }
         }
 
-        $analytics->balance_negative_comments = $pos;
-        $analytics->balance_positive_comments = $neg;
+        $analytics->balance_positive_comments = $pos;
+        $analytics->balance_negative_comments = $neg;
 
         // Analytics specific to the assignment owner
         if ($isOwner) {

@@ -36,12 +36,12 @@ class MarkingSide extends React.Component {
             assignment: null,
             content: (<h1>Nothing</h1>),
             enableMarking: false,
-            selectedExportType: 'pdf'
+            selectedExportType: 'pdf',
+            commentsUsedInSession: []
         };
     }
 
     componentDidMount() {
-        this.setState({start: Date.now()});
         this.fetchAssignment();
     }
 
@@ -159,13 +159,18 @@ class MarkingSide extends React.Component {
     handleAppendComment(id, comment) {
         this.setState(prevState => {
             const section = prevState.assignment.sections.custom.find(x => x.id == id);
-            // Check if the section is empty after inputting values
-            if (section.value == "<p><br></p>") {
-                section.value = "<p>" + comment + "</p>";
+            // Check if the section has an empty line, or doesn't end in a paragraph, and add the new comment
+            if (section.value.endsWith("<p><br></p>")) {
+                section.value = section.value.substring(0, section.value.length - 11) + "<p>" + comment.text + "</p>";
+            } else if (!section.value.endsWith("</p>")) {
+                section.value += "<p>" + comment.text + "</p>";
             } else {
-                section.value += "<p>" + comment + "</p>";
+                section.value = section.value.substring(0, section.value.length - 4) + "<span> " + comment.text + "</span></p>";
             }
-            
+
+            // Add comment to comments used in session
+            prevState.commentsUsedInSession.push(comment.id);
+
             return prevState;
         });
     }
@@ -197,23 +202,23 @@ class MarkingSide extends React.Component {
     }
 
     handleSaveSession(words, seconds) {
-        fetch('/api/marking-sessions', {
-			method: 'post',
-			body: JSON.stringify({
-				assignment_id: this.state.assignment.id,
-				words: words,
-				time: seconds
-			}),
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json, text-plain, */*",
-                "X-Requested-With": "XMLHttpRequest",
-                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content')
-            }
-        })
-        .then(data => data.json())
-        .then(data => {
-            console.log(data); 
+        return new Promise(next => {
+            fetch('/api/marking-sessions', {
+                method: 'post',
+                body: JSON.stringify({
+                    assignment_id: this.state.assignment.id,
+                    words: words,
+                    time: seconds,
+                    comments: this.state.commentsUsedInSession
+                }),
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json, text-plain, */*",
+                    "X-Requested-With": "XMLHttpRequest",
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            next();
         });
     }
 
@@ -241,9 +246,7 @@ class MarkingSide extends React.Component {
         for(let i = 0; i < this.state.assignment.sections.custom.length; i++) {
             section = this.state.assignment.sections.custom[i];
             strippedText = isEmpty(section.value);
-            if(!strippedText) {
-                console.log(section.title + " is empty")
-            } else {
+            if(strippedText) {
                 wordCount += this.countWords(strippedText);
             }
         }
@@ -251,9 +254,12 @@ class MarkingSide extends React.Component {
         let name = this.props.pdfsSelected[this.props.pdfPointer].name;
         const methodToSave = this.state.selectedExportType == 'pdf' ? this.generatePDF : this.copyTextToClipboard;
 
-        let time = (Date.now() -this.state.start ) / 1000;
+        let time = (Date.now() -this.props.start ) / 1000;
         
-        this.handleSaveSession(wordCount, time);
+        this.handleSaveSession(wordCount, time).then(() => {
+            this.setState({commentsUsedInSession: []});
+        });
+
         methodToSave(name).then(() => {
             if (this.state.enableMarking) this.props.setPdfMark(this.state.assignment.totalMark);
             
@@ -264,7 +270,7 @@ class MarkingSide extends React.Component {
                 this.generateMarksPDF(this.props.pdfsSelected.map(pdf => ({name: pdf.name, mark: pdf.mark})));
             }
             this.props.handleNextPdf();
-            this.setState({start: Date.now()});
+            // this.setState({start: Date.now()});
             // if (this.props.isLastPdf) alert.success({text: "Session complete!", isConfirm: false});
         });
     }
@@ -382,7 +388,6 @@ class MarkingSide extends React.Component {
                             `<p>Marked by ${USER_NAME}</p>`,
                             `<table style='font-size: 11px'><tr><th>Name</th><th>Marks</th></tr>${rows}</table>`,
                         ].reduce((a, c) => a + c, '');
-                        console.log(rows);
                         var doc = new jsPDF();
                         doc.fromHTML(html, 15, 15, {
                             'width': 170,
@@ -490,7 +495,7 @@ class MarkingSide extends React.Component {
         const loadingNewSection = () => {this.state.submitting &&  <Loading text="Creating new section..." />};
         return (
 
-            <div className="col-6">
+            <div id="marking-side">
                 <div>
                     {this.state.loading
                     ?

@@ -99,7 +99,7 @@
                                 </p>
                                 <div class="clear"></div> --}}
                             @foreach ($course->assignments()->get() as $assignment)
-                                <p><a href="/marking/{{ $assignment->id }}">{{ $assignment->name }}</a></p>
+                                <p><a href="/assignments/{{ $assignment->id }}/mark">{{ $assignment->name }}</a></p>
                             @endforeach
                             <small> Created on {{$course->created_at}} by 
                                 <strong>

@@ -2,7 +2,7 @@ import React from 'react';
 import PDFSide from './components/PDFSide';
 import MarkingSide from './components/MarkingSide';
 import Loading from '../global_components/Loading';
-import CreateTemplateModal from './components/modals/CreateTemplateModal';
+import interact from 'interactjs';
 
 class App extends React.Component {
     constructor(props) {
@@ -20,16 +20,45 @@ class App extends React.Component {
         this.isLastPdf = this.isLastPdf.bind(this);
     }
 
-    // componentDidMount() {
-    //     this.fetchAssignment();
-        
-    // }
+    componentDidMount() {
+            interact('.resize-drag')
+            .resizable({
+                edges: {
+                  right : true    // Resize if pointer target is the given Element
+                },
+                modifiers: [
+                    // minimum size
+                    interact.modifiers.restrictSize({
+                      min: { width: 350}
+                    })
+                  ]
+
+              })
+              .on('resizemove', event => {
+                let { x, y } = event.target.dataset
+                console.log(parseFloat(x));
+                x = parseFloat(x) || 0
+                y = parseFloat(y) || 0
+
+                
+            
+                Object.assign(event.target.style, {
+                  width: `${(() => Math.min(event.rect.width, $($('.resize-container')[0]).width() - 350))()}px`,
+                  height: `${event.rect.height}px`,
+                  transform: `translate(${event.deltaRect.left}px, ${event.deltaRect.top}px)`
+                })
+            
+                Object.assign(event.target.dataset, { x, y })
+              })
+    }
 
     // fetchAssignment() {
     //     fetch('/api/assignments/' + assignment_id)
     //         .then(data => data.json())   
     //         .then(data => {this.setState(prevState => ({assignment: Object.assign(prevState.assignment, this.assignmentFromDBFormat(data)), loading: false}))});
     // }
+
+    
 
     formatDate(date) {
         var monthNames = [
@@ -49,6 +78,7 @@ class App extends React.Component {
     }
 
     handlePdfsSelected(files) {
+        this.setState({start: Date.now()});
         const pdfsSelected = [];
         for (let i = 0; i < files.length; i++) {
             pdfsSelected[i] = {name: files[i].name, url: URL.createObjectURL(files[i]), mark: -1};
@@ -57,6 +87,7 @@ class App extends React.Component {
     }
 
     handleNextPdf() {
+        this.setState({start: Date.now()});
         this.setState(prevState => {
             if (this.isLastPdf()) {
                 prevState.pdfPointer = -1;
@@ -90,23 +121,34 @@ class App extends React.Component {
 
     render() {
         return (
-            <div className="row cont">
-                
-                <PDFSide
-                    handlePdfsSelected={this.handlePdfsSelected}
-                    pdfsSelected={this.state.pdfsSelected}
-                    pdfPointer={this.state.pdfPointer} />
-                
-                <MarkingSide
-                    pdfsSelected={this.state.pdfsSelected}
-                    pdfPointer={this.state.pdfPointer}
-                    finishEarly={this.finishEarly}
-                    setPdfMark={this.setPdfMark}
-                    handleNextPdf={this.handleNextPdf}
-                    isLastPdf={this.isLastPdf} 
-                    loading={this.state.loading}
-                    formatDate={this.formatDate} />
-            </div>
+            // <div className="cont">
+                <div className="resize-container">
+                    <div className="resize-drag">
+                        <div className="resize-drag-content">
+                            <PDFSide
+                                handlePdfsSelected={this.handlePdfsSelected}
+                                pdfsSelected={this.state.pdfsSelected}
+                                pdfPointer={this.state.pdfPointer} />
+                        </div>
+                        <div id="divider">
+                            <div id="bar">
+                                <i className="fas fa-ellipsis-v"></i>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    <MarkingSide
+                        pdfsSelected={this.state.pdfsSelected}
+                        pdfPointer={this.state.pdfPointer}
+                        finishEarly={this.finishEarly}
+                        setPdfMark={this.setPdfMark}
+                        handleNextPdf={this.handleNextPdf}
+                        isLastPdf={this.isLastPdf} 
+                        loading={this.state.loading}
+                        formatDate={this.formatDate}
+                        start={this.state.start} />
+                </div>
+            // </div>
         )
     }
 }

@@ -8,7 +8,7 @@ class PDFSide extends React.Component {
     render() {
         const currentPdf = this.props.pdfsSelected[this.props.pdfPointer];
         return (
-            <div className="col-6 sticky" id="pdf-side">
+            <div className="" id="pdf-side">
                 {/* <div className="sticky">
                     hello
                 </div> */}

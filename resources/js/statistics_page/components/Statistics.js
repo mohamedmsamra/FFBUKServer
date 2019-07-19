@@ -46,11 +46,13 @@ class Statistics extends React.Component {
                         }} />
                     <BalanceOfComments
                         id="chartBalanceCommentsOverall"
+                        title="Balance of Comments (overall)"
                         positive={this.props.assignment.comments.filter(c => c.type == 'positive').reduce((a, b) => a + b.count, 0)}
                         negative={this.props.assignment.comments.filter(c => c.type == 'negative').reduce((a, b) => a + b.count, 0)} />
                     <h2>Personal statistics</h2>
                     <BalanceOfComments
                         id="chartBalanceCommentsPersonal"
+                        title="Balance of Comments (personal)"
                         positive={this.props.assignment.balance_positive_comments}
                         negative={this.props.assignment.balance_negative_comments} />
                 </div>
@@ -63,6 +65,7 @@ class Statistics extends React.Component {
                     <h4>Average time: {formatAverageTime(this.props.assignment.personal_average_time)}</h4>
                     <BalanceOfComments
                         id="chartBalanceCommentsPersonal"
+                        title="Balance of Comments"
                         positive={this.props.assignment.balance_positive_comments}
                         negative={this.props.assignment.balance_negative_comments} />
                 </div>

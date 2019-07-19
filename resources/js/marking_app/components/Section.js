@@ -99,23 +99,7 @@ class Section extends React.Component {
     // On click, add comment to the text box if it wasn't added already
     handleCommentClick(id, type, text) {
         this.props.handleCommentAdded(this.props.id, id, type);
-        this.props.handleAppendComment(this.props.id, text);
-        fetch('/api/comment-uses/update', {
-			method: 'post',
-			body: JSON.stringify({
-				comment_id: id
-			}),
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json, text-plain, */*",
-                "X-Requested-With": "XMLHttpRequest",
-                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content')
-            }
-            })
-            .then(data => data.json())
-            .then(data => {
-                // console.log(data); 
-            });
+        this.props.handleAppendComment(this.props.id, {id: id, text: text});
     }
 
     handleEditTitle(e) {

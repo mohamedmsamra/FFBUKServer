@@ -110,6 +110,7 @@ class AssignmentsController extends Controller
         $assignment = Assignment::find($id);
         $newAssignment = $assignment->replicate();
         $newAssignment->course_id = $request->course_id;
+        $newAssignment->name .= ' (copy)';
         $newAssignment->save();
 
         $sections = Section::where('assignment_id', $id)->get();

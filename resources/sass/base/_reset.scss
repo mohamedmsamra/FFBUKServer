@@ -1,5 +1,9 @@
 // reduce browser inconsistencies in things like default line heights, margins and font sizes of headings
 
+body {
+  min-width: 735px;
+}
+
 .clear {
     clear: both;
 }
