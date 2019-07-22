@@ -35,7 +35,7 @@
                 const PERMISSIONS = <?php echo json_encode($permissions) ?>;
                 const HAS_COURSE_EDIT_PERMISSION = course_owner_id == user_id;
                 const CREATED_AT = new Date("{{$course->created_at}}");
-                const CREATOR_NAME = "{{ $course->user->first()->name }}";
+                const CREATOR_NAME = "{{ $course->user()->first()->name }}";
                 const COVER_IMAGE = "{{$course->cover_image}}";
                 const COURSE_TITLE = "{{$course->title}}";
                 const BODY = <?php echo json_encode($course->body) ?>;
