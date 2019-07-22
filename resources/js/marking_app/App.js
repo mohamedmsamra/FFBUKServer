@@ -36,7 +36,6 @@ class App extends React.Component {
               })
               .on('resizemove', event => {
                 let { x, y } = event.target.dataset
-                console.log(parseFloat(x));
                 x = parseFloat(x) || 0
                 y = parseFloat(y) || 0
 

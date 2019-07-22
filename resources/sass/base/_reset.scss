@@ -36,6 +36,7 @@ border-spacing: 0; }
 
 /* width */
 ::-webkit-scrollbar {
+    height: 10px;
     width: 10px;
     transition: width 2s;
   }

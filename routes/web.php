@@ -101,7 +101,7 @@ Route::group( ['middleware' => 'auth' ], function()
 });
 
 
-Auth::routes();
+Auth::routes(['verify' => true]);
 
 // TODO: Remove
 Route::get('/apitest', function () {
