@@ -17,7 +17,9 @@ class PagesController extends Controller
         //return view('pages.index', compact('title'));
         
         //with (what we want to call the passed variable, its name in this context)
-        return view('pages.index') -> with('title', $title);
+        return view('pages.index') -> with('title', $title)
+                                   -> with('assignment1', 2)
+                                   -> with('assignment2', 13);
     }
     public function about(){
         $title = 'About';
