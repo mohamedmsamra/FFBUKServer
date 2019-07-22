@@ -370,7 +370,7 @@
 }
 
 .resize-drag {
-    flex: 1 0 auto;
+    flex: 0 0 auto;
     font-size: 20px;
     font-family: sans-serif;
     padding-left: 20px;
@@ -381,7 +381,7 @@
   
     /* This makes things *much* easier */
     box-sizing: border-box;
-    max-width: calc(100%-300px);
+    // max-width: calc(100%-300px);
 
     position: sticky;
     top: 0;
@@ -402,8 +402,8 @@
 }
 
 #marking-side {
-    flex: 0 1 auto;
-    min-width: 300px;
+    flex: 1 1 auto;
+    min-width: 350px;
     padding: 0 20px;
 }
 
