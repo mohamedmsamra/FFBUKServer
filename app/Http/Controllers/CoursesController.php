@@ -70,7 +70,7 @@ class CoursesController extends Controller
     /**
      * Show the form for creating a new course
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\Response the page with the form to create a new course
      */
     public function create()
     {
@@ -217,13 +217,28 @@ class CoursesController extends Controller
         return json_encode($fileNameToStore);
     }
 
+    /**
+     * Get the file path of the image of a course
+     * 
+     * @param int $id the id of the course
+     * @return string the course image file path
+     */
     public function apiShowImage($id) {
+        // If the authenticated user doesn't have permission to see the course (is not the owner or invited), abort
         if (!$this->canView($id)) abort(401);
+
+        // Find the course and return the image path
         $course = Course::find($id);
         return json_encode($course->cover_image);
     }
 
-    public function apiShow(Request $request, $id)
+    /**
+     * Get a JSON course object
+     * 
+     * @param int $id the id of the course to retrieve
+     * @return string a string containing the JSON representation of a course object
+     */
+    public function apiShow($id)
     {
         if (!$this->canView($id)) abort(401);
         $course = Course::find($id);
@@ -236,97 +251,172 @@ class CoursesController extends Controller
         ]);
     }
 
+    /**
+     * Accept an invitation to join a course
+     * 
+     * @param int $id the id of the invitation (a course permission with pending set to true)
+     * @return \Illuminate\Http\Response the previous page, with an appropriate message
+     */
     public function apiJoinCourse($id) {
+        // Find the invitation
         $permission = CoursePermission::find($id);
+
+        // Check that it is for the authenticated user
         if ($permission -> user_id == Auth::user()->id) {
+            // Set the pending to false, meaning that the invitation was accepted
             $permission -> pending = 0;
             $permission -> save();
     
+            // Return to the previous page with a success message
             return back()->with('success', 'Joined Course');
         }
-        return back()->with('error', "Don't have permission to do that");
-        // return $permission;
+        // Otherwise (invitation is not for this user), return to the previous page with an error message
+        return back()->with('error', "You don't have permission to do that");
     }
 
-    // Add user to course
+    /**
+     * Invite a user to a course by their email
+     * 
+     * @param \Illuminate\Http\Request $request the information that needs to be sent in the post request
+     * @param int $course_id the id of the coure to add the user to
+     * @return string a string containing the JSON representation of an object dictating the success of the request
+     */
     public function apiInviteToCourse(Request $request, $course_id) {
+        // If the authenticated user is not the owner of the course, abort
         if (!$this->canEdit($course_id)) abort(401);
+
+        // An email address must be provided
         $this -> validate($request,[
             'email' => 'required'
         ]);
 
+        // Find the user by the email
         $user = User::where('email', $request->email)->first();
         if (!$user) {
+            // No user with this email address, so send an error message
             return json_encode(['success' => false, 'message' => 'This email cannot be found.']);   
         }
 
+        // Find the course by the id
         $user_id = $user->id;
         $course = Course::find($course_id);
 
         if (!$course) {
+            // No course with this id exists, so sent an error message
             return json_encode(['success' => false, 'message' => 'This course does not exist.']);   
         }
         
         if ($user_id == $course->user_id) {
+            // The invited user is the course owner, so send an error message (owner can't be invited to the course they own)
             return json_encode(['success' => false, 'message' => 'You are the owner of this course.']);   
         }
 
         if (CoursePermission::where('course_id', $course_id)->where('user_id', $user_id)->first()) {
+            // The invited user has already been ivited, so send an error message
             return json_encode(['success' => false, 'message' => 'This user is already invited to this course.']);   
         }
 
+        // If all checks are passed, create a new pending course permission for this user on this course
         $coursePermission = new CoursePermission();
         $coursePermission -> course_id = $course_id;
         $coursePermission -> user_id = $user_id;
         $coursePermission -> save();
         unset($coursePermission['user_id']);
         $coursePermission['user'] = ['id' => $user->id, 'name' => $user->name];
+
+        // Return the created course permission
         return json_encode(['success' => true, 'course_permission' => $coursePermission]);
     } 
 
+    /**
+     * Remove a user from a course
+     * 
+     * @param int $id the id of the course permission to delete
+     * @return string a string containing the JSON representation of an object that says whether the removal was a success or not
+     */
     public function apiRemoveFromCourse($id) {
+        // Find the course permission
         $coursePermission = CoursePermission::find($id);
+        // If the autenticated user is not the course owner, abort
         if (!$this->canEdit($coursePermission->course_id)) abort(401);
-        if ($coursePermission->course()->first()->user_id == Auth::user()->id) {
-            $coursePermission->delete();
-            return json_encode(['success' => true]);
-        } else {
-            return json_encode(['success' => false]);
-        }
+        // Otherwise, remove the course permission and return success true
+        $coursePermission->delete();
+        return json_encode(['success' => true]);
     }
 
+    /**
+     * Reject an invitation to a course
+     * 
+     * @param int $id the id of the invitation (course permission with pending set to true)
+     * @return \Illuminate\Http\Response the previous page with an appropriate message
+     */
     public function apiRejectCourseInvite($id) {
+        // Find the course permission
         $coursePermission = CoursePermission::find($id);
+        // Check that the course permission is still pending and that the authenticated user is the one invited
         if ($coursePermission->pending == true && $coursePermission->user_id == Auth::user()->id) {
+            // Save the course name for confirmation alert
             $name = Course::find($coursePermission->course_id)->title;
+            // Remove the course permission from storage
             $coursePermission -> delete();
+            // Return to the previous page with a confirmation alert
             return back()->with('warning', 'Rejected invitation to '.$name);
         } else {
+            // Otherwise (course permission is either not pending or doesn't concern the authenticated user)
+            // Return to the previous page with a failure alert
             return back()->with('error', 'Failed to reject course invitation');
         }
     }
 
+    /**
+     * Get all permissions for a course
+     * 
+     * @param int $id the id of the course
+     * @return string a string containing the JSON representation of the list of permissions for this course
+     */
     public function apiGetPermissions($id) {
         if (!$this->canView($id)) abort(401);
         return json_encode($this->permissions($id));
     }
 
+    /**
+     * Update the permission level for a user on a course
+     * 
+     * @param \Illuminate\Http\Request $request what needs to be sent in the update request
+     * @param int $course_id the id of the course this permission is for
+     * @param int $user_id the id of the user whose permission should be updated
+     * @return string the success of the update
+     */
     public function apiUpdatePermission(Request $request, $course_id, $user_id) {
+        // If the authenticated user is not the course owner, abort
         if (!$this->canEdit($course_id)) abort(401);
+
+        // The new permission level must pe provided
         $this -> validate($request,[
             'level' => 'required'
         ]);
         
         if ($this->hasPermissionToUpdatePermissions($course_id, Auth::user()->id)) {
             // First check if user in the course has read/write permissions
+            // Find the course permission for the give course and user pair
             $permission = CoursePermission::where('course_id', $course_id)->where('user_id', $user_id)->first();
+            // Update the permission level to the new one and save the changes
             $permission->level = $request->input('level');
             $permission->save();
+            // Return a relevant message
             return json_encode("done");
         }
+        // Return an error message
         return json_encode(['error' => 'You don\'t have permission for that']);
     }
 
+    /**
+     * Check if a given user has permission to update course permissions for a given course
+     * 
+     * @param int $course_id the id of the course 
+     * @param int $user_id the id of the user
+     * @return boolean if the user has permission to edit the course permissions for this course
+     */
     private static function hasPermissionToUpdatePermissions($course_id, $user_id) {
         // Check if the user is the owner
         if (Course::where('id', $course_id)->where('user_id', $user_id)->first()) return true;
@@ -335,11 +425,19 @@ class CoursesController extends Controller
         // Check if the user has read/write permissions ??
     }
 
+    /**
+     * Get all the permission for a given course
+     * 
+     * @param int $id the id of the course
+     * @return array a list of all permissions for this course
+     */
     private static function permissions($id) {
-        $course = Course::find($id);
 
+        // Find the course and all the permissions for it
+        $course = Course::find($id);
         $permissions = $course->permissions;
 
+        // Build the list of permission with only the relevant information
         $return = [];
         foreach ($permissions as $permission) {
             $r = [];
@@ -350,25 +448,53 @@ class CoursesController extends Controller
             $r['pending'] = $permission->pending;
             array_push($return, $r);
         }
-
         return $return;
     }
     
+    /**
+     * Get the course with the given id created by the authenticated user
+     * 
+     * @param int $id the id of the course
+     * @return object the course with this id created by the authenticated user (can be null)
+     */
     public static function canManage($id) {
+        // Get a list of all courses that match the criteria (have the given course id and are created by the authenticated user)
         $isOwner = Course::where('id', $id)->where('user_id', Auth::user()->id);
+        // Return the first object from that list
         return $isOwner->first();
     }
 
+    /**
+     * Get the course with the given id and created by the authenticated user 
+     * (if it exists, the authenticated user is the owner)
+     * (if it does not exist, the authenticated user is not the owner so he does not have edit permission)
+     * 
+     * @param int $id the course id
+     * @return object the course with the given id and created by the authenticated user 
+     */
     public static function canEdit($id) {
         // Only the manager (owner) can edit course details
         return CoursesController::canManage($id);
     }
 
+    /**
+     * Check if the authenticated user has permission to view the given course
+     * 
+     * @param int $id the id of the course
+     * @return boolean if the authenticated user has permission to view the course
+     */
     private static function canView($id) {
+        // Get the course with the given id and created by the authenticated user 
+        // if this exists, the user is the course wner and has access to view the course
         $isOwner = Course::where('id', $id)->where('user_id', Auth::user()->id);
+
+        // Get the course permission for this user to this course that is not pending
+        // if this exists, the user is invited to the course and has access to view it
         $hasReadRights = CoursePermission::where('course_id', $id)
                                          ->where('user_id', Auth::user()->id)
                                          ->where('pending', false);
+        
+        // Return if the authenticated user is either the owner or is invited to the course
         return ($isOwner->first() || $hasReadRights->first());
     }
 }
