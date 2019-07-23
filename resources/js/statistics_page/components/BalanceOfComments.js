@@ -1,6 +1,7 @@
 import React from 'react';
 import Chart from 'chart.js';
 
+/* A pie chart for the balance of comments (positive to negative) */
 class BalanceOfComments extends React.Component {
     componentDidMount() {
         var ctx = document.getElementById(this.props.id).getContext('2d');
