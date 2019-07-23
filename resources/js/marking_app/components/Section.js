@@ -1,6 +1,5 @@
 import React from 'react';
 import Comment from './Comment.js';
-import ConfirmationModal from './modals/ConfirmationModal';
 import TextEditor from './TextEditor';
 import { withAlert } from 'react-alert';
 import FocusingInput from '../../global_components/FocusingInput.js';
@@ -38,10 +37,14 @@ class Section extends React.Component {
         this.handlePermissionCommentType = this.handlePermissionCommentType.bind(this);
     }
 
+    /* Update the selected type of permission in the state, when the user selects between 'private' or 'public' for the
+     * type of the next comment to be added.
+     */
     handlePermissionCommentType(type) {
         this.setState({selectedPermissionCommentType: type});
     }
 
+    // Used to upload a selected mark scheme
     handleUploadScheme(e) {
         // debugger;
         $.ajax({
@@ -81,10 +84,9 @@ class Section extends React.Component {
         });
     }
 
-
+    // Update in the state whether the mark scheme of the section is open
     handleOpenScheme() {
         this.setState((prevState) => Object.assign(prevState, {schemeOpen: !prevState.schemeOpen}));
-               
     }
     
     // Display list of comments 
@@ -102,12 +104,13 @@ class Section extends React.Component {
         this.props.handleAppendComment(this.props.id, {id: id, text: text});
     }
 
+    // Title of the section is edited
     handleEditTitle(e) {
         this.setState(prevState => Object.assign(prevState, {editTitle: !prevState.editTitle, editTitleText: this.props.title}));
     }
 
+    // Used to delete a comment, submit the delete request to the server
     handleRemoveComment(idToRemove) {
-
         // console.log('Fetch method delete comment with id = ' + idToRemove);
         fetch('/api/comments/' + idToRemove, {
             method: 'delete',
@@ -123,7 +126,7 @@ class Section extends React.Component {
             console.log(data);
             if (data.length > 12) data = data.substring(0,12) + "...";
             this.props.alert.success({text: "Removed comment \n '" + data + "'"});
-        }).then( () => {
+        }).then(() => {
             this.setState(prevState => {
                 const category = prevState.openComments == "positive" ? "posComments" : "negComments";
                 for (var i = 0; i < prevState[category].length; i++) { 
@@ -133,22 +136,21 @@ class Section extends React.Component {
                 }
                 return prevState;
             });
-            $("#confirmationModal").removeClass("fade");
-            $("#confirmationModal").modal('hide');
-            $("#confirmationModal").addClass("fade");
         });
-        
     }
 
+    // Runs when the input of the new comment is changed
     handleFormChange(event) {
         const {name, value, type, checked} = event.target;
         type === "checkbox" ? this.setState({ [name]: checked }) : this.setState({ [name]: value });
     }
 
+    // Update the edited title in the state
     handleEditTitleChange(event) {
         this.setState({editTitleText: event.target.value});
     }
 
+    // Add the new comment in the state
     addComment(comment) {
         if (comment.type === 'positive') {
             this.setState(prevState => prevState.posComments.push(comment));
@@ -157,6 +159,7 @@ class Section extends React.Component {
         }
     }
 
+    // Submit the added comment to the server
     handleAddComment(event) {
         if (this.state.newComment != "") {
             let cat = this.state.openComments;
@@ -193,18 +196,20 @@ class Section extends React.Component {
     }
 
     renderTitleEditView() {
-        return <div className="input-group">
-                    <FocusingInput
-                        size="lg"
-                        value={this.state.editTitleText}
-                        onEnterKey={this.updateTitle}
-                        onEscapeKey={this.handleEditTitle}
-                        onChange={this.handleEditTitleChange} />
-                    <div className="input-group-append" id="button-addon4">
-                        <button onClick={this.handleEditTitle} className="btn btn-outline-danger" type="button"><i className="fas fa-times"></i></button>
-                        <button onClick={this.updateTitle} className="btn btn-outline-success" type="button"><i className="fas fa-check"></i></button>
-                    </div>
+        return (
+            <div className="input-group">
+                <FocusingInput
+                    size="lg"
+                    value={this.state.editTitleText}
+                    onEnterKey={this.updateTitle}
+                    onEscapeKey={this.handleEditTitle}
+                    onChange={this.handleEditTitleChange} />
+                <div className="input-group-append" id="button-addon4">
+                    <button onClick={this.handleEditTitle} className="btn btn-outline-danger" type="button"><i className="fas fa-times"></i></button>
+                    <button onClick={this.updateTitle} className="btn btn-outline-success" type="button"><i className="fas fa-check"></i></button>
                 </div>
+            </div>
+        );
     }
 
     updateTitle() {
@@ -229,50 +234,51 @@ class Section extends React.Component {
     }
 
     renderAddCommentInput() {
-        return <form onSubmit={this.handleAddComment} className="addCommentForm text-center">
-            {(this.props.permissionLevel === 1) &&
-                <div className="btn-group btn-group-toggle shadow-sm text-center" data-toggle="buttons">
-                    <label className="btn btn-light active" onClick={() => this.handlePermissionCommentType("private")}>
-                        <input
-                            type="radio"
-                            checked={this.state.selectedPermissionCommentType === "private"}
-                            id="selectPrivate"
-                            onChange={() => {}}
-                        /> Private Comment
-                    </label>
-                    <label className="btn btn-light" onClick={() => this.handlePermissionCommentType("public")}>
-                        <input
-                            type="radio"
-                            checked={this.state.selectedPermissionCommentType === "public"}
-                            id="addPublic"
-                            onChange={() => {}}
-                        /> Public Comment
-                    </label>
-                </div>
-            }
-                    
-                    <div className="input-group mb-3">
-                        <input
-                            value={this.state.newComment}
-                            name="newComment" type="text"
-                            onChange={this.handleFormChange}
-                            className="form-control"
-                            placeholder="New comment"
-                            aria-label="New comment"
-                            aria-describedby="newCommentText"
-                        />
-                        <div className="input-group-append">
-                            <button
-                                className="btn btn-outline-secondary"
-                                type="button"
-                                id="newCommentText"
-                                type="submit"
-                            >
-                                Add
-                            </button>
-                        </div>
+        return (
+            <form onSubmit={this.handleAddComment} className="addCommentForm text-center">
+                {(this.props.permissionLevel === 1) &&
+                    <div className="btn-group btn-group-toggle shadow-sm text-center" data-toggle="buttons">
+                        <label className="btn btn-light active" onClick={() => this.handlePermissionCommentType("private")}>
+                            <input
+                                type="radio"
+                                checked={this.state.selectedPermissionCommentType === "private"}
+                                id="selectPrivate"
+                                onChange={() => {}}
+                            /> Private Comment
+                        </label>
+                        <label className="btn btn-light" onClick={() => this.handlePermissionCommentType("public")}>
+                            <input
+                                type="radio"
+                                checked={this.state.selectedPermissionCommentType === "public"}
+                                id="addPublic"
+                                onChange={() => {}}
+                            /> Public Comment
+                        </label>
                     </div>
-                </form>
+                } 
+                <div className="input-group mb-3">
+                    <input
+                        value={this.state.newComment}
+                        name="newComment" type="text"
+                        onChange={this.handleFormChange}
+                        className="form-control"
+                        placeholder="New comment"
+                        aria-label="New comment"
+                        aria-describedby="newCommentText"
+                    />
+                    <div className="input-group-append">
+                        <button
+                            className="btn btn-outline-secondary"
+                            type="button"
+                            id="newCommentText"
+                            type="submit"
+                        >
+                            Add
+                        </button>
+                    </div>
+                </div>
+            </form>
+        );
     }
 
     render() {
@@ -428,9 +434,6 @@ class Section extends React.Component {
                     {/* If this section should have comments, display them */}
                     {!this.props.compulsory && commentsDiv}
                 </div>
-                
-                
-                
             </div>
         );
     }

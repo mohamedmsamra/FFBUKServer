@@ -1,6 +1,17 @@
 import React from 'react';
 import Button from 'react-bootstrap/Button';
 
+/* This is a template for alerts from the library 'react-alert'. It allows using alerts that have 'Confirm' and 'Cancel'
+ * buttons. Each alert takes a single object with the following properties:
+ *     text      (string)            - The message the alert will display.
+ *     autoClose (boolean, optional) - Whether the alert should close by itself after 4 seconds, ignored when onConfirm
+ *                                     is present (default: true)
+ * 
+ * To create an alert that has the 'Confirm' and 'Cancel' buttons, also include the following properties:
+ *     onConfirm (function)           - The function to run when 'Confirm' is clicked
+ *     onCancel  (function, optional) - The function to run when 'Cancel' or the close button are clicked
+ */
+
 const ConfirmableAlertTemplate = ({ style, options, message, close }) => (
     <div className="alert-box shadow" style={style}>
         <div className="float-left alert-icon align-middle">

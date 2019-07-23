@@ -45,12 +45,12 @@ class Comment extends React.Component {
                 "X-Requested-With": "XMLHttpRequest",
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content')
             }
-        }).then(function(data) {
         });
         this.setState({edit: false});
         this.props.handleCommentChange(this.props.section_id, this.props.id, this.props.type, this.state.editingText);
     }
 
+    // Render the input for editing comments
     renderEditCommentView() {
         return (
             <div className="input-group editView">
@@ -79,65 +79,64 @@ class Comment extends React.Component {
         );
     }
 
+    // Render the regular comment view
     renderCommentView() {
-                
-        return (<div>
-                    <div 
-                        className={"float-left clickableComment" + (this.props.added ? " added" : '')}
-                        onClick={() => {if (!this.props.added) this.props.handleClick(this.props.id, this.props.type, this.props.text)}}
-                        data-toggle="tooltip" 
-                        data-placement="top" 
-                        title="Click to Add">
-                        {this.props.text}
-                    </div>
+        return (
+            <div>
+                <div 
+                    className={"float-left clickableComment" + (this.props.added ? " added" : '')}
+                    onClick={() => {if (!this.props.added) this.props.handleClick(this.props.id, this.props.type, this.props.text)}}
+                    data-toggle="tooltip" 
+                    data-placement="top" 
+                    title="Click to Add">
+                    {this.props.text}
+                </div>
 
-                    <div className="float-right commentBtns">
-                        <button 
-                            type="button" 
-                            className="invisibleBtn text-muted" 
-                            data-placement="top"
-                            title={(this.props.visibility === 'public' ? "Public" : "Private") + " Comment"}>
-                            {this.props.visibility === 'public' && <i className={"fas " + (this.props.permissionLevel == 1 ? 'fa-lock-open' : 'fa-lock')}></i>}
-                        </button>
-                        {(this.props.visibility === 'private' || this.props.permissionLevel === 1) &&
-                            <>
-                                <button 
-                                    type="button" 
-                                    className="invisibleBtn"  
-                                    onClick={this.handleEditChange}
-                                    data-toggle="tooltip" 
-                                    data-placement="top" 
-                                    title="Edit Comment">
-                                    <i className="fas fa-edit"></i>
-                                </button>
-                                <button 
-                                    type="button" 
-                                    className="invisibleBtn" 
-                                    onClick={() => this.props.alert.show({
-                                        text: "Are you sure you want to remove this comment?",
-                                        onConfirm: () => this.props.handleRemove(this.props.id)
-                                    })}
-                                    data-placement="top" 
-                                    title="Delete Comment">
-                                    <i className="fas fa-times"></i>
-                                </button>
-                            </>
-                        }
-                    </div>
-                </div>);
+                <div className="float-right commentBtns">
+                    <button 
+                        type="button" 
+                        className="invisibleBtn text-muted" 
+                        data-placement="top"
+                        title={(this.props.visibility === 'public' ? "Public" : "Private") + " Comment"}>
+                        {this.props.visibility === 'public' && <i className={"fas " + (this.props.permissionLevel == 1 ? 'fa-lock-open' : 'fa-lock')}></i>}
+                    </button>
+                    {(this.props.visibility === 'private' || this.props.permissionLevel === 1) &&
+                        <>
+                            <button 
+                                type="button" 
+                                className="invisibleBtn"  
+                                onClick={this.handleEditChange}
+                                data-toggle="tooltip" 
+                                data-placement="top" 
+                                title="Edit Comment">
+                                <i className="fas fa-edit"></i>
+                            </button>
+                            <button 
+                                type="button" 
+                                className="invisibleBtn" 
+                                onClick={() => this.props.alert.show({
+                                    text: "Are you sure you want to remove this comment?",
+                                    onConfirm: () => this.props.handleRemove(this.props.id)
+                                })}
+                                data-placement="top" 
+                                title="Delete Comment">
+                                <i className="fas fa-times"></i>
+                            </button>
+                        </>
+                    }
+                </div>
+            </div>
+        );
     }
 
     render() {
         return (
             this.state.edit ? 
                 this.renderEditCommentView()
-                :
+            :
                 this.renderCommentView()
         );
     }
-}
-
-Comment.defaultProps = {
 }
 
 export default withAlert()(Comment);
