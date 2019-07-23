@@ -2,6 +2,7 @@ import React from 'react';
 import ListGroup from 'react-bootstrap/ListGroup';
 import ListOption from './ListOption';
 
+/* Display the list of the comments in order. */
 class CommentsList extends React.Component {
     constructor(props) {
         super(props);
@@ -14,6 +15,7 @@ class CommentsList extends React.Component {
         }
     }
 
+    /* Update the ordering options in the state when the user modifies the selected options. */
     handleListOptionChange(option) {
         this.setState(prevState => {
             const listOptions = prevState.listOptions;
@@ -33,12 +35,10 @@ class CommentsList extends React.Component {
     }
 
     render() {
-        // const separateByType = (cs) => {
-        //     const positive = cs.filter(c => c.type == 'positive');
-        //     const negative = cs.filter(c => c.type == 'negative');
-        //     return [positive, negative];
-        // }
-
+        /* As several options for sorting are applied on top of each other, the list has to be broken down into
+         * sub-lists after sorting, then the sorted again by a different type of sort recursively. Finally, the elements
+         * have to be traversed into a single list.
+         */
         const recursiveSortByType = cs => {
             if (Array.isArray(cs[0])) return cs.map(c => recursiveSortByType(c));
             return [cs.filter(c => c.type == 'positive'), cs.filter(c => c.type == 'negative')];
@@ -49,8 +49,9 @@ class CommentsList extends React.Component {
             return cs.sort((a, b) => (b.count - a.count))
         }
 
+        // Break down the array into sub-arrays based on sections
         const fragmentArrayBySection = cs => {
-            // Assumes a sorted array
+            // The array cs has to be sorted by sections in advance
             const fragmentedArray = [];
             let currentSection = [];
             for (var i = 0; i < cs.length; i++) {
@@ -74,6 +75,7 @@ class CommentsList extends React.Component {
             return cs;
         }
 
+        // Render the list of comments, after the sorts have been applied to it
         const commentsList = [this.props.comments]
         .map(this.state.listOptions.orderByType ? recursiveSortByType : cs => cs)
         .map(this.state.listOptions.orderBySection ? recursiveSortBySection : cs => cs)
@@ -88,7 +90,6 @@ class CommentsList extends React.Component {
             </ListGroup.Item>
         ));
         
-
         return (
             <div className="commentsList">
                 <ListOption id='listOptionSection' text='Order by section' value={this.state.listOptions.orderBySection} onChange={() => {this.handleListOptionChange('section')}} />

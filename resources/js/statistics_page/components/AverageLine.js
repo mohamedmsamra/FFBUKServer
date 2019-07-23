@@ -1,14 +1,18 @@
 import React from 'react';
 import Chart from 'chart.js';
 
+/* A line to display the averages graphically. Uses the library chart.js. */
 class AverageLine extends React.Component {
     constructor(props) {
         super(props);
-        this.height = 80;
+        this.height = 80; // Height of component is pixels
     }
+
     componentDidMount() {
         var chart = document.getElementById(this.props.chartID);
         var ctx = chart.getContext('2d');
+        
+        // Create the scatter chart when the component mounts
         var scatterChart = new Chart(ctx, {
             type: 'scatter',
             data: {

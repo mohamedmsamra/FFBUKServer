@@ -1,5 +1,5 @@
 import React from 'react';
-import Statistics from './components/Statistics';
+import Analytics from './components/Analytics';
 import Loading from '../global_components/Loading';
 
 class App extends React.Component {
@@ -21,11 +21,11 @@ class App extends React.Component {
             <div className='container'>
                  <a href={`/courses/${COURSE_ID}`}>Back to {COURSE_NAME}</a>
                 {!this.state.assignment ?
-                    <Loading text="Loading statistics..." />
+                    <Loading text="Loading analytics..." />
                 :
                     <>
-                        <h1>Statistics for {this.state.assignment.name}</h1>
-                        <Statistics assignment={this.state.assignment}/>
+                        <h1>Analytics for {this.state.assignment.name}</h1>
+                        <Analytics assignment={this.state.assignment}/>
                     </>
                 }
             </div>
