@@ -1,11 +1,10 @@
 import React from 'react';
 import { withAlert } from 'react-alert';
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
 import TextEditor from './TextEditor';
 
 class App extends React.Component {
     constructor(props) {
+        // Call parent constructor
         super(props);
         this.handleUploadCover = this.handleUploadCover.bind(this);
         this.handleDescriptionChange = this.handleDescriptionChange.bind(this);
@@ -13,19 +12,22 @@ class App extends React.Component {
             cover_image: '',
             description: ''
         }
-
     }
 
     componentDidMount() {
+        // When the component load, add validation to the form
         this.validate();
     }
 
+    // Validate selected cover image
     handleUploadCover(e) {
+        // If the file size is larger than 2mb, display alert and add suggestive styling
         if(e.target.files[0] != undefined && e.target.files[0].size > 2097152) {
             this.props.alert.error({text: "Image too large! Please pick one smaller than 2mb"});
             $('#uploadCoverImage').removeClass('goodHighlight');
             $('#uploadCoverImage').addClass('badHighlight');
         } else {
+            // Otherwise, set the new cover image
             this.setState({cover_image: e.target.value.split('\\').pop().split('/').pop()});
             $('#uploadCoverImage').removeClass('badHighlight');
             $('#uploadCoverImage').addClass('goodHighlight');
@@ -33,10 +35,12 @@ class App extends React.Component {
         
     }
 
+    // Change the course description to the input value
     handleDescriptionChange(val) {
         this.setState({description: val});
     }
 
+    // Add form validation
     validate() {
         'use strict';
         window.addEventListener('load', function() {
@@ -55,28 +59,33 @@ class App extends React.Component {
         }, false);
     };
 
-
- 
+    // Render the component
     render() {
         return (
             <form className="needs-validation" noValidate method="POST" action="/courses" encType="multipart/form-data">
+                {/* CSRF token input */}
                 <input type="hidden" name="_token" value={$('meta[name="csrf-token"]').attr('content')} />
+
+                {/* Course Title input */}
                 <div className="form-group">
-            
                     <label htmlFor="validationCustom01">Course Title</label>
                     <input type="text" name="title" className="form-control" id="validationCustom01" placeholder="Course Title" required/>
+                    {/* Confirmation message - displayed if form is submitted with the title set */}
                     <div className="valid-feedback">
                         Looks good!
                     </div>
+                    {/* Error message - displayed if form is submitted without the title set */}
                     <div className="invalid-feedback">
                         Please input a title
                     </div>
                 </div>
 
-                
+                {/* Course Description input */}
                 <div className="form-group">
                     <label htmlFor="body">Course Description</label>
+                    {/* Hidden input used to store the value in the state */}
                     <input type="hidden" value={this.state.description} name="body" id="body"/>
+                    {/* Text Editor component that allows html formatting */}
                     <TextEditor 
                         value={this.state.description}
                         handleSectionTextChange={(val) => this.handleDescriptionChange(val)}
@@ -84,7 +93,9 @@ class App extends React.Component {
                     />
                 </div>
 
+                {/* Image Upload Input */}
                 <div className="form-group">
+                    {/* Hidden file upload input because it can't be styled to look nice */}
                     <input 
                         onChange={this.handleUploadCover}
                         name="cover_image"
@@ -92,6 +103,7 @@ class App extends React.Component {
                         id="cover_image"
                         className="hiddenFileInput" 
                         accept="image/*"/>
+                    {/* Button the triggers the file upload input on click - because this can be styled to look nice*/}
                     <button 
                         type="button" 
                         id={"uploadCoverImage"}
@@ -102,20 +114,20 @@ class App extends React.Component {
                         title="Upload Cover Image">
                             {this.state.cover_image ? this.state.cover_image : 'Choose Cover Image'}
                     </button>
+                    {/* Confirmation message */}
                     <div className="valid-feedback">
                         Looks good!
                     </div>
+                    {/* Error message */}
                     <div className="invalid-feedback">
-                        Please input a title
+                        Picture is not suitable
                     </div>
                 </div>
 
+                {/* Submit new course button */}
                 <button className="btn btn-primary shadow-sm" type="submit">Create Course</button>
-            </form>
-
-       
+            </form>      
         );
-        
     }
 }
 

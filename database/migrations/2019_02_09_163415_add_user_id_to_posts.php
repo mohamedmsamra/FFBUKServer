@@ -13,9 +13,9 @@ class AddUserIdToPosts extends Migration
      */
     public function up()
     {
+        // Add user_id column to posts table
         Schema::table('posts', function (Blueprint $table) {
-        
-                $table->integer('user_id');
+            $table->integer('user_id'); 
         });
     }
 
@@ -26,6 +26,7 @@ class AddUserIdToPosts extends Migration
      */
     public function down()
     {
+        // Drop user_id column from posts table
         Schema::table('posts', function (Blueprint $table) {
             $table->dropColumn('user_id');
         });

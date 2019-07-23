@@ -13,6 +13,7 @@ class AddSchoolAndRoleToUser extends Migration
      */
     public function up()
     {
+        // Add school, department and role columns to the users table
         Schema::table('users', function (Blueprint $table) {
             $table ->string('school');
             $table ->string('department');
@@ -27,6 +28,7 @@ class AddSchoolAndRoleToUser extends Migration
      */
     public function down()
     {
+        // Drop the school, department and role columns from the users table
         Schema::table('users', function (Blueprint $table) {
             $table->dropColumn('school');
             $table->dropColumn('department');

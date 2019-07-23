@@ -13,6 +13,7 @@ class MergeSchoolAndDepartmentInUser extends Migration
      */
     public function up()
     {
+        // Merge the school and department columns into one
         Schema::table('users', function (Blueprint $table) {
             $table->dropColumn('school');
             $table->dropColumn('department');

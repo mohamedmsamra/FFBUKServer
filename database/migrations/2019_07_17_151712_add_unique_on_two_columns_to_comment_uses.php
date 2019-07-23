@@ -14,6 +14,8 @@ class AddUniqueOnTwoColumnsToCommentUses extends Migration
     public function up()
     {
         Schema::table('comment_uses', function (Blueprint $table) {
+            // The comment and user pair should be unique for comment uses.
+            // A user cannot have multiple different counts for the same comment
             $table->unique(['comment_id', 'user_id']);
         });
     }
@@ -26,6 +28,7 @@ class AddUniqueOnTwoColumnsToCommentUses extends Migration
     public function down()
     {
         Schema::table('comment_uses', function (Blueprint $table) {
+            // Drop the unique pair constraint between comments and users on comment uses
             $table->dropUnique('comment_uses_comment_id_user_id_unique');
         });
     }

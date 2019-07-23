@@ -13,6 +13,7 @@ class CreateAssignmentsTable extends Migration
      */
     public function up()
     {
+        // Create the assignments table
         Schema::create('assignments', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
@@ -30,6 +31,7 @@ class CreateAssignmentsTable extends Migration
      */
     public function down()
     {
+        // Drop the assignments table
         Schema::dropIfExists('assignments');
     }
 }

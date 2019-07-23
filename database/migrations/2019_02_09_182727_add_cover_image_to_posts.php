@@ -13,6 +13,7 @@ class AddCoverImageToPosts extends Migration
      */
     public function up()
     {
+        // Add cover_image column to posts table (holds the path to the post image within the storage folder)
         Schema::table('posts', function (Blueprint $table) {
             $table ->string('cover_image');
         });
@@ -25,6 +26,7 @@ class AddCoverImageToPosts extends Migration
      */
     public function down()
     {
+        // Remove cover_image column from posts table
         Schema::table('posts', function (Blueprint $table) {
             $table ->dropColumn('cover_image');
         });

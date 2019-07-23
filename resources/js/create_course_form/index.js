@@ -11,6 +11,7 @@ const alertOptions = {
     transition: transitions.SCALE
 }
 
+// Add the alerts to the project using the react-alert library
 const Root = () => (
     <AlertProvider template={ConfirmableAlertTemplate} {...alertOptions}>
         <App />

@@ -13,6 +13,7 @@ class CreateTemplateTable extends Migration
      */
     public function up()
     {
+        // Create the templates table
         Schema::create('templates', function (Blueprint $table) {
             $table->increments('id');
             $table->string('heading');
@@ -29,6 +30,7 @@ class CreateTemplateTable extends Migration
      */
     public function down()
     {
+        // Drop the templates table
         Schema::dropIfExists('template');
     }
 }

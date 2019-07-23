@@ -13,9 +13,8 @@ class RenamePostsToCourses extends Migration
      */
     public function up()
     {
+        // Rename the posts table to courses
         Schema::rename('posts', 'courses');
-       
-
     }
 
     /**
@@ -26,6 +25,5 @@ class RenamePostsToCourses extends Migration
     public function down()
     {
         Schema::rename('posts', 'courses');
-        
     }
 }

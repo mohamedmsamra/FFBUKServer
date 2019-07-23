@@ -13,11 +13,12 @@ class CreatePostsTable extends Migration
      */
     public function up()
     {
+        // Create posts table
         Schema::create('posts', function (Blueprint $table) {
             $table->increments('id');
             $table->string('title');
             $table->mediumText('body');
-            $table->timestamps(); //created at / updated at
+            $table->timestamps(); //created at and updated at
         });
     }
 
@@ -28,6 +29,7 @@ class CreatePostsTable extends Migration
      */
     public function down()
     {
+        // Drop posts table
         Schema::dropIfExists('posts');
     }
 }

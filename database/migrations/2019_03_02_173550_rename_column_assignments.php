@@ -13,6 +13,7 @@ class RenameColumnAssignments extends Migration
      */
     public function up()
     {
+        // Rename the post_id column to course_id in the assignments table
         Schema::table('assignments', function(Blueprint $table) {
             $table->renameColumn('post_id', 'course_id');
         });
