@@ -11,10 +11,9 @@ class CloneAssignmentsModal extends React.Component {
         };
     }
 
-    
-
+    /* Display the assignments in the modal. */
     displayAssignments(assignment) {
-        const ret = 
+        return (
             <a 
                 onClick={() => {
                     $(".cloneModalAssignmentInstance").removeClass('active');
@@ -25,12 +24,13 @@ class CloneAssignmentsModal extends React.Component {
                 key={assignment.id} data-toggle="list" role="tab">
                 {assignment.name}
                 <p className="float-right"><small>{assignment.created_at}</small></p>
-            </a>;
-        return ret;
+            </a>
+        );
     }
-    
 
+    /* Render the modal. */
     renderModalBody() {
+        // Display the assignments that can be cloned, once they are loaded.
         if (this.props.loadingAssignments) {
             return "Loading assignments..."
         } else {
@@ -80,8 +80,6 @@ class CloneAssignmentsModal extends React.Component {
     }
 
     render() {
-        // const templates = [{name:'template 1', id: 1}, {name: 'template 2', id: 2}, {name:'template 3', id: 3}, {name: 'template 4', id: 4}];
-
         return (
             <div className="modal fade" id="cloneAssignmentsModal" tabIndex="-1" role="dialog" aria-labelledby="cloneAssignmentsModalLabel" aria-hidden="true">
                 <div className="modal-dialog" role="document">
@@ -94,13 +92,12 @@ class CloneAssignmentsModal extends React.Component {
                             <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        
 
                         {this.renderModalBody()}
                     </div>
                 </div>
             </div>
-        )
+        );
     }
 }
 

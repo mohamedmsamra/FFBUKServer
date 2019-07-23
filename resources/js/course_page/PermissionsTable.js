@@ -23,6 +23,9 @@ class PermissionsTable extends React.Component {
         this.setState({emailInput: e.target.value});
     }
 
+    /* Runs when the user enters an email address to invite. The email address is submitted to the server, and if the
+     * invitation was successful, the name of the invited user is added to the table.
+     */
     handleInvite() {
         if (this.state.emailInput.trim() !== '')  {
             this.setState({awaitingInvitationResponse: true}, () => {
@@ -53,6 +56,7 @@ class PermissionsTable extends React.Component {
         }
     }
 
+    /* Runs when the user wants the remove the permission from the user. Submits the request to the server. */
     handleRemovePermission(id) {
         this.props.setTableRowData(id, prevRow => {
             prevRow.isLoading = true;
@@ -88,6 +92,9 @@ class PermissionsTable extends React.Component {
         });
     }
 
+    /* Runs when the course owner selects a new permission for one of the invited users. Asks for confirmation, and then
+     * submits the request to the server to have the permission changed.
+     */
     handlePermissionChange(key, {value}) {
         const originalValue = this.props.getTableRowData(key).data.level;
         this.props.setTableRowData(key, (prevRow) => {
@@ -133,9 +140,10 @@ class PermissionsTable extends React.Component {
                     });
                 }
             });
-        })
+        });
     }
 
+    /* Function that specifies how to render a single row in the table based on the table row's data. */
     renderRow(row) {
         return (
             <>
@@ -177,6 +185,9 @@ class PermissionsTable extends React.Component {
         );
     }
 
+    /* Adds the permissions to the table when the component mounts. The permissions are stored in an object compiled in
+     * blade on the backend (should be changed to a fetch request in this function in the future).
+     */
     componentDidMount() {
         this.props.addTableRows(PERMISSIONS.map(r => ({key: r.id, data: r})));
     }
@@ -184,6 +195,7 @@ class PermissionsTable extends React.Component {
     render() {
         return (
             <>
+                {/* Displayed information for course owner */}
                 {HAS_COURSE_EDIT_PERMISSION && 
                     <div className="mb-3 ml-1">
                         <small><i className="fas fa-asterisk fa-sm text-muted"></i> People you invite to the course can see all existing assignments</small>
@@ -191,9 +203,11 @@ class PermissionsTable extends React.Component {
                         <small><i className="fas fa-asterisk fa-sm text-muted"></i> People you give read/write permission to can modify all existing assignments</small>
                     </div>
                 }
+                {/* Table to display permissions */}
                 <this.props.ReactiveTable
                     headers={['User', 'Permissions'].concat(HAS_COURSE_EDIT_PERMISSION ? ['Actions'] : [])}
                     renderRow={this.renderRow} />
+                {/* Controls to invite new users to the course */}
                 {HAS_COURSE_EDIT_PERMISSION && 
                     <InputGroup size="sm" className="mb-3">
                         <InputGroup.Prepend>
@@ -218,7 +232,7 @@ class PermissionsTable extends React.Component {
                     </InputGroup>
                 }
             </>
-        )
+        );
     }
 }
 
