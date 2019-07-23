@@ -11,7 +11,9 @@ use App\Models\Section;
 use App\Models\Comment;
 
 use Auth;
-
+/**
+ * The Assignments controller deals with saving and returning information to and from storage about assignments.
+ */
 class AssignmentsController extends Controller
 {
 
@@ -293,7 +295,6 @@ class AssignmentsController extends Controller
         return $hasEditRights->first() || AssignmentsController::canManage($assignment_id);
     }
 
-    // Read permission only
     /**
      * Check if the authenticated user has permission to view an assignment given the assignment id
      * 

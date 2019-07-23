@@ -20,7 +20,7 @@ class CoursesController extends Controller
     /**
      * Display a page with the list of all courses you own or are invited to.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\Response a page with a list of all your courses (owned or invited to)
      */
     public function index()
     {
