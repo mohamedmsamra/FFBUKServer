@@ -1,9 +1,8 @@
 import React from 'react';
 import Form from 'react-bootstrap/Form';
 
-/* An input that becomes focused the first time it's rendered.
- * It is can also be passed a function to be executed when
- * enter or escape is pressed.
+/* An input box that becomes focused the first time it's rendered. It is can also be passed a function to be executed
+ * when enter or escape is pressed.
  */
 class FocusingInput extends React.Component {
     constructor(props) {

@@ -1,5 +1,6 @@
 import React from 'react';
 
+/* Used throughout the project to add a spinning loading icon with customisable text. */
 function Loading(props) {
     return (
         <div className="loading">
