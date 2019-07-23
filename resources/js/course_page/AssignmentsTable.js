@@ -20,12 +20,14 @@ class AssignmentsTable extends React.Component {
         this.handleSelectCloningAssignment = this.handleSelectCloningAssignment.bind(this);
     }
 
+    /* Fetch the assignments from the database */
     fetchAssignments() {
         fetch("../api/assignments")
         .then(data => data.json())
         .then(data => {this.setState({coursesWithAssignments: data})});
     }
 
+    /* Used to convert an assignment object coming from the backend to an object that is used on the front end. */
     mapDBAssignmentToLocal(assignment) {
         Object.assign(assignment, {
             editing: false,
@@ -36,10 +38,7 @@ class AssignmentsTable extends React.Component {
         return assignment;
     }
 
-    // setRef(ref) {
-    //     this.inputRefs.push(ref);
-    // }
-
+    /* Runs when a change to the editing text has been made. Updates the new value in the state. */
     handleEditText(id, value) {
         this.props.setTableRowsData((prevRows) => {
             prevRows.find(x => x.key == id).data.editName = value;
@@ -47,6 +46,7 @@ class AssignmentsTable extends React.Component {
         });
     }
 
+    /* Runs when the edit button is next to an assignment is clicked. Enables edit mode for the assigment name. */
     handleEditClick(id) {
         this.props.setTableRowsData((prevRows) => {
             const assignment = prevRows.find(x => x.key == id);
@@ -56,6 +56,9 @@ class AssignmentsTable extends React.Component {
         });
     }
 
+    /* Runs when a user confirms the edit they made to the name of the assignment. Submits the edited name to the
+     * server. Updates the name if successful.
+     */
     handleConfirmEdit(id) {
         fetch("/api/assignments/" + id + "/edit-name", {
             method: 'post',
@@ -100,6 +103,7 @@ class AssignmentsTable extends React.Component {
         });
     }
 
+    /* Runs if the edit is cancelled. Resets the name to the name before the edit. */
     handleCancelEdit(id) {
         this.props.setTableRowData(id, prevRow => {
             prevRow.data.editing = false;
@@ -107,6 +111,7 @@ class AssignmentsTable extends React.Component {
         });
     }
 
+    /* Runs if the user clicks on delete. Asks the user for confirmation before making the delete request. */
     handleDeleteClick(id) {
         this.props.setTableRowData(id, prevRow => {
             prevRow.isLoading = true;
@@ -147,15 +152,18 @@ class AssignmentsTable extends React.Component {
         });
     }
 
+    /* Runs when the user clicks on creating a new assignment. */
     handleCreateClick() {
         this.props.addTableRows([{key: this.idCounter, data: {id: this.idCounter--, creating: true, createName: ""}}]);
     }
-
+    
+    /* Runs when the user clicks on cloning an assignment. */
     handleCloneClick() {
         this.fetchAssignments();
         $("#cloneAssignmentsModal").modal('show');
     }
 
+    /* Resets the cloning modal to its initial state. */
     resetModal() {
         $("#cloneAssignmentsModal").removeClass("fade");
         $("#cloneAssignmentsModal").modal('hide');
@@ -164,6 +172,7 @@ class AssignmentsTable extends React.Component {
         $(".collapse").removeClass('show');
     }
 
+    /* Submits a request to clone an assignment. If successful, it adds the new assignment to the table. */
     handleSelectCloningAssignment(id) {
         fetch('../api/assignments/' + id + '/clone', {
             method: 'post',
@@ -179,21 +188,24 @@ class AssignmentsTable extends React.Component {
         })
         .then(function(response) {
             return response.json();
-        }).then((data) => {
+        }).then(data => {
             this.props.addTableRows([{key: data.id, data: this.mapDBAssignmentToLocal(data)}]);
             // this.props.alert.success({text: "Cloned assignment \n '" + data.name + "'"});
-        }).then( () => {
-            
+        }).then(() => {
             this.resetModal();
         });
     }
 
+    /* Edit the text in the create new assignment input. */
     handleEditCreateName(id, val) {
         this.props.setTableRowData(id, (prevRow) => {
             prevRow.data.createName = val;
         });
     }
 
+    /* Runs when the user confirms the creation of the assignment. Sends a request to the server to create the
+     * assignment. If successful, adds the new assignment to the table.
+     */
     handleConfirmCreate(id) {
         this.props.setTableRowData(id, prevRow => {
             prevRow.data.creating = false;
@@ -230,12 +242,14 @@ class AssignmentsTable extends React.Component {
         });
     }
 
+    /* Runs when the user clicks cancel when creating a new assignment. */
     handleCancelCreate(id) {
         this.props.setTableRowData(id, prevRow => {
             prevRow.deleted = true;
         });
     }
 
+    /* Render the control buttons next to each assignment in the table. */
     renderButtons({isLoading, data}) {
         if (data.editing) {
             return (
@@ -282,6 +296,7 @@ class AssignmentsTable extends React.Component {
         }
     }
 
+    /* Render the name, or the input boxes for the assignments in the table. */
     renderContent(data) {
         if (data.editing) {
             return (
@@ -306,6 +321,7 @@ class AssignmentsTable extends React.Component {
         }
     }
 
+    /* Render the row of the table. */
     renderRow({isLoading, data}) {
         return (
             <>
@@ -315,6 +331,9 @@ class AssignmentsTable extends React.Component {
         );
     }
 
+    /* Adds the assignments to the table when the component mounts. The assignments are stored in an object compiled in
+     * blade on the backend (should be changed to a fetch request in this function in the future).
+     */
     componentDidMount() {
         // this.props.alert.show({text: 'test'})
         this.props.addTableRows(assignments.map(a => {return {key: a.id, data: this.mapDBAssignmentToLocal(a)}}));
@@ -327,10 +346,10 @@ class AssignmentsTable extends React.Component {
                     headers={['Assignments', 'Actions']}
                     renderRow={this.renderRow} />
                 {HAS_COURSE_EDIT_PERMISSION && 
-                <div className="text-center newAssignmentBtns">
-                    <Button className="mr-1" variant="primary" size="sm" onClick={this.handleCreateClick}><i className="fas fa-plus"></i>  Create Assignment</Button>
-                    <Button variant="info" size="sm" onClick={this.handleCloneClick}><i className="fas fa-clone"></i>  Duplicate Assignment</Button>
-                </div>
+                    <div className="text-center newAssignmentBtns">
+                        <Button className="mr-1" variant="primary" size="sm" onClick={this.handleCreateClick}><i className="fas fa-plus"></i>  Create Assignment</Button>
+                        <Button variant="info" size="sm" onClick={this.handleCloneClick}><i className="fas fa-clone"></i>  Duplicate Assignment</Button>
+                    </div>
                 }
                 <CloneAssignmentsModal coursesWithAssignments={this.state.coursesWithAssignments} handleSelectAssignment={this.handleSelectCloningAssignment} resetModal={this.resetModal}/>
             </>
@@ -339,4 +358,3 @@ class AssignmentsTable extends React.Component {
 }
 
 export default withTable(withAlert()(AssignmentsTable));
-// export default withTable(AssignmentsTable);

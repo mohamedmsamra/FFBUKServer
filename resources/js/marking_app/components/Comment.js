@@ -20,17 +20,19 @@ class Comment extends React.Component {
         this.renderEditCommentView = this.renderEditCommentView.bind(this);
     }
 
+    /* Enable editing mode for the comment. */
     handleEditChange(e) {
         this.setState(prevState => Object.assign(prevState, {edit: !prevState.edit, editingText: prevState.text}));
     }
 
+    /* Runs when a form in the component is edited. Updates the state. */
     handleFormChange(event) {
         const {name, value, type, checked} = event.target;
         type === "checkbox" ? this.setState({ [name]: checked }) : this.setState({ [name]: value });
     }
 
+    /* Runs when a comment has been edited, submits the edited comment to the server. */
     update() {
-        // Submit the section to the server
         fetch("/api/comments/" + this.props.id + "/edit-text", {
             method: 'post',
             mode: 'cors',
@@ -50,7 +52,7 @@ class Comment extends React.Component {
         this.props.handleCommentChange(this.props.section_id, this.props.id, this.props.type, this.state.editingText);
     }
 
-    // Render the input for editing comments
+    /* Render the input for editing comments. */
     renderEditCommentView() {
         return (
             <div className="input-group editView">
@@ -79,7 +81,7 @@ class Comment extends React.Component {
         );
     }
 
-    // Render the regular comment view
+    /* Render the regular comment view. */
     renderCommentView() {
         return (
             <div>
