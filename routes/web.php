@@ -75,7 +75,7 @@ Route::group( ['middleware' => 'auth' ], function()
     Route::post('/api/comments/{id}/edit-text', 'CommentsController@apiEditText');
 
     // Courses
-    Route::resource('courses', 'CoursesController');
+    Route::resource('courses', 'CoursesController')->except(['edit', 'update']);
     Route::post('/api/courses/{course}/image-upload', 'CoursesController@apiImageUpload');
     Route::get('/api/courses/{course}/show-image', 'CoursesController@apiShowImage');
     Route::get('/api/courses/{course}', 'CoursesController@apiShow');

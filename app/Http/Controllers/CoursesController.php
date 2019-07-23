@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-//return the course Model so we can use it here
 use Illuminate\Support\Facades\Storage;
 use App\Models\Course;
 use App\Models\Assignment;
@@ -13,107 +12,98 @@ use Auth;
 //if we want to use normal SQL we need to call DB
 use DB;
 
-
+/**
+ * The Courses controller deals with storing and returning information relating to courses.
+ */
 class CoursesController extends Controller
 {
-
     /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-    }
-
-    /**
-     * Display a listing of the resource.
+     * Display a page with the list of all courses you own or are invited to.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
+        // Find the authenticated user
         $user_id = auth()->user()->id;
         $user = User::find($user_id);
-        $courses = $user->courses()->orderBy('created_at', 'desc')->paginate(10);
-        $invitations = $user->course_permissions()->orderBy('pending', 'DESC')->paginate(10);
 
-        // $temp = new stdClass();
+        // Find all the courses this user owns
+        $courses = $user->courses()->orderBy('created_at', 'desc')->paginate(10);
+
+        // Find all the courses this user is invited to and retrieve all the relevant information about it (e.g. the course owner)
+        $invitations = $user->course_permissions()->orderBy('pending', 'DESC')->paginate(10);
         foreach ($invitations as $invite) {
             $t2 = Course::find($invite->course_id);
-            // $owner = User::find($t2->user_id);
-            // $assignments = Assignment::where('course_id',$t2->id)->get();
             $invite->course = Course::find($invite->course_id);
             $invite->owner = User::find($t2->user_id);
             $invite->assignments = Assignment::where('course_id',$t2->id)->get();
         }
 
+        // Return a page with this information
         return view('courses.index')->with('courses', $courses)
                                     ->with('invitations', $invitations);
     }
 
-        /**
-     * Display the specified resource.
+    /**
+     * Display the page for one course
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  int  $id the id of the course you want to display;
+     * @return \Illuminate\Http\Response the page for one course
      */
-    public function show(Request $request, $id)
+    public function show($id)
     {
+        // If the uthenticated user does not have permission to see this course (is not owner or invited), abort
         if (!$this->canView($id)) abort(401);
 
-        //it gets the id from the URL
-        //http://ffbuk.test/posts/1
-        //return this specific post which its id is in the link
+        // Find the course, all of its assignments and all the sharing permissions it has
         $course = Course::find($id);
         $assignments = Assignment::where('course_id',$course->id)->get();
         $permissions = $this->permissions($id);
 
+        // Return a page with that information
         return view('courses.show') -> with('course', $course)
                                     -> with('assignments', $assignments)
                                     -> with('permissions', $permissions);
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the form for creating a new course
      *
      * @return \Illuminate\Http\Response
      */
     public function create()
     {
-        //return a view within the post folder
+        // Return a page that allows you to create a new course
         return view('courses.create');
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created course in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param  \Illuminate\Http\Request  $request what needs to be sent in the post request
+     * @return \Illuminate\Http\Response the courses page with a confirmation
      */
     public function store(Request $request)
     {
-        //here we do our form validation first before returnging that the storage was successful
-        // so the form does not submit until the title and the body are there
-        if($request -> hasFile('cover_image')) {
-        }
+        // Validation rules the request must comply with
         $rules = [
             'title' => 'required',
-            //adding some validation to the image to upload, it has to be an image, optional to include or not, not required
-            //and finally has a max size of 1999mb
+            // The course image is not required and has a max size of 1999mb
             'cover_image' => 'image | mimes:jpeg,png,jpg,gif,svg | nullable | max:2048'
         ];
     
+        // Custom messages to display when validation fails
         $customMessages = [
-            'require' => 'The :attribute field is required',
+            'required' => 'The :attribute field is required',
             'image' => 'The :attribute field must be an image.',
             'max' => ':attribute no bigger than 3mb'
         ];
     
+        // Apply the validation rules with the custom messages
         $this->validate($request, $rules, $customMessages);
 
-        //Create Post
-        
+        // Create a new course with the information provided
         $course = new Course;
         $course ->title = $request->input('title');
         if ($request->input('body') == null) {
@@ -121,171 +111,109 @@ class CoursesController extends Controller
         } else {
             $course ->body = $request->input('body');
         }
-        //the user_id is not coming from the form, we read it from auth(), which will read the id of current signed_in user
+
+        // Set the course "owner" to the user that is authenticated
         $course ->user_id = auth()->user()->id;
         $course ->cover_image = "default";
+        // Save the course to storage
         $course ->save();
 
+        // Set the course image
         $this -> apiImageUpload($request, $course['id']);
 
-        // $returnCourse
-
-        //direct the page back to the index
-        //set the success message to Post Created
+        // If nothing fails, return to the courses page with a success message
         return redirect('/courses')-> with('success', 'Your Course has been added successfully!');
     }
 
-        /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        if (!$this->canEdit($id)) abort(401);
-        $course=  Course::find($id);
-        //check if the correct user wants to edit his/her own post
-        if(auth()->user()->id !==$course->user_id){
-            //if the post owner is not the same, we direct the user to /posts with an error message of Unathourised Page
-            return redirect('/courses')->with('error','Unauthorised Page');
-        }
-
-        return view('courses.edit') -> with('course', $course);
-
-    }
-
     /**
-     * Update the specified resource in storage.
+     * Remove the specified course from storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        if (!$this->canEdit($id)) abort(401);
-        //to update we still need the validation
-        $this -> validate($request,[
-            'title' => 'required',
-            'body' => 'required',
-        ]);
-
-        //Handle File upload
-        //make sure an actual file was chosen, put if no image was chosen, do not override or display noImage.jpg
-        //like what happened in create. because no override needed
-        if($request -> hasFile('cover_image')){
-            //Get Filename with the extension
-            $filenameWithExt = $request->file('cover_image') ->getClientOriginalName();
-            //Get just filename
-            $filename= pathinfo( $filenameWithExt, PATHINFO_FILENAME);
-            //Get just extenstion
-            $extension = $request->file('cover_image')->getClientOriginalExtension();
-            //Filename to store (to make the filename to be stored veru unique and avoid any possible overriding)
-            $fileNameToStore = $filename.'_'.time().'_'.$extension;
-            //Upload Image
-            $path = $request -> file('cover_image') -> storeAs('public/cover_images',$fileNameToStore);
-
-        }
-         //update this Post, find it by id
-         $course = Course::find($id);
-         $course -> title = $request->input('title');
-         $course -> body = $request->input('body');
-         if($request->hasFile('cover_image')){
-             $course->cover_image = $fileNameToStore;
-         }
-         $course -> save();
-
-         //direct the page back to the index
-         //set the success message to Post Created
-         return redirect('/courses')-> with('success', 'Course Updated!');
-
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  \Illuminate\Http\Request  $request what needs to be sent in the delete request
+     * @param  int  $id the id of the course to be removed
+     * @return \Illuminate\Http\Response the courses page
      */
     public function destroy(Request $request, $id)
     {
+        // If the authenticated user is not the course owner, abort
         if (!$this->canEdit($id)) abort(401);
-        //needed to delete the post
+       
+        // Find the course
         $course = Course::find($id);
-        if(auth()->user()->id !==$course->user_id){
-            //if the post owner is not the same, we direct the user to /posts with an error message of Unathourised Page
-            return redirect('/courses')->with('error','Unauthorised Page');
-        }
-
-        // if($course -> cover_image != 'default'){
-        //     //Delete Image
-        //     $path = storage_path('app/public/'.$course->cover_image);
-        //     unlink($path);
-        //     // Storage::delete('public/cover_images/'.$course->cover_image);
-        // }
-        $title = $course -> title;
+        // Save to course title for the confirmation alert
+        $title = $course->title;
+        // Remove the course
         $course -> delete();
 
-        // return redirect('/courses');
-        // $this -> index();
-        // $request->session()->flash('alert-success', 'User was successful added!');
-        // return json_encode($title);
-        Session::flash('success', 'This is a message!'); 
-
-        return redirect()->route('courses');    
+        // Return to the courses page
+        return redirect('courses')-> with('success', "The course '".$title."' has been removed");
     }
 
+    /**
+     * Store a course cover image in storage and return the stored filename.
+     * 
+     * @param \Illuminate\Http\Request $request the image to be sent in the post request
+     * @param int $id the id of the course the image needs to be uploaded to
+     * @return string the filename the image was stored with
+     */
     public function apiImageUpload(Request $request, $id) 
     {
+        // If the authenticated user is not the owner (he can't edit the course), abort
         if (!$this->canEdit($id)) abort(401);
+        // Validation rules the request must comply with
         $rules = [
             'cover_image' => 'image | mimes:jpeg,png,jpg,gif,svg | nullable | max:2048'
         ];
     
+        // Custom messages to display when validation fails
         $customMessages = [
             'image' => 'The :attribute field must be an image.',
             'max' => ':attribute no bigger than 3mb'
         ];
     
+        // Apply the validation rules with the custom messages
         $this->validate($request, $rules, $customMessages);
 
+        // Find the course
         $course = Course::find($id);
 
-        //Handle File upload
-        //make sure an actual file was chosen
+        // If a file was chosen
         if($request -> hasFile('cover_image')){
 
             $img = $request -> cover_image;
-
             $user_id = auth()->user()->id;
 
-            // Check if user folder exists and create it if not
+            // Check if user storage folder exists and create it if not
             $path = storage_path('app/public/user_'.$user_id);
             if(!file_exists($path)) {
-                // path does not exist
+                // Path does not exist, so create it
                 \File::makeDirectory($path);
             }
 
+            // If the user already has any other images for this course, remove them
             $matches = glob($path.'/course_'.$course->id.'*');
             foreach ($matches as $match) {
                 unlink($match);
             }
 
+            // Create a unique file name to store the image
             $imageName = 'course_'.$course->id.'_'.date("YmdHis").'.'.$img->getClientOriginalExtension();
 
-            // Save image to user folder
+            // Save image to the user folder using the created filename
             $img->move($path, $imageName);
 
+            // Save the image path inside the storage folder to store to the database
             $fileNameToStore = 'user_'.$user_id.'/'.$imageName;
             
         } else{
-            //so if the user has not chosen an image, this default image will show
+            // If the user has not chosen an image, this default image will show
             $fileNameToStore= 'default';
         }
+
+        // Save the image path to the database
         $course -> cover_image = $fileNameToStore;
         $course -> save();
 
+        // Return the path that is saved in the database
         return json_encode($fileNameToStore);
     }
 

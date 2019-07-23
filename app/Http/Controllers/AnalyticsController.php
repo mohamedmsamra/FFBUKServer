@@ -22,7 +22,8 @@ class AnalyticsController extends Controller
     /**
      * Store a new marking session
      *
-     * @param Request what needs to be sent in the post request
+     * @param \Illuminate\Http\Request what needs to be sent in the post request
+     * @return string a string containing the JSON representation of the created session object
      */
     public function apiStoreSession(Request $request) {
         // Ensure the request information is complete
@@ -55,13 +56,23 @@ class AnalyticsController extends Controller
         return json_encode($session);
     }
 
-    // Get the information for one particular session by the session id
+    /**
+     * Get the information for one particular session by the session id
+     * 
+     * @param int $id the marking session id
+     * @return string a string containing the JSON representation of the session object
+     */
     public function apiShowSession($id) {
         $session = MarkingSession::find($id);
         return json_encode($session);
     }    
 
-    // Store a new comment use by the authenticated user for a given comment id
+    /**
+     * Store a new comment use by the authenticated user for a given comment id
+     * 
+     * @param int $id the id of the comment
+     * @return string a string containing the JSON representation of the created comment use object
+     */
     private function apiStoreCommentUse($comment_id) {
         // Get the authenticated user id 
         $user_id = Auth::user()->id;
@@ -79,7 +90,9 @@ class AnalyticsController extends Controller
 
     /**
      * Increase the use count for a comment use given the comment id
-     * @param integer $id the id of the comment we want to increase the count for
+     * 
+     * @param int $id the id of the comment we want to increase the count for
+     * @return string a string containing the JSON representation of the updated comment use object
      */
     private function apiUpdateCommentUse($id) {
         // Get the authenticated user
@@ -104,7 +117,12 @@ class AnalyticsController extends Controller
         return json_encode($commentUse);
     }
 
-    // Get a comment use by its id
+    /**
+     * Get the information for one comment use
+     * 
+     * @param int $id the id of the comment use
+     * @return string a string containing the JSON representation of the comment use object
+     */
     public function apiShowCommentUse($id) {
         $commentUse = CommentUse::find($id);
         return json_encode($commentUse);
@@ -112,7 +130,8 @@ class AnalyticsController extends Controller
 
     /**
      * Get all analytics for the authenticated user for a given assignment
-     * @param integer $assignment_id the id of the assignment we want analytics for
+     * 
+     * @param int $assignment_id the id of the assignment we want analytics for
      * @return string $analytics a string containing the JSON representation of the object containing all analytics for this assignment and the authenticated user
      */
     public function apiShowAnalytics($assignment_id) {
@@ -147,8 +166,9 @@ class AnalyticsController extends Controller
 
         // Get list of comments by popularity (for all users of the assignment, including all comments)
         $commentsList = (object)[];
-        // Find all comments from this assignment
+        // Find all the sections for this assignment
         $sections = Section::where('assignment_id', $assignment_id)->pluck('id');
+        // For all those sections, find all the comments
         $commentsList = Comment::whereIn('section_id', $sections)->get();
 
         // Format each comment to only send relevant data
@@ -172,18 +192,21 @@ class AnalyticsController extends Controller
 
         // Personal balance of positive and negative comments
         // Find all comment uses by this user
-        // CONTINUE COMMENTS HERE
         $personalUses = CommentUse::where('user_id', $user_id)->get();
         $pos = 0;
         $neg = 0;
 
+        // 
         foreach ($personalUses as $use) {
             $comm = Comment::find($use->comment_id);
+            // If the current comment belongs to this assignment (is in a section that belongs tot this assignment)
             if (in_array($comm->section_id, json_decode(json_encode($sections), true))) {
+                // add its use count to the total positive or negative use counts depending on the type of comment
                 $comm->type == "positive" ? $pos += $use->count : $neg += $use->count;
             }
         }
 
+        // save the balance between positive and negatime comment uses
         $analytics->balance_positive_comments = $pos;
         $analytics->balance_negative_comments = $neg;
 
@@ -191,6 +214,7 @@ class AnalyticsController extends Controller
         if ($isOwner) {
             // Get all user ids (except owner) from marking sessions for this assignment
             $guests = MarkingSession::where('assignment_id', $assignment_id)->where('user_id', '!=', $user_id)->pluck('user_id');
+            // Remove duplicate ids
             $guests = array_unique(json_decode(json_encode($guests, true)));
             // Arrays to hold the averages for all guest users
             $guests_words = array();
@@ -203,9 +227,11 @@ class AnalyticsController extends Controller
                 array_push($guests_times, $res->average_time);
             }
 
+            // Save individual averages for all users invited to this course
             $analytics->guests_average_words = $guests_words;
             $analytics->guests_average_times = $guests_times;
-            // the overall
+
+            // Compute and save the overall average of words and time for all users in this course
             $analytics->total_average_words = round(($analytics->personal_average_words + array_sum(json_decode(json_encode($guests_words), true))) / (count($guests_words) + 1));
             $analytics->total_average_times = round(($analytics->personal_average_time + array_sum(json_decode(json_encode($guests_times), true))) / (count($guests_times) + 1));
 
@@ -219,13 +245,15 @@ class AnalyticsController extends Controller
             $analytics->all_sessions_times = $sessions_times;            
         }
 
+        // Return all the analytics relevant to the authenticated user for the given assignment
         return json_encode($analytics);        
     }
     
     /**
-     * Get the average number of words and average time spent on a marking session by a given user on a given assignment
-     * @param integer $user_id the id of the user
-     * @param integer $assignment_id the id of the assignment
+     * Get the average number of words and average time spent on a marking session by a given user on a given assignment#
+     * 
+     * @param int $user_id the id of the user
+     * @param int $assignment_id the id of the assignment
      * @return object an object containing the average number of words and the average time per marking session (by this user with this assignment)
      */
     public function getAverageWordsAndTime($user_id, $assignment_id) {
@@ -258,8 +286,9 @@ class AnalyticsController extends Controller
 
     /**
      * Get the total number of times this comment been used
-     * @param integer $comment_id the id of the comment
-     * @return integer $count how many time this comment has been used by all users
+     * 
+     * @param int $comment_id the id of the comment
+     * @return int $count how many time this comment has been used by all users
      */
     public function getTotalCommentCount($comment_id) {
         $count = 0;
