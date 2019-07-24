@@ -15,7 +15,7 @@ class FocusingInput extends React.Component {
     }
 
     render() {
-        var { className, value, onChange, name, onEnterKey, onEnterKey, ...otherProps} = this.props;
+        var { className, value, onChange, name, onEnterKey, onEscapeKey, ...otherProps} = this.props;
         
         return (
             <Form.Control

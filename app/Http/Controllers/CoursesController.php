@@ -58,13 +58,9 @@ class CoursesController extends Controller
 
         // Find the course, all of its assignments and all the sharing permissions it has
         $course = Course::find($id);
-        $assignments = Assignment::where('course_id',$course->id)->get();
-        $permissions = $this->permissions($id);
 
         // Return a page with that information
-        return view('courses.show') -> with('course', $course)
-                                    -> with('assignments', $assignments)
-                                    -> with('permissions', $permissions);
+        return view('courses.show') -> with('course', $course);
     }
 
     /**
@@ -242,12 +238,20 @@ class CoursesController extends Controller
     {
         if (!$this->canView($id)) abort(401);
         $course = Course::find($id);
+        $assignments = Assignment::where('course_id',$course->id)->get();
+        $permissions = $this->permissions($id);
+        $owner = $course->user()->first();
 
         return json_encode([
-            'image' => $course->cover_image,
+            'assignments' => $assignments,
             'body' => $course->body,
-            'createdAt' => $course->created_at,
-            'username' => $course->user->name
+            'can_manage' => Auth::user()->id == $owner->id, 
+            'course_id' => $course->id,
+            'created_at' => $course->created_at,
+            'creator_name' => $owner->name,
+            'image' => $course->cover_image,
+            'permissions' => $permissions,
+            'title' => $course->title
         ]);
     }
 
