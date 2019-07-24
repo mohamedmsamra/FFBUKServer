@@ -29,7 +29,7 @@ class PermissionsTable extends React.Component {
     handleInvite() {
         if (this.state.emailInput.trim() !== '')  {
             this.setState({awaitingInvitationResponse: true}, () => {
-                fetch('/api/courses/' + course_id + '/invite', {
+                fetch('/api/courses/' + this.props.course.course_id + '/invite', {
                     method: 'post',
                     body: JSON.stringify({
                         email: this.state.emailInput
@@ -104,7 +104,7 @@ class PermissionsTable extends React.Component {
             this.props.alert.show({
                 text: "Change " + this.props.getTableRowData(key).data.user.name + "'s permissions to " + (value == 1? 'read/write' : 'read only') + "?",
                 onConfirm: () => {
-                    fetch("/api/courses/" + course_id + "/permissions/" + this.props.getTableRowData(key).data.user.id, {
+                    fetch("/api/courses/" + this.props.course.course_id + "/permissions/" + this.props.getTableRowData(key).data.user.id, {
                         method: 'post',
                         body: JSON.stringify({level: value}),
                         headers: {
@@ -153,7 +153,7 @@ class PermissionsTable extends React.Component {
                     </p>
                 </td>
                 <td>
-                    {HAS_COURSE_EDIT_PERMISSION ?
+                    {this.props.course.can_manage ?
                         <Form.Group controlId="exampleForm.ControlSelect1">
                             <Form.Control
                                 size="sm"
@@ -170,7 +170,7 @@ class PermissionsTable extends React.Component {
                         <p>{row.data.level == 1 ? 'Read/Write' : 'Read only'}</p>
                     }
                 </td>
-                {HAS_COURSE_EDIT_PERMISSION && 
+                {this.props.course.can_manage && 
                     <td>
                         <Button 
                             variant="danger" 
@@ -185,18 +185,16 @@ class PermissionsTable extends React.Component {
         );
     }
 
-    /* Adds the permissions to the table when the component mounts. The permissions are stored in an object compiled in
-     * blade on the backend (should be changed to a fetch request in this function in the future).
-     */
+    /* Adds the permissions to the table when the component mounts. */
     componentDidMount() {
-        this.props.addTableRows(PERMISSIONS.map(r => ({key: r.id, data: r})));
+        this.props.addTableRows(this.props.course.permissions.map(r => ({key: r.id, data: r})));
     }
 
     render() {
         return (
             <>
                 {/* Displayed information for course owner */}
-                {HAS_COURSE_EDIT_PERMISSION && 
+                {this.props.course.can_manage && 
                     <div className="mb-3 ml-1">
                         <small><i className="fas fa-asterisk fa-sm text-muted"></i> People you invite to the course can see all existing assignments</small>
                         <br />
@@ -205,10 +203,10 @@ class PermissionsTable extends React.Component {
                 }
                 {/* Table to display permissions */}
                 <this.props.ReactiveTable
-                    headers={['User', 'Permissions'].concat(HAS_COURSE_EDIT_PERMISSION ? ['Actions'] : [])}
+                    headers={['User', 'Permissions'].concat(this.props.course.can_manage ? ['Actions'] : [])}
                     renderRow={this.renderRow} />
                 {/* Controls to invite new users to the course */}
-                {HAS_COURSE_EDIT_PERMISSION && 
+                {this.props.course.can_manage && 
                     <InputGroup size="sm" className="mb-3">
                         <InputGroup.Prepend>
                         <InputGroup.Text id="basic-addon1"><i className="fas fa-plus"></i></InputGroup.Text>

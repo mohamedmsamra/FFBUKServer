@@ -14,6 +14,7 @@ class AssignmentsTable extends React.Component {
         this.idCounter = -1;
         this.handleCreateClick = this.handleCreateClick.bind(this);
         this.handleCloneClick = this.handleCloneClick.bind(this);
+        this.handleConfirmCreate = this.handleConfirmCreate.bind(this);
         this.renderRow = this.renderRow.bind(this);
         this.renderContent = this.renderContent.bind(this);
         this.fetchAssignments = this.fetchAssignments.bind(this);
@@ -177,7 +178,7 @@ class AssignmentsTable extends React.Component {
         fetch('../api/assignments/' + id + '/clone', {
             method: 'post',
             body: JSON.stringify({
-                course_id: course_id
+                course_id: this.props.course.course_id
             }),
             headers: {
                 "Content-Type": "application/json",
@@ -214,7 +215,7 @@ class AssignmentsTable extends React.Component {
         }, () => {
             fetch("/api/assignments", {
                 method: 'post',
-                body: JSON.stringify({course_id: course_id, title: this.props.tableRows.find(x => x.key == id).data.name}),
+                body: JSON.stringify({course_id: this.props.course.course_id, title: this.props.tableRows.find(x => x.key == id).data.name}),
                 headers: {
                     "Content-Type": "application/json",
                     "Accept": "application/json, text-plain, */*",
@@ -282,7 +283,7 @@ class AssignmentsTable extends React.Component {
                     <a href={`/assignments/${data.id}/statistics`}>
                         <button type="button" className="btn btn-secondary btn-sm" disabled={isLoading}>View analytics</button>
                     </a>
-                    {HAS_COURSE_EDIT_PERMISSION && 
+                    {this.props.course.can_manage && 
                         <>
                             <button type="button" className="btn btn-info btn-sm" disabled={isLoading} onClick={() => this.handleEditClick(data.id)}>Edit</button>
                             <button type="button" className="btn btn-danger btn-sm" disabled={isLoading} 
@@ -313,7 +314,7 @@ class AssignmentsTable extends React.Component {
                     value={data.createName}
                     onChange={e => this.handleEditCreateName(data.id, e.target.value)}
                     onEnterKey={() => this.handleConfirmCreate(data.id)}
-                    onEscapeKey={() => this.handleConfirmEdit(data.id)}
+                    onEscapeKey={() => this.handleCancelCreate(data.id)}
                     size="sm" />
             );
         } else {
@@ -331,12 +332,9 @@ class AssignmentsTable extends React.Component {
         );
     }
 
-    /* Adds the assignments to the table when the component mounts. The assignments are stored in an object compiled in
-     * blade on the backend (should be changed to a fetch request in this function in the future).
-     */
+    /* Adds the assignments to the table when the component mounts. */
     componentDidMount() {
-        // this.props.alert.show({text: 'test'})
-        this.props.addTableRows(assignments.map(a => {return {key: a.id, data: this.mapDBAssignmentToLocal(a)}}));
+        this.props.addTableRows(this.props.course.assignments.map(a => {return {key: a.id, data: this.mapDBAssignmentToLocal(a)}}));
     }
 
     render() {
@@ -345,7 +343,7 @@ class AssignmentsTable extends React.Component {
                 <this.props.ReactiveTable
                     headers={['Assignments', 'Actions']}
                     renderRow={this.renderRow} />
-                {HAS_COURSE_EDIT_PERMISSION && 
+                {this.props.course.can_manage && 
                     <div className="text-center newAssignmentBtns">
                         <Button className="mr-1" variant="primary" size="sm" onClick={this.handleCreateClick}><i className="fas fa-plus"></i>  Create Assignment</Button>
                         <Button variant="info" size="sm" onClick={this.handleCloneClick}><i className="fas fa-clone"></i>  Duplicate Assignment</Button>
