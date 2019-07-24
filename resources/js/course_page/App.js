@@ -145,7 +145,7 @@ class App extends React.Component {
                                 </div>
                             }
                             <div className="card-footer">
-                                {/* <small> Added by <strong>{this.state.course.creator_name}</strong> on {dateformat(new Date(this.state.course.created_at + ''), "dddd, mmmm dS, yyyy, h:MM:ss TT")}</small> */}
+                                <small> Added by <strong>{this.state.course.creator_name}</strong> on {dateformat(new Date(this.state.course.created_at.date), "dddd, mmmm dS, yyyy")}</small>
                             </div>
                         </div>
                         
