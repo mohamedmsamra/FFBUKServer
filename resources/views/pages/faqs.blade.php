@@ -18,6 +18,7 @@
     <!-- Styles -->
     <link href="{{ asset('builds/css/app.css') }}" rel="stylesheet">
 
+    {{-- jQuery --}}
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
     </script>
@@ -34,8 +35,6 @@
             <div class="card shadow-sm mt-3 mb-3">
                 <h1 class="card-header">Tutorial Videos</h1>
                 <div class="p-3">
-
-
                     <p>This series of videos will take you through all the functionality of the fFBUK software. Click on
                         the
                         icon in the top left of the video to skip to other videos in the playlist.</p>
@@ -49,8 +48,6 @@
             <div class="card shadow-sm mb-3">
                 <h1 class="card-header">Frequently Asked Questions</h1>
                 <div class="p-3">
-
-
                     <strong>Why isn't the PDF loading?</strong>
                     <p>The software requires you use an up-to-date version of Google Chrome. To update or check the
                         version
@@ -72,10 +69,8 @@
                 <div class="p-3">
                     <p>If you have a question that isn't answered here, please contact us at&nbsp;<a
                             href="mailto:ffbukcontact@gmail.com">ffbukcontact@gmail.com</a>.</p>
-
                 </div>
             </div>
-
         </div>
     </div>
 

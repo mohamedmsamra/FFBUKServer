@@ -1,5 +1,6 @@
 @extends('layouts.app')
 
+{{-- The about page (/about) --}}
 @section('content')
     <h1> {{$title}} </h1>
     <p>This is a website developed through a Hefi funded project.</p>

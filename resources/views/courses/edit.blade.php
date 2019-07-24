@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
-
+{{-- Page to edit a course --}}
+{{-- Not used currently --}}
 @section('content')
     <h1> Edit Course </h1>
 
@@ -11,6 +12,8 @@
             {{Form::text('title',$course->title,['class' =>'form-control','placeholder' => 'Title'])}}
         </div>   
         
+        {{-- this should be a rich text editor like in the course creation form --}}
+        {{-- not just a plain textarea --}}
         <div class= "form-group">   
             {{Form::label('body', 'Body')}}
             {{Form::textArea('body',$course->body,['id'=>'article-ckeditor', 'class' =>'form-control','placeholder' => 'Body Text'])}}
