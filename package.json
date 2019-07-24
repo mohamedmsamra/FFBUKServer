@@ -14,12 +14,9 @@
         "@babel/core": "^7.4.5",
         "@babel/preset-env": "^7.4.5",
         "@babel/preset-react": "^7.0.0",
-        "axios": "^0.19.0",
         "babel-loader": "^8.0.6",
         "babel-preset-env": "^1.7.0",
-        "bootstrap": "^4.3.1",
         "cross-env": "^5.1",
-        "jquery": "^3.4.1",
         "laravel-mix": "^4.0.16",
         "lodash": "^4.17.14",
         "popper.js": "^1.15.0",
@@ -29,7 +26,10 @@
         "vue-template-compiler": "^2.5.22"
     },
     "dependencies": {
+        "axios": "^0.19.0",
         "@fortawesome/fontawesome-free": "^5.9.0",
+        "bootstrap": "^4.3.1",
+        "jquery": "^3.4.1",
         "chart.js": "^2.8.0",
         "dateformat": "^3.0.3",
         "interactjs": "^1.4.0-rc.13",

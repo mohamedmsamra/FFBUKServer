@@ -11,6 +11,8 @@
 
     <title>{{ config('app.name', 'SWiFT') }}</title>
 
+    <link rel="icon" href="/svg/book-solid.png"/>
+
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700|Raleway:400,700&display=swap"

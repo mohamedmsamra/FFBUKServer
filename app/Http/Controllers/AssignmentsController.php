@@ -227,6 +227,7 @@ class AssignmentsController extends Controller
      * @return \Illuminate\Http\Response the marking page for the given assignment
      */
     public function getMarking($assignment_id){
+        if (!$this->canView($assignment_id)) abort(401);
         $title = 'Marking';
         // Find the assignment
         $assignment = Assignment::where('id', '=', $assignment_id)->first();
@@ -246,6 +247,7 @@ class AssignmentsController extends Controller
      * @return \Illuminate\Http\Response the statistics/analytics page for the given assignment
      */
     public function getStatistics($id) {
+        if (!$this->canView($id)) abort(401);
         // Find the assignment and the course it belongs to
         $assignment = Assignment::find($id);
         $course = $assignment->course()->first();

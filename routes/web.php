@@ -55,7 +55,7 @@ Route::get('/survey2', 'PagesController@survey2');
 Route::get('/services', 'PagesController@services');
 
 // will create all the routes associated with the post editing deleteing and so on
-Route::group( ['middleware' => 'auth' ], function()
+Route::group( ['middleware' => 'auth'], function()
 {
     // Assignments
     // Route::resource('assignments', 'AssignmentsController');
