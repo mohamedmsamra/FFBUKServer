@@ -1,3 +1,6 @@
+
+{{-- The analytics page for assignments ( /assignments/{assignment id}/statistics ) --}}
+
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
@@ -12,16 +15,17 @@
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700|Raleway:400,700&display=swap" rel="stylesheet">
 
-
         <!-- Styles -->
         <link href="{{ asset('builds/css/app.css') }}" rel="stylesheet">
 
+        {{-- jQuery --}}
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     </head>
     <body>
         <div id="app">
             @include('inc.navbar')
             <div id="statistics-page">
+                {{-- Use react for this page --}}
                 <main class="py-4"><div id="react-root"></div></main>
             </div>
         </div>

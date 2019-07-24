@@ -1,7 +1,8 @@
 @extends('layouts.app')
 
+{{-- The about page (/about) --}}
 @section('content')
     <h1> {{$title}} </h1>
-    <p> This is the about page for an awesome app to give  your feedback </p>
-    <p> This is more information about the app </p>
+    <p>This is a website developed through a Hefi funded project.</p>
+    <p>Our aim is to improve the quality of feedback students receive, through the use of a simple yet very useful tool.</p>
 @endsection

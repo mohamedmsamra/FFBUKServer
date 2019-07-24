@@ -1,5 +1,6 @@
 @extends('layouts.app')
 
+{{-- The register page (/register) --}}
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
@@ -15,40 +16,48 @@
                             <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Name') }}</label>
 
                             <div class="col-md-6">
-                                <input id="name" type="text" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" name="name" value="{{ old('name') }}" required autofocus>
+                                <input id="name" type="text"
+                                    class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" name="name"
+                                    value="{{ old('name') }}" required autofocus>
 
                                 @if ($errors->has('name'))
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('name') }}</strong>
-                                    </span>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $errors->first('name') }}</strong>
+                                </span>
                                 @endif
                             </div>
                         </div>
 
                         <div class="form-group row">
-                            <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>
+                            <label for="email"
+                                class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>
 
                             <div class="col-md-6">
-                                <input id="email" type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ old('email') }}" required>
+                                <input id="email" type="email"
+                                    class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email"
+                                    value="{{ old('email') }}" required>
 
                                 @if ($errors->has('email'))
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('email') }}</strong>
-                                    </span>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $errors->first('email') }}</strong>
+                                </span>
                                 @endif
                             </div>
                         </div>
 
                         <div class="form-group row">
-                            <label for="school_department" class="col-md-4 col-form-label text-md-right">{{ __('School/Department') }}</label>
+                            <label for="school_department"
+                                class="col-md-4 col-form-label text-md-right">{{ __('School/Department') }}</label>
 
                             <div class="col-md-6">
-                                <input id="school_department" type="text" class="form-control{{ $errors->has('school_department') ? ' is-invalid' : '' }}" name="school_department" value="{{ old('school_department') }}" required autofocus>
+                                <input id="school_department" type="text"
+                                    class="form-control{{ $errors->has('school_department') ? ' is-invalid' : '' }}"
+                                    name="school_department" value="{{ old('school_department') }}" required autofocus>
 
                                 @if ($errors->has('school_department'))
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('school_department') }}</strong>
-                                    </span>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $errors->first('school_department') }}</strong>
+                                </span>
                                 @endif
                             </div>
                         </div>
@@ -57,39 +66,44 @@
                             <label for="role" class="col-md-4 col-form-label text-md-right">{{ __('Role') }}</label>
 
                             <div class="col-md-6">
-                                <select id="role" class="custom-select {{ $errors->has('role') ? ' is-invalid' : '' }}" name="role" value="{{ old('role') }}" required autofocus>
+                                <select id="role" class="custom-select {{ $errors->has('role') ? ' is-invalid' : '' }}"
+                                    name="role" value="{{ old('role') }}" required autofocus>
                                     <option value="PGTA" selected>PGTA</option>
                                     <option value="Course Lead">Course Lead</option>
                                 </select>
-                                {{-- <input id="role" type="text" class="form-control{{ $errors->has('role') ? ' is-invalid' : '' }}" name="role" value="{{ old('role') }}" required autofocus> --}}
 
                                 @if ($errors->has('role'))
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('role') }}</strong>
-                                    </span>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $errors->first('role') }}</strong>
+                                </span>
                                 @endif
                             </div>
                         </div>
 
                         <div class="form-group row">
-                            <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
+                            <label for="password"
+                                class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
 
                             <div class="col-md-6">
-                                <input id="password" type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" required>
+                                <input id="password" type="password"
+                                    class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}"
+                                    name="password" required>
 
                                 @if ($errors->has('password'))
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('password') }}</strong>
-                                    </span>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $errors->first('password') }}</strong>
+                                </span>
                                 @endif
                             </div>
                         </div>
 
                         <div class="form-group row">
-                            <label for="password-confirm" class="col-md-4 col-form-label text-md-right">{{ __('Confirm Password') }}</label>
+                            <label for="password-confirm"
+                                class="col-md-4 col-form-label text-md-right">{{ __('Confirm Password') }}</label>
 
                             <div class="col-md-6">
-                                <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required>
+                                <input id="password-confirm" type="password" class="form-control"
+                                    name="password_confirmation" required>
                             </div>
                         </div>
 
