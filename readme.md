@@ -3,7 +3,7 @@
 ## What is SWiFT?
 SWiFT is a web application built with students in mind. Most students feel dissatisfied with the feedback they receive at University. SWiFT can be used by module leads to create feedback templates they can then share with their Postgraduate Teaching Assistant to ensure a standard structure and increased quality for the feedback. SWiFT can also increase productivity and decrease the time spent marking each assignment.
 
-![SWiFT ScreenShot](/svg/swift-ss.png)
+![SWiFT ScreenShot](public/swift-ss.png)
 
 ### Functionality
 * Users can create courses.
