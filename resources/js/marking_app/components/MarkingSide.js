@@ -591,8 +591,18 @@ class MarkingSide extends React.Component {
                                 <div className="export text-center">
                                     {this.renderNextPdfButton()}
                                 </div>
-                                <button type="button" className='btn btn-danger btn-block shadow-sm' onClick={() => {if(confirm('All entered text will be deleted. Are you sure?')) this.clearSectionsContent()}} id="clearButton">Clear All</button>
+                                <button
+                                    type="button"
+                                    className='btn btn-danger btn-block shadow-sm'
+                                    onClick={() => {this.props.alert.info({
+                                        text: 'All entered text will be deleted. Are you sure?',
+                                        onConfirm: this.clearSectionsContent
+                                    })}}
+                                    id="clearButton">
+                                    Clear All
+                                </button>
                             </div>
+                            
                         </div>
                     }
                 </div>
