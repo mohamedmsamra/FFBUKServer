@@ -3,20 +3,26 @@
 ## What is SWiFT?
 SWiFT is a web application built with students in mind. Most students feel dissatisfied with the feedback they receive at University. SWiFT can be used by module leads to create feedback templates they can then share with their Postgraduate Teaching Assistant to ensure a standard structure and increased quality for the feedback. SWiFT can also increase productivity and decrease the time spent marking each assignment.
 
-<!-- Flow:
-Register to the website.
-Verify your email.
-Login.
-Create a course
-Create an assignment / Clone
-Edit assignment title
-Remove assignment
-View analytics
-Start marking assignment
+![SWiFT ScreenShot](/svg/swift-ss.png)
 
-Invite others to course
-Change invites permissions
-Remove Permissioons -->
+### Functionality
+* Users can create courses.
+* Courses can have multiple assignments. 
+* Courses can be shared with other users with 2 different permission levels: read only and read/write. 
+* Assignments are used to produce feedback and mark student work. 
+* Assignments are made up of sections. 
+* In sections, you write the feedback. 
+* Sections can have lists of comments that are predefined, so you can add them easily to your feedback. These are useful and speed thing up if, for instance, there is a common mistake students make then you can create a comment for that and use it whenever appropriate without having to type it every time. 
+* The course owner can create new assignments, edit them and remove them. 
+* The course owner can give, change and remove permissions to other users.
+* Users with read/write permission can edit the content of assignments.
+* Both the owner and the read/write permission users can add public or private comments to sections. 
+* Public comments are comments that will be available to all other users who have access to the course. 
+* Private comments are comments that are only available to the user who created them.
+* Users with read-only permissions can see assignments and use them for marking. They can also create private comments.
+* All users who have access to a course also have access to analytics for all assignments in the course.
+* The course owner can see analytics concerning all the users in the course.
+* Users that the course is shared with can only see their personal analytics. 
 
 ## Project Setup
 * Create a database for the project
@@ -50,8 +56,10 @@ The libraries this project uses include:
 ## Future plans
 In the future, we would like to add the following imporvements to the website:
 * add email verification middleware to pages (restrict access if email is not verified)
-* reorder sections and comments
-* edit course title and description
+* add the ability to reorder sections and comments
+* make it possible to edit the course title and description
 * redesign course page to be more user friendly
 * improve analytics (statistical outliers for averages, only track marking time when the page is actually used)
 * add a more interactive pdf display library (that allows highlighting for instance)
+* use a consistent color scheme across the website to give it a recognisable identity
+
