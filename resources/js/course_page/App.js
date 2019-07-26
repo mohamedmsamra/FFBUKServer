@@ -58,16 +58,15 @@ class App extends React.Component {
      * /courses.
      */
     handleDeleteCourse() {
-        fetch(COURSE_ID, {
-            method: 'delete',
+        fetch(`/api/courses/${COURSE_ID}`, {
+            method: 'post',
+            body: JSON.stringify({_method: 'delete'}),
             headers: {
                 "Content-Type": "application/json",
                 "Accept": "application/json, text-plain, */*",
                 "X-Requested-With": "XMLHttpRequest",
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content')
             }
-        }).then(function(response) {
-            return response.json();
         }).then((data) => {
             // console.log(data);
             window.location.href = '/courses';

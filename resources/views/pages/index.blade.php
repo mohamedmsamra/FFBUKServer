@@ -5,6 +5,7 @@
 <div class="jumbotron text-center homePage">
     <h1> {{$title}} </h1>
     <p>An awesome app to help you give quality feedback.</p>
+    <p>You can find tutorials on how to use SWiFT <a href="/faqs">here</a>.</p>
     
     @if (Auth::check())
     <div class="mb-2 mt-4">
@@ -14,6 +15,8 @@
     <a href="/survey1" class="btn btn-info mr-1">Pre-Workshop Survey</a>
     <a href="/survey2" class="btn btn-info">Post-Workshop Survey</a>
     @endif
+
+    
 
 </div>
 

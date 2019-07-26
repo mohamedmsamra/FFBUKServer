@@ -113,7 +113,8 @@ class Section extends React.Component {
     handleRemoveComment(idToRemove) {
         // console.log('Fetch method delete comment with id = ' + idToRemove);
         fetch('/api/comments/' + idToRemove, {
-            method: 'delete',
+            method: 'post',
+            body: JSON.stringify({_method: 'delete'}),
             headers: {
                 "Content-Type": "application/json",
                 "Accept": "application/json, text-plain, */*",

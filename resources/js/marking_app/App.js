@@ -20,6 +20,25 @@ class App extends React.Component {
         this.isLastPdf = this.isLastPdf.bind(this);
     }
 
+    /* Enable or disable confirmation before closing the window to prevent losing work */
+    setConfirmationOnWindowClose(enable) {
+        if (enable) {
+            window.onbeforeunload = function (e) {
+                e = e || window.event;
+        
+                // For IE and Firefox prior to version 4
+                if (e) {
+                    e.returnValue = 'Sure?';
+                }
+        
+                // For Safari
+                return 'Sure?';
+            };
+        } else {
+            window.onbeforeunload = () => {};
+        }
+    }
+
     componentDidMount() {
         // Add resizing the PDF side and marking side using the interact.js library
         interact('.resize-drag')
@@ -82,6 +101,9 @@ class App extends React.Component {
             pdfsSelected[i] = {name: files[i].name, url: URL.createObjectURL(files[i]), mark: -1};
         }
         this.setState({pdfsSelected: pdfsSelected, pdfPointer: 0});
+
+        // Ask for confirmation before closing window to prevent losing unsaved work
+        this.setConfirmationOnWindowClose(true);
     }
 
     // Runs when the user clicks 'Save and Load next' to start marking the next PDF
@@ -89,6 +111,7 @@ class App extends React.Component {
         this.setState({start: Date.now()});
         this.setState(prevState => {
             if (this.isLastPdf()) {
+                this.setConfirmationOnWindowClose(false); // Session done, don't ask for confirmation
                 prevState.pdfPointer = -1;
                 prevState.pdfsSelected = [];
             } else {

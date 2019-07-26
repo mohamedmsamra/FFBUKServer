@@ -121,8 +121,8 @@ class AssignmentsTable extends React.Component {
                 text: "Are you sure you want to delete this assignment?",
                 onConfirm: () => {
                     fetch("/api/assignments/" + id, {
-                        method: 'delete',
-                        body: JSON.stringify({}),
+                        method: 'post',
+                        body: JSON.stringify({_method: 'delete'}),
                         headers: {
                             "Content-Type": "application/json",
                             "Accept": "application/json, text-plain, */*",

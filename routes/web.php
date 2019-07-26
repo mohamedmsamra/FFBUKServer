@@ -75,7 +75,7 @@ Route::group( ['middleware' => 'auth'], function()
     Route::post('/api/comments/{id}/edit-text', 'CommentsController@apiEditText');
 
     // Courses
-    Route::resource('courses', 'CoursesController')->except(['edit', 'update']);
+    Route::resource('courses', 'CoursesController')->except(['edit', 'update', 'destroy']);
     Route::post('/api/courses/{course}/image-upload', 'CoursesController@apiImageUpload');
     Route::get('/api/courses/{course}/show-image', 'CoursesController@apiShowImage');
     Route::get('/api/courses/{course}', 'CoursesController@apiShow');
@@ -85,6 +85,7 @@ Route::group( ['middleware' => 'auth'], function()
     Route::post('/api/courses/{course_id}/permissions/{user_id}', 'CoursesController@apiUpdatePermission');
     Route::delete('/api/course-permissions/{id}', 'CoursesController@apiRemoveFromCourse');
     Route::delete('/api/course-permissions/{id}/reject-invite', 'CoursesController@apiRejectCourseInvite');
+    Route::delete('/api/courses/{course}', 'CoursesController@apiDestroy');
     
     // Sections
     Route::post('/api/sections', 'SectionsController@apiStore');
