@@ -126,9 +126,9 @@ class CoursesController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request what needs to be sent in the delete request
      * @param  int  $id the id of the course to be removed
-     * @return \Illuminate\Http\Response the courses page
+     * @return String confirmation
      */
-    public function destroy(Request $request, $id)
+    public function apiDestroy(Request $request, $id)
     {
         // If the authenticated user is not the course owner, abort
         if (!$this->canEdit($id)) abort(401);
@@ -141,7 +141,7 @@ class CoursesController extends Controller
         $course -> delete();
 
         // Return to the courses page
-        return redirect('courses')-> with('success', "The course '".$title."' has been removed");
+        return json_encode(['success' => true]);
     }
 
     /**

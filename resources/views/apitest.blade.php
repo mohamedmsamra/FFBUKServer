@@ -72,7 +72,7 @@
 
         function sendDelete(loc, data) {
             fetch(loc, {
-                method: 'delete',
+                method: 'post',
                 body: JSON.stringify(data),
                 headers: {
                     "Content-Type": "application/json",

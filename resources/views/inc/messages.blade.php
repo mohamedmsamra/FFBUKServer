@@ -26,6 +26,20 @@
     </div> 
 @endif
 
+@if(session('warning'))
+    <div class="alert alert-warning alert-block">
+        <button type="button" class="close" data-dismiss="alert">×</button>	
+        <strong>{{session('warning')}}</strong>
+    </div> 
+@endif
+
+@if(session('ingo'))
+    <div class="alert alert-info alert-block">
+        <button type="button" class="close" data-dismiss="alert">×</button>	
+        <strong>{{session('info')}}</strong>
+    </div> 
+@endif
+
 
 {{-- @if ($message = Session::get('success'))
 <div class="alert alert-success alert-block">

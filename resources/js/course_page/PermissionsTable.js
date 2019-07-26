@@ -65,7 +65,8 @@ class PermissionsTable extends React.Component {
                 text: `Are you sure you want to remove ${this.props.getTableRowData(id).data.name} from this course?`,
                 onConfirm: () => {
                     fetch('/api/course-permissions/' + id, {
-                        method: 'delete',
+                        method: 'post',
+                        body: JSON.stringify({_method: 'delete'}),
                         headers: {
                             "Content-Type": "application/json",
                             "Accept": "application/json, text-plain, */*",
