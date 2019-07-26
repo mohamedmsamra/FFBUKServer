@@ -31,7 +31,7 @@ class AnalyticsController extends Controller
             'assignment_id' => 'required',
             'words' => 'required',
             'time' => 'required',
-            'comments' => 'required'
+            'comments' => 'present|array'
         ]);
 
         // Get the authenticated user id
