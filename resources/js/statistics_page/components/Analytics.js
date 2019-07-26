@@ -77,7 +77,7 @@ class Analytics extends React.Component {
                 <div className="col-sm">
                     <h2>Personal analytics</h2>
                     <h4>Average words: {Math.round(this.props.assignment.personal_average_words)} words</h4>
-                    <h4>Average time: {formatAverageTime(this.props.assignment.personal_average_time)}</h4>
+                    <h4>Average time: {formatAverageTime(this.props.assignment.personal_average_time / 60)}</h4>
                     <BalanceOfComments
                         id="chartBalanceCommentsPersonal"
                         title="Balance of Comments"
