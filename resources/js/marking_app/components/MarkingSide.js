@@ -93,7 +93,8 @@ class MarkingSide extends React.Component {
     // Deleting a section
     deleteSection(id){
         fetch('/api/sections/' + id, {
-            method: 'delete',
+            method: 'post',
+            body: JSON.stringify({'_method': 'delete'}),
             headers: {
                 "Content-Type": "application/json",
                 "Accept": "application/json, text-plain, */*",
